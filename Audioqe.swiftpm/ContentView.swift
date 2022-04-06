@@ -31,16 +31,12 @@ struct ContentView: View {
                                 .fill(Color.primary)
                                 .frame(maxWidth: .infinity, maxHeight: 1)
                             
-                            if bank.effect != nil {
-                                TileView(selectedBank: $selectedBank, bank: bank, editor: editor)
-                                    .onDrag {
-                                        editor.draggedBank = bank
-                                        return NSItemProvider(contentsOf: URL(string: bank.id)!)!
-                                    }
-                                    .onDrop(of: [.url], delegate: TileDropDelegate(editor: editor, bank: bank))
-                            } else {
-                                TileView(selectedBank: $selectedBank, bank: bank, editor: editor)
-                            }
+                            TileView(selectedBank: $selectedBank, bank: bank, editor: editor)
+                                .onDrag {
+                                    editor.draggedBank = bank
+                                    return NSItemProvider(contentsOf: URL(string: bank.id)!)!
+                                }
+                                .onDrop(of: [.url], delegate: TileDropDelegate(editor: editor, bank: bank))
                             
                             Rectangle()
                                 .fill(Color.primary)

@@ -16,6 +16,10 @@ struct TileDropDelegate: DropDelegate {
         return true
     }
     
+    func dropUpdated(info: DropInfo) -> DropProposal? {
+        return DropProposal(operation: .move)
+    }
+    
     func dropEntered(info: DropInfo) {
         guard let draggedBank = editor.draggedBank else { return }
         
