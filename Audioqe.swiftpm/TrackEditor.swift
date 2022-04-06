@@ -7,15 +7,22 @@
 
 import Foundation
 import AVFoundation
+import AVFAudio
 
 class TrackEditor: ObservableObject, Identifiable {
     let id: String
-    let engine: AVAudioEngine
+    let engine = AVAudioEngine()
     
-    @Published var reverb = AVAudioUnitReverb()
-    @Published var distortion = AVAudioUnitDistortion()
-    @Published var delay = AVAudioUnitDelay()
-    @Published var equaliser = AVAudioUnitEQ(numberOfBands: 1)
+    @Published var effectBanks = [
+        EffectBankViewModel(effect: AVAudioUnitReverb()),
+        EffectBankViewModel(),
+        EffectBankViewModel(),
+        EffectBankViewModel(),
+        EffectBankViewModel(),
+        EffectBankViewModel()
+    ]
+    
+    @Published var draggedBank: EffectBankViewModel?
     
     @Published var audioPlayer = AVAudioPlayerNode()
     
@@ -23,69 +30,51 @@ class TrackEditor: ObservableObject, Identifiable {
     
     @Published var isActive = true
     
-    @Published var distortionPreset = AVAudioUnitDistortionPreset.multiBrokenSpeaker {
-        didSet {
-            distortion.loadFactoryPreset(distortionPreset)
-        }
-    }
-    
-    @Published var reverbPreset = AVAudioUnitReverbPreset.smallRoom {
-        didSet {
-            reverb.loadFactoryPreset(reverbPreset)
-        }
-    }
-    
-    @Published var equaliserFilterType = AVAudioUnitEQFilterType.parametric {
-        didSet {
-            guard let band = equaliser.bands.first else { return }
-            band.filterType = equaliserFilterType
-        }
-    }
-    
-    init(engine: AVAudioEngine, fileURL: URL) {
+    init(fileURL: URL) {
         self.id = fileURL.lastPathComponent
-        self.engine = engine
         
         self.file = try! AVAudioFile(forReading: fileURL)
         
-        reverb.loadFactoryPreset(.smallRoom)
-        reverb.wetDryMix = 50
-        
-        distortion.loadFactoryPreset(.multiBrokenSpeaker)
-        distortion.preGain = -6 // Value from -80...20
-        distortion.wetDryMix = 50
-        
-        delay.delayTime = 1.5 // Value from 0...2
-        delay.feedback = 70 // Value from -100...100
-        delay.lowPassCutoff = 1500 // Value from 10...Float(file.fileFormat.sampleRate / 2)
-        delay.wetDryMix = 50
-        
-        equaliser.globalGain = 0 // Value from -96...24
-
         engine.attach(audioPlayer)
-        engine.attach(reverb)
-        engine.attach(distortion)
-        engine.attach(delay)
-        engine.attach(equaliser)
         
         audioPlayer.volume = 0.5
         
         let format = file.processingFormat
         
-        engine.connect(audioPlayer, to: distortion, format: format)
+        engine.connect(audioPlayer, to: engine.mainMixerNode, format: format)
         
-        engine.connect(distortion, to: reverb, format: format)
+        connectNodes()
+    }
+    
+    func connectNodes() {
+        let format = file.processingFormat
         
-        engine.connect(reverb, to: delay, format: format)
-        
-        engine.connect(delay, to: equaliser, format: format)
-        
-        engine.connect(equaliser, to: engine.mainMixerNode, format: format)
+        let nodes = effectBanks.compactMap { $0.effect }
+
+        if nodes.isEmpty { return }
+
+        for node in nodes {
+            engine.attach(node)
+        }
+
+        for index in nodes.indices {
+            if nodes.count == 1 {
+                engine.connect(audioPlayer, to: nodes[0], format: format)
+                engine.connect(nodes[0], to: engine.mainMixerNode, format: format)
+            } else if index == 0 {
+                engine.connect(audioPlayer, to: nodes[index], format: format)
+            } else if effectBanks.count - 1 == index {
+                engine.connect(nodes[index - 1], to: nodes[index], format: format)
+                engine.connect(nodes[index], to: engine.mainMixerNode, format: format)
+            } else {
+                engine.connect(nodes[index - 1], to: nodes[index], format: format)
+            }
+        }
     }
     
     func playPause() throws {
         if audioPlayer.isPlaying {
-            stop()
+            pause()
         } else {
             try play()
         }
@@ -100,18 +89,48 @@ class TrackEditor: ObservableObject, Identifiable {
         }
     }
     
-    func stop() {
+    func pause() {
         audioPlayer.stop()
+    }
+}
+
+class EffectBankViewModel: Identifiable, ObservableObject {
+    @Published var id = UUID().uuidString
+    @Published var effect: AVAudioUnit?
+    
+    init(effect: AVAudioUnit? = nil) {
+        self.effect = effect
+    }
+    
+    @Published var distortionPreset = AVAudioUnitDistortionPreset.multiBrokenSpeaker {
+        didSet {
+            guard let distortion = effect as? AVAudioUnitDistortion else { return }
+            distortion.loadFactoryPreset(distortionPreset)
+        }
+    }
+    
+    @Published var reverbPreset = AVAudioUnitReverbPreset.smallRoom {
+        didSet {
+            guard let reverb = effect as? AVAudioUnitReverb else { return }
+            reverb.loadFactoryPreset(reverbPreset)
+        }
+    }
+    
+    @Published var equaliserFilterType = AVAudioUnitEQFilterType.parametric {
+        didSet {
+            guard let equaliser = effect as? AVAudioUnitEQ else { return }
+            guard let band = equaliser.bands.first else { return }
+            band.filterType = equaliserFilterType
+        }
     }
     
     func setPreset(_ preset: AVAudioUnitReverbPreset) {
-        reverb.wetDryMix = 50
+        guard let reverb = effect as? AVAudioUnitReverb else { return }
         reverb.loadFactoryPreset(preset)
     }
     
     func setPreset(_ preset: AVAudioUnitDistortionPreset) {
-        distortion.wetDryMix = 50
+        guard let distortion = effect as? AVAudioUnitDistortion else { return }
         distortion.loadFactoryPreset(preset)
     }
 }
-

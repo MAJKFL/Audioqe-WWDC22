@@ -9,7 +9,7 @@ import SwiftUI
 import AVFoundation
 
 struct EqualiserEditorView: View {
-    @ObservedObject var track: TrackEditor
+    @ObservedObject var bank: EffectBankViewModel
     
     let filterNames = [
         0:  "parametric",
@@ -26,29 +26,31 @@ struct EqualiserEditorView: View {
     ]
     
     var body: some View {
+        guard let equaliser = bank.effect as? AVAudioUnitEQ else { fatalError() }
+        
         let preset = Binding(
-            get: { Int(track.equaliserFilterType.rawValue) },
-            set: { track.equaliserFilterType = AVAudioUnitEQFilterType(rawValue: $0) ?? .parametric }
+            get: { Int(bank.equaliserFilterType.rawValue) },
+            set: { bank.equaliserFilterType = AVAudioUnitEQFilterType(rawValue: $0) ?? .parametric }
         )
         
         let bandwidth = Binding(
-            get: { track.equaliser.bands.first?.bandwidth ?? 0 },
-            set: { track.equaliser.bands.first?.bandwidth = $0 }
+            get: { equaliser.bands.first?.bandwidth ?? 0 },
+            set: { equaliser.bands.first?.bandwidth = $0 }
         )
         
         let bypass = Binding(
-            get: { track.equaliser.bands.first?.bypass ?? false },
-            set: { track.equaliser.bands.first?.bypass = $0 }
+            get: { equaliser.bands.first?.bypass ?? false },
+            set: { equaliser.bands.first?.bypass = $0 }
         )
         
         let frequency = Binding(
-            get: { track.equaliser.bands.first?.frequency ?? 0 },
-            set: { track.equaliser.bands.first?.frequency = $0 }
+            get: { equaliser.bands.first?.frequency ?? 0 },
+            set: { equaliser.bands.first?.frequency = $0 }
         )
         
         let gain = Binding(
-            get: { track.equaliser.bands.first?.gain ?? 0 },
-            set: { track.equaliser.bands.first?.gain = $0 }
+            get: { equaliser.bands.first?.gain ?? 0 },
+            set: { equaliser.bands.first?.gain = $0 }
         )
         
         return VStack(alignment: .leading) {
@@ -62,7 +64,7 @@ struct EqualiserEditorView: View {
             Text("Bypass")
             Toggle(isOn: bypass) { Text("") }
             Text("Frequency")
-            Slider(value: frequency, in: 20...Float(track.file.fileFormat.sampleRate / 2))
+            Slider(value: frequency, in: 20...Float(equaliser.lastRenderTime?.sampleRate ?? 0 / 2))
             Text("Gain")
             Slider(value: gain, in: -96...24)
         }

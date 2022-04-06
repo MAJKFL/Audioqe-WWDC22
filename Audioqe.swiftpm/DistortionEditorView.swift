@@ -9,7 +9,7 @@ import SwiftUI
 import AVFoundation
 
 struct DistortionEditorView: View {
-    @ObservedObject var track: TrackEditor
+    @ObservedObject var bank: EffectBankViewModel
     
     let presetNames = [
         0:  "drums bit brush",
@@ -37,19 +37,21 @@ struct DistortionEditorView: View {
     ]
     
     var body: some View {
+        guard let distortion = bank.effect as? AVAudioUnitDistortion else { fatalError() }
+        
         let preset = Binding(
-            get: { Int(track.distortionPreset.rawValue) },
-            set: { track.distortionPreset = AVAudioUnitDistortionPreset(rawValue: $0) ?? .multiBrokenSpeaker }
+            get: { Int(bank.distortionPreset.rawValue) },
+            set: { bank.distortionPreset = AVAudioUnitDistortionPreset(rawValue: $0) ?? .multiBrokenSpeaker }
         )
         
         let preGain = Binding(
-            get: { track.distortion.preGain },
-            set: { track.distortion.preGain = $0 }
+            get: { distortion.preGain },
+            set: { distortion.preGain = $0 }
         )
         
         let wetDryMix = Binding(
-            get: { track.distortion.wetDryMix },
-            set: { track.distortion.wetDryMix = $0 }
+            get: { distortion.wetDryMix },
+            set: { distortion.wetDryMix = $0 }
         )
         
         return VStack(alignment: .leading) {

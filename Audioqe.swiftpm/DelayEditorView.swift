@@ -6,33 +6,32 @@
 //
 
 import SwiftUI
+import AVFAudio
 
 struct DelayEditorView: View {
-    @ObservedObject var track: TrackEditor
-    
-    init(track: TrackEditor) {
-        self.track = track
-    }
+    @ObservedObject var bank: EffectBankViewModel
     
     var body: some View {
+        guard let delay = bank.effect as? AVAudioUnitDelay else { fatalError() }
+        
         let feedback = Binding(
-            get: { track.delay.feedback },
-            set: { track.delay.feedback = $0 }
+            get: { delay.feedback },
+            set: { delay.feedback = $0 }
         )
         
         let delayTime = Binding(
-            get: { track.delay.delayTime },
-            set: { track.delay.delayTime = $0 }
+            get: { delay.delayTime },
+            set: { delay.delayTime = $0 }
         )
         
         let lowPassCutoff = Binding(
-            get: { track.delay.lowPassCutoff },
-            set: { track.delay.lowPassCutoff = $0 }
+            get: { delay.lowPassCutoff },
+            set: { delay.lowPassCutoff = $0 }
         )
         
         let wetDryMix = Binding(
-            get: { track.delay.wetDryMix },
-            set: { track.delay.wetDryMix = $0 }
+            get: { delay.wetDryMix },
+            set: { delay.wetDryMix = $0 }
         )
         
         return VStack(alignment: .leading) {
@@ -41,7 +40,7 @@ struct DelayEditorView: View {
             Text("Delay time")
             Slider(value: delayTime, in: 0...2)
             Text("Low pass cutoff")
-            Slider(value: lowPassCutoff, in: 10...Float(track.file.fileFormat.sampleRate / 2))
+            Slider(value: lowPassCutoff, in: 10...Float(delay.lastRenderTime?.sampleRate ?? 0 / 2))
             Text("Wet dry mix")
             Slider(value: wetDryMix, in: 0...100)
         }

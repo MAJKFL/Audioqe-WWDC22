@@ -11,7 +11,7 @@ import SwiftUI
 import AVFoundation
 
 struct ReverbEditorView: View {
-    @ObservedObject var track: TrackEditor
+    @ObservedObject var bank: EffectBankViewModel
     
     let presetNames = [
         0:  "small room",
@@ -30,14 +30,16 @@ struct ReverbEditorView: View {
     ]
     
     var body: some View {
+        guard let reverb = bank.effect as? AVAudioUnitReverb else { fatalError() }
+        
         let preset = Binding(
-            get: { Int(track.reverbPreset.rawValue) },
-            set: { track.reverbPreset = AVAudioUnitReverbPreset(rawValue: $0) ?? .smallRoom }
+            get: { Int(bank.reverbPreset.rawValue) },
+            set: { bank.reverbPreset = AVAudioUnitReverbPreset(rawValue: $0) ?? .smallRoom }
         )
         
         let wetDryMix = Binding(
-            get: { track.reverb.wetDryMix },
-            set: { track.reverb.wetDryMix = $0 }
+            get: { reverb.wetDryMix },
+            set: { reverb.wetDryMix = $0 }
         )
         
         return VStack(alignment: .leading) {
