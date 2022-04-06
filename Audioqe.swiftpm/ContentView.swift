@@ -21,12 +21,14 @@ struct ContentView: View {
                         StartTileView()
                         
                         Rectangle()
+                            .fill(Color.primary)
                             .frame(maxWidth: .infinity, maxHeight: 1)
                     }
                     
                     ForEach(editor.effectBanks) { bank in
                         HStack(spacing: 0) {
                             Rectangle()
+                                .fill(Color.primary)
                                 .frame(maxWidth: .infinity, maxHeight: 1)
                             
                             TileView(selectedBank: $selectedBank, bank: bank, editor: editor)
@@ -37,12 +39,14 @@ struct ContentView: View {
                                 .onDrop(of: [.url], delegate: DropViewDelegate(editor: editor, bank: bank))
                             
                             Rectangle()
+                                .fill(Color.primary)
                                 .frame(maxWidth: .infinity, maxHeight: 1)
                         }
                     }
                     
                     HStack(spacing: 0) {
                         Rectangle()
+                            .fill(Color.primary)
                             .frame(maxWidth: .infinity, maxHeight: 1)
                         
                         ExitTileView()
@@ -182,6 +186,7 @@ struct TileView: View {
                         .frame(width: 200, height: 150)
                     
                     Rectangle()
+                        .fill(Color.primary)
                         .frame(maxWidth: .infinity, maxHeight: 1)
                 }
             }

@@ -40,7 +40,7 @@ struct DelayEditorView: View {
             Text("Delay time")
             Slider(value: delayTime, in: 0...2)
             Text("Low pass cutoff")
-            Slider(value: lowPassCutoff, in: 10...Float(delay.lastRenderTime?.sampleRate ?? 0 / 2))
+            Slider(value: lowPassCutoff, in: 10...Float(bank.sampleRate / 2))
             Text("Wet dry mix")
             Slider(value: wetDryMix, in: 0...100)
         }

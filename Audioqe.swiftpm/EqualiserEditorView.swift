@@ -64,7 +64,7 @@ struct EqualiserEditorView: View {
             Text("Bypass")
             Toggle(isOn: bypass) { Text("") }
             Text("Frequency")
-            Slider(value: frequency, in: 20...Float(equaliser.lastRenderTime?.sampleRate ?? 0 / 2))
+            Slider(value: frequency, in: 20...Float(bank.sampleRate / 2))
             Text("Gain")
             Slider(value: gain, in: -96...24)
         }

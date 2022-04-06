@@ -13,14 +13,7 @@ class TrackEditor: ObservableObject, Identifiable {
     let id: String
     let engine = AVAudioEngine()
     
-    @Published var effectBanks = [
-        EffectBankViewModel(),
-        EffectBankViewModel(),
-        EffectBankViewModel(),
-        EffectBankViewModel(),
-        EffectBankViewModel(),
-        EffectBankViewModel()
-    ]
+    @Published var effectBanks = [EffectBankViewModel]()
     
     @Published var draggedBank: EffectBankViewModel?
     
@@ -40,6 +33,15 @@ class TrackEditor: ObservableObject, Identifiable {
         audioPlayer.volume = 0.5
         
         let format = file.processingFormat
+        
+        effectBanks = [
+            EffectBankViewModel(sampleRate: file.fileFormat.sampleRate),
+            EffectBankViewModel(sampleRate: file.fileFormat.sampleRate),
+            EffectBankViewModel(sampleRate: file.fileFormat.sampleRate),
+            EffectBankViewModel(sampleRate: file.fileFormat.sampleRate),
+            EffectBankViewModel(sampleRate: file.fileFormat.sampleRate),
+            EffectBankViewModel(sampleRate: file.fileFormat.sampleRate)
+        ]
         
         engine.connect(audioPlayer, to: engine.mainMixerNode, format: format)
         
@@ -97,8 +99,10 @@ class TrackEditor: ObservableObject, Identifiable {
 class EffectBankViewModel: Identifiable, ObservableObject {
     @Published var id = UUID().uuidString
     @Published var effect: AVAudioUnit?
+    @Published var sampleRate: Double
     
-    init(effect: AVAudioUnit? = nil) {
+    init(sampleRate: Double, effect: AVAudioUnit? = nil) {
+        self.sampleRate = sampleRate
         self.effect = effect
     }
     
