@@ -29,7 +29,7 @@ struct ContentView: View {
                             Rectangle()
                                 .frame(maxWidth: .infinity, maxHeight: 1)
                             
-                            TileView(selectedBank: $selectedBank, bank: bank)
+                            TileView(selectedBank: $selectedBank, bank: bank, editor: editor)
                                 .onDrag {
                                     editor.draggedBank = bank
                                     return NSItemProvider(contentsOf: URL(string: bank.id)!)!
@@ -123,6 +123,7 @@ struct StartTileView: View {
 struct TileView: View {
     @Binding var selectedBank: EffectBankViewModel?
     @ObservedObject var bank: EffectBankViewModel
+    @ObservedObject var editor: TrackEditor
     
     var bgColor: Color? {
         switch bank.effect {
@@ -146,13 +147,43 @@ struct TileView: View {
                     }
                 }
         } else {
-            ZStack {
-                RoundedRectangle(cornerRadius: 15)
-                    .fill(Color.secondary.opacity(0.1))
-                    .frame(width: 200, height: 150)
+            Menu {
+                Button {
+                    bank.effect = AVAudioUnitReverb()
+                    editor.connectNodes()
+                } label: {
+                    Label("Add reverb", systemImage: "dot.radiowaves.left.and.right")
+                }
+
+                Button {
+                    bank.effect = AVAudioUnitDistortion()
+                    editor.connectNodes()
+                } label: {
+                    Label("Add distortion", systemImage: "waveform.path")
+                }
                 
-                Rectangle()
-                    .frame(maxWidth: .infinity, maxHeight: 1)
+                Button {
+                    bank.effect = AVAudioUnitDelay()
+                    editor.connectNodes()
+                } label: {
+                    Label("Add delay", systemImage: "wave.3.right")
+                }
+                
+                Button {
+                    bank.effect = AVAudioUnitEQ()
+                    editor.connectNodes()
+                } label: {
+                    Label("Add equaliser", systemImage: "slider.vertical.3")
+                }
+            } label: {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 15)
+                        .fill(Color.secondary.opacity(0.1))
+                        .frame(width: 200, height: 150)
+                    
+                    Rectangle()
+                        .frame(maxWidth: .infinity, maxHeight: 1)
+                }
             }
         }
     }

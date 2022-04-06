@@ -14,7 +14,7 @@ class TrackEditor: ObservableObject, Identifiable {
     let engine = AVAudioEngine()
     
     @Published var effectBanks = [
-        EffectBankViewModel(effect: AVAudioUnitReverb()),
+        EffectBankViewModel(),
         EffectBankViewModel(),
         EffectBankViewModel(),
         EffectBankViewModel(),
@@ -51,8 +51,6 @@ class TrackEditor: ObservableObject, Identifiable {
         
         let nodes = effectBanks.compactMap { $0.effect }
 
-        if nodes.isEmpty { return }
-
         for node in nodes {
             engine.attach(node)
         }
@@ -61,13 +59,15 @@ class TrackEditor: ObservableObject, Identifiable {
             if nodes.count == 1 {
                 engine.connect(audioPlayer, to: nodes[0], format: format)
                 engine.connect(nodes[0], to: engine.mainMixerNode, format: format)
-            } else if index == 0 {
-                engine.connect(audioPlayer, to: nodes[index], format: format)
-            } else if effectBanks.count - 1 == index {
+                return
+            }
+            
+            switch index {
+            case 0: engine.connect(audioPlayer, to: nodes[index], format: format)
+            case nodes.count - 1:
                 engine.connect(nodes[index - 1], to: nodes[index], format: format)
                 engine.connect(nodes[index], to: engine.mainMixerNode, format: format)
-            } else {
-                engine.connect(nodes[index - 1], to: nodes[index], format: format)
+            default: engine.connect(nodes[index - 1], to: nodes[index], format: format)
             }
         }
     }
