@@ -124,19 +124,37 @@ struct TileView: View {
     @Binding var selectedBank: EffectBankViewModel?
     @ObservedObject var bank: EffectBankViewModel
     
-    var bgColor: Color {
-        guard bank.effect is AVAudioUnitReverb else { return .blue }
-        return .yellow
+    var bgColor: Color? {
+        switch bank.effect {
+        case is AVAudioUnitReverb: return .mint
+        case is AVAudioUnitDistortion: return .orange
+        case is AVAudioUnitDelay: return .indigo
+        case is AVAudioUnitEQ: return .yellow
+        default: return nil
+        }
     }
     
     var body: some View {
-        RoundedRectangle(cornerRadius: 15)
-            .fill(bgColor)
-            .frame(width: 200, height: 150)
-            .overlay(Text("\(bank.id)"))
-            .onTapGesture {
-                selectedBank = bank
+        if let bgColor = bgColor {
+            RoundedRectangle(cornerRadius: 15)
+                .fill(bgColor)
+                .frame(width: 200, height: 150)
+                .overlay(Text("\(bank.id)"))
+                .onTapGesture {
+                    withAnimation(.easeInOut.speed(2)) {
+                        selectedBank = bank
+                    }
+                }
+        } else {
+            ZStack {
+                RoundedRectangle(cornerRadius: 15)
+                    .fill(Color.secondary.opacity(0.1))
+                    .frame(width: 200, height: 150)
+                
+                Rectangle()
+                    .frame(maxWidth: .infinity, maxHeight: 1)
             }
+        }
     }
 }
 
