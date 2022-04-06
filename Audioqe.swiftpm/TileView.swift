@@ -24,12 +24,21 @@ struct TileView: View {
         }
     }
     
+    var isSelected: Bool {
+        bank.id == selectedBank?.id
+    }
+    
     var body: some View {
         if let bgColor = bgColor {
             RoundedRectangle(cornerRadius: 15)
                 .fill(bgColor)
                 .frame(width: 200, height: 150)
                 .overlay(Text("\(bank.id)"))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(.blue, lineWidth: 4)
+                        .opacity(isSelected ? 1 : 0)
+                )
                 .onTapGesture {
                     withAnimation(.easeInOut.speed(2)) {
                         selectedBank = bank
