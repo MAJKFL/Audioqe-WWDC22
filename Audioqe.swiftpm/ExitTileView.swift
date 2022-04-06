@@ -12,5 +12,9 @@ struct ExitTileView: View {
         RoundedRectangle(cornerRadius: 15)
             .fill(Color.red)
             .frame(width: 200, height: 150)
+            .overlay {
+                Image(systemName: "backward.end.fill")
+                    .font(.largeTitle)
+            }
     }
 }

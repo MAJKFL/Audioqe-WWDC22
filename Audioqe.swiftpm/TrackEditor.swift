@@ -18,6 +18,8 @@ class TrackEditor: ObservableObject, Identifiable {
     @Published var audioPlayer = AVAudioPlayerNode()
     @Published var file: AVAudioFile
     
+    @Published var isPlaying = false
+    
     init(fileURL: URL) {
         self.id = fileURL.lastPathComponent
         
@@ -69,14 +71,16 @@ class TrackEditor: ObservableObject, Identifiable {
         }
     }
     
-    func play() throws {
-        audioPlayer.scheduleFile(file, at: nil)
-        
-        try engine.start()
-        audioPlayer.play()
-    }
-    
-    func pause() {
-        audioPlayer.stop()
+    func playPause() {
+        if audioPlayer.isPlaying {
+            audioPlayer.stop()
+            isPlaying = false
+        } else {
+            audioPlayer.scheduleFile(file, at: nil)
+            
+            try? engine.start()
+            audioPlayer.play()
+            isPlaying = true
+        }
     }
 }

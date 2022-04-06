@@ -18,7 +18,7 @@ struct ContentView: View {
             VStack(spacing: 100) {
                 LazyVGrid(columns: columns, spacing: 50) {
                     HStack(spacing: 0) {
-                        StartTileView()
+                        StartTileView(editor: editor)
                         
                         Rectangle()
                             .fill(Color.primary)
@@ -72,23 +72,7 @@ struct ContentView: View {
             }
             .padding(.horizontal)
             .navigationTitle(editor.file.url.lastPathComponent)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    HStack {
-                        Button {
-                            try? editor.play()
-                        } label: {
-                            Image(systemName: "play.fill")
-                        }
-
-                        Button {
-                            editor.pause()
-                        } label: {
-                            Image(systemName: "pause.fill")
-                        }
-                    }
-                }
-                
+            .toolbar {                
                 ToolbarItem(placement: .navigationBarTrailing) {
                     HStack {
                         Menu {
