@@ -28,13 +28,19 @@ class TrackEditor: ObservableObject, Identifiable {
         }
     }
     
+    @Published var reverbPreset = AVAudioUnitReverbPreset.smallRoom {
+        didSet {
+            reverb.loadFactoryPreset(reverbPreset)
+        }
+    }
+    
     init(engine: AVAudioEngine, fileURL: URL) {
         self.id = fileURL.lastPathComponent
         self.engine = engine
         
         self.file = try! AVAudioFile(forReading: fileURL)
         
-        reverb.loadFactoryPreset(.largeChamber)
+        reverb.loadFactoryPreset(.smallRoom)
         reverb.wetDryMix = 50
         
         distortion.loadFactoryPreset(.multiBrokenSpeaker)

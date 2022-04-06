@@ -31,7 +31,7 @@ struct MainEditorView: View {
             case .distortion:
                 DistortionEditorView(track: selectedEditor!.track)
             case .reverb:
-                Text("Reverb")
+                ReverbEditorView(track: selectedEditor!.track)
             case .equaliser:
                 Text("Equaliser")
             default:
