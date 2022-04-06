@@ -7,21 +7,16 @@
 
 import Foundation
 import AVFoundation
-import AVFAudio
 
 class TrackEditor: ObservableObject, Identifiable {
     let id: String
     let engine = AVAudioEngine()
     
-    @Published var effectBanks = [EffectBankViewModel]()
-    
-    @Published var draggedBank: EffectBankViewModel?
+    @Published var effectBanks = [BankViewModel]()
+    @Published var draggedBank: BankViewModel?
     
     @Published var audioPlayer = AVAudioPlayerNode()
-    
     @Published var file: AVAudioFile
-    
-    @Published var isActive = true
     
     init(fileURL: URL) {
         self.id = fileURL.lastPathComponent
@@ -35,12 +30,12 @@ class TrackEditor: ObservableObject, Identifiable {
         let format = file.processingFormat
         
         effectBanks = [
-            EffectBankViewModel(sampleRate: file.fileFormat.sampleRate),
-            EffectBankViewModel(sampleRate: file.fileFormat.sampleRate),
-            EffectBankViewModel(sampleRate: file.fileFormat.sampleRate),
-            EffectBankViewModel(sampleRate: file.fileFormat.sampleRate),
-            EffectBankViewModel(sampleRate: file.fileFormat.sampleRate),
-            EffectBankViewModel(sampleRate: file.fileFormat.sampleRate)
+            BankViewModel(sampleRate: file.fileFormat.sampleRate),
+            BankViewModel(sampleRate: file.fileFormat.sampleRate),
+            BankViewModel(sampleRate: file.fileFormat.sampleRate),
+            BankViewModel(sampleRate: file.fileFormat.sampleRate),
+            BankViewModel(sampleRate: file.fileFormat.sampleRate),
+            BankViewModel(sampleRate: file.fileFormat.sampleRate)
         ]
         
         engine.connect(audioPlayer, to: engine.mainMixerNode, format: format)
@@ -74,67 +69,14 @@ class TrackEditor: ObservableObject, Identifiable {
         }
     }
     
-    func playPause() throws {
-        if audioPlayer.isPlaying {
-            pause()
-        } else {
-            try play()
-        }
-    }
-    
     func play() throws {
-        if isActive {
-            audioPlayer.scheduleFile(file, at: nil)
-            
-            try engine.start()
-            audioPlayer.play()
-        }
+        audioPlayer.scheduleFile(file, at: nil)
+        
+        try engine.start()
+        audioPlayer.play()
     }
     
     func pause() {
         audioPlayer.stop()
-    }
-}
-
-class EffectBankViewModel: Identifiable, ObservableObject {
-    @Published var id = UUID().uuidString
-    @Published var effect: AVAudioUnit?
-    @Published var sampleRate: Double
-    
-    init(sampleRate: Double, effect: AVAudioUnit? = nil) {
-        self.sampleRate = sampleRate
-        self.effect = effect
-    }
-    
-    @Published var distortionPreset = AVAudioUnitDistortionPreset.multiBrokenSpeaker {
-        didSet {
-            guard let distortion = effect as? AVAudioUnitDistortion else { return }
-            distortion.loadFactoryPreset(distortionPreset)
-        }
-    }
-    
-    @Published var reverbPreset = AVAudioUnitReverbPreset.smallRoom {
-        didSet {
-            guard let reverb = effect as? AVAudioUnitReverb else { return }
-            reverb.loadFactoryPreset(reverbPreset)
-        }
-    }
-    
-    @Published var equaliserFilterType = AVAudioUnitEQFilterType.parametric {
-        didSet {
-            guard let equaliser = effect as? AVAudioUnitEQ else { return }
-            guard let band = equaliser.bands.first else { return }
-            band.filterType = equaliserFilterType
-        }
-    }
-    
-    func setPreset(_ preset: AVAudioUnitReverbPreset) {
-        guard let reverb = effect as? AVAudioUnitReverb else { return }
-        reverb.loadFactoryPreset(preset)
-    }
-    
-    func setPreset(_ preset: AVAudioUnitDistortionPreset) {
-        guard let distortion = effect as? AVAudioUnitDistortion else { return }
-        distortion.loadFactoryPreset(preset)
     }
 }

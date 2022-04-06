@@ -9,7 +9,7 @@ import SwiftUI
 import AVFoundation
 
 struct EqualiserEditorView: View {
-    @ObservedObject var bank: EffectBankViewModel
+    @ObservedObject var bank: BankViewModel
     
     let filterNames = [
         0:  "parametric",
@@ -59,12 +59,16 @@ struct EqualiserEditorView: View {
                     Text(filterNames[key] ?? "UNKNOWN")
                 }
             }
+            
             Text("Bandwidth")
             Slider(value: bandwidth, in: 0.05...5.0)
+            
             Text("Bypass")
             Toggle(isOn: bypass) { Text("") }
+            
             Text("Frequency")
             Slider(value: frequency, in: 20...Float(bank.sampleRate / 2))
+            
             Text("Gain")
             Slider(value: gain, in: -96...24)
         }

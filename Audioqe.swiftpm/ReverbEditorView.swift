@@ -5,13 +5,11 @@
 //  Created by Jakub Florek on 06/04/2022.
 //
 
-import Foundation
-
 import SwiftUI
 import AVFoundation
 
 struct ReverbEditorView: View {
-    @ObservedObject var bank: EffectBankViewModel
+    @ObservedObject var bank: BankViewModel
     
     let presetNames = [
         0:  "small room",

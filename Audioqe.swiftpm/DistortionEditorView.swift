@@ -9,7 +9,7 @@ import SwiftUI
 import AVFoundation
 
 struct DistortionEditorView: View {
-    @ObservedObject var bank: EffectBankViewModel
+    @ObservedObject var bank: BankViewModel
     
     let presetNames = [
         0:  "drums bit brush",
@@ -60,8 +60,10 @@ struct DistortionEditorView: View {
                     Text(presetNames[key] ?? "UNKNOWN")
                 }
             }
+            
             Text("Pre gain")
             Slider(value: preGain, in: -80...20)
+            
             Text("Wet dry mix")
             Slider(value: wetDryMix, in: 0...100)
         }

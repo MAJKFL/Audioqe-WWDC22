@@ -1,17 +1,17 @@
 import SwiftUI
-import AVFAudio
+import AVFoundation
 
 struct ContentView: View {
+    @ObservedObject var editor = TrackEditor(fileURL: Bundle.main.url(forResource: "CleanGuitar", withExtension: "aif")!)
+    
+    @State private var selectedBank: BankViewModel?
+    
     let columns = [
         GridItem(.flexible(), spacing: 0),
         GridItem(.flexible(), spacing: 0),
         GridItem(.flexible(), spacing: 0),
         GridItem(.flexible(), spacing: 0)
     ]
-    
-    @ObservedObject var editor = TrackEditor(fileURL: Bundle.main.url(forResource: "CleanGuitar", withExtension: "aif")!)
-    
-    @State private var selectedBank: EffectBankViewModel?
     
     var body: some View {
         NavigationView {
@@ -36,7 +36,7 @@ struct ContentView: View {
                                     editor.draggedBank = bank
                                     return NSItemProvider(contentsOf: URL(string: bank.id)!)!
                                 }
-                                .onDrop(of: [.url], delegate: DropViewDelegate(editor: editor, bank: bank))
+                                .onDrop(of: [.url], delegate: TileDropDelegate(editor: editor, bank: bank))
                             
                             Rectangle()
                                 .fill(Color.primary)
@@ -113,117 +113,5 @@ struct ContentView: View {
             }
         }
         .navigationViewStyle(.stack)
-    }
-}
-
-struct StartTileView: View {
-    var body: some View {
-        RoundedRectangle(cornerRadius: 15)
-            .fill(Color.green)
-            .frame(width: 200, height: 150)
-    }
-}
-
-struct TileView: View {
-    @Binding var selectedBank: EffectBankViewModel?
-    @ObservedObject var bank: EffectBankViewModel
-    @ObservedObject var editor: TrackEditor
-    
-    var bgColor: Color? {
-        switch bank.effect {
-        case is AVAudioUnitReverb: return .mint
-        case is AVAudioUnitDistortion: return .orange
-        case is AVAudioUnitDelay: return .indigo
-        case is AVAudioUnitEQ: return .yellow
-        default: return nil
-        }
-    }
-    
-    var body: some View {
-        if let bgColor = bgColor {
-            RoundedRectangle(cornerRadius: 15)
-                .fill(bgColor)
-                .frame(width: 200, height: 150)
-                .overlay(Text("\(bank.id)"))
-                .onTapGesture {
-                    withAnimation(.easeInOut.speed(2)) {
-                        selectedBank = bank
-                    }
-                }
-        } else {
-            Menu {
-                Button {
-                    bank.effect = AVAudioUnitReverb()
-                    editor.connectNodes()
-                } label: {
-                    Label("Add reverb", systemImage: "dot.radiowaves.left.and.right")
-                }
-
-                Button {
-                    bank.effect = AVAudioUnitDistortion()
-                    editor.connectNodes()
-                } label: {
-                    Label("Add distortion", systemImage: "waveform.path")
-                }
-                
-                Button {
-                    bank.effect = AVAudioUnitDelay()
-                    editor.connectNodes()
-                } label: {
-                    Label("Add delay", systemImage: "wave.3.right")
-                }
-                
-                Button {
-                    bank.effect = AVAudioUnitEQ()
-                    editor.connectNodes()
-                } label: {
-                    Label("Add equaliser", systemImage: "slider.vertical.3")
-                }
-            } label: {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 15)
-                        .fill(Color.secondary.opacity(0.1))
-                        .frame(width: 200, height: 150)
-                    
-                    Rectangle()
-                        .fill(Color.primary)
-                        .frame(maxWidth: .infinity, maxHeight: 1)
-                }
-            }
-        }
-    }
-}
-
-struct ExitTileView: View {
-    var body: some View {
-        RoundedRectangle(cornerRadius: 15)
-            .fill(Color.red)
-            .frame(width: 200, height: 150)
-    }
-}
-
-struct DropViewDelegate: DropDelegate {
-    @ObservedObject var editor: TrackEditor
-    
-    var bank: EffectBankViewModel
-    
-    func performDrop(info: DropInfo) -> Bool {
-        return true
-    }
-    
-    func dropEntered(info: DropInfo) {
-        guard let draggedBank = editor.draggedBank else { return }
-        
-        let fromIndex = editor.effectBanks.firstIndex(where: { $0.id == bank.id })!
-        
-        let toIndex = editor.effectBanks.firstIndex(where: { $0.id == draggedBank.id })!
-        
-        if fromIndex != toIndex {
-            let fromBank = editor.effectBanks[fromIndex]
-            editor.effectBanks[fromIndex] = editor.effectBanks[toIndex]
-            editor.effectBanks[toIndex] = fromBank
-        }
-        
-        editor.connectNodes()
     }
 }

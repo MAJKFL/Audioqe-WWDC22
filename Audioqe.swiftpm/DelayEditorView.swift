@@ -6,10 +6,10 @@
 //
 
 import SwiftUI
-import AVFAudio
+import AVFoundation
 
 struct DelayEditorView: View {
-    @ObservedObject var bank: EffectBankViewModel
+    @ObservedObject var bank: BankViewModel
     
     var body: some View {
         guard let delay = bank.effect as? AVAudioUnitDelay else { fatalError() }
@@ -37,10 +37,13 @@ struct DelayEditorView: View {
         return VStack(alignment: .leading) {
             Text("Feedback")
             Slider(value: feedback, in: -100...100)
+            
             Text("Delay time")
             Slider(value: delayTime, in: 0...2)
+            
             Text("Low pass cutoff")
             Slider(value: lowPassCutoff, in: 10...Float(bank.sampleRate / 2))
+            
             Text("Wet dry mix")
             Slider(value: wetDryMix, in: 0...100)
         }
