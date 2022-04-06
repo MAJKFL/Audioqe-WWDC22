@@ -15,6 +15,7 @@ class TrackEditor: ObservableObject, Identifiable {
     @Published var reverb = AVAudioUnitReverb()
     @Published var distortion = AVAudioUnitDistortion()
     @Published var delay = AVAudioUnitDelay()
+    @Published var equaliser = AVAudioUnitEQ(numberOfBands: 1)
     
     @Published var audioPlayer = AVAudioPlayerNode()
     
@@ -31,6 +32,13 @@ class TrackEditor: ObservableObject, Identifiable {
     @Published var reverbPreset = AVAudioUnitReverbPreset.smallRoom {
         didSet {
             reverb.loadFactoryPreset(reverbPreset)
+        }
+    }
+    
+    @Published var equaliserFilterType = AVAudioUnitEQFilterType.parametric {
+        didSet {
+            guard let band = equaliser.bands.first else { return }
+            band.filterType = equaliserFilterType
         }
     }
     
@@ -51,24 +59,28 @@ class TrackEditor: ObservableObject, Identifiable {
         delay.feedback = 70 // Value from -100...100
         delay.lowPassCutoff = 1500 // Value from 10...Float(file.fileFormat.sampleRate / 2)
         delay.wetDryMix = 50
+        
+        equaliser.globalGain = 0 // Value from -96...24
 
         engine.attach(audioPlayer)
         engine.attach(reverb)
         engine.attach(distortion)
         engine.attach(delay)
+        engine.attach(equaliser)
         
         audioPlayer.volume = 0.5
         
         let format = file.processingFormat
         
         engine.connect(audioPlayer, to: distortion, format: format)
-        engine.connect(distortion, to: engine.mainMixerNode, format: format)
         
         engine.connect(distortion, to: reverb, format: format)
-        engine.connect(reverb, to: engine.mainMixerNode, format: format)
         
         engine.connect(reverb, to: delay, format: format)
-        engine.connect(delay, to: engine.mainMixerNode, format: format)
+        
+        engine.connect(delay, to: equaliser, format: format)
+        
+        engine.connect(equaliser, to: engine.mainMixerNode, format: format)
     }
     
     func playPause() throws {

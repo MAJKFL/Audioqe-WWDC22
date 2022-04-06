@@ -33,7 +33,7 @@ struct MainEditorView: View {
             case .reverb:
                 ReverbEditorView(track: selectedEditor!.track)
             case .equaliser:
-                Text("Equaliser")
+                EqualiserEditorView(track: selectedEditor!.track)
             default:
                 Text("None")
             }
