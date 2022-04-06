@@ -38,7 +38,7 @@ struct MainEditorView: View {
                 Text("None")
             }
         }
-        .padding()
+        .padding(.horizontal)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 HStack {

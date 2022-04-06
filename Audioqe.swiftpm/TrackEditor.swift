@@ -95,10 +95,5 @@ class TrackEditor: ObservableObject, Identifiable {
         distortion.wetDryMix = 50
         distortion.loadFactoryPreset(preset)
     }
-    
-    func disableAllEffects() {
-        reverb.wetDryMix = 0;
-        distortion.wetDryMix = 0;
-    }
 }
 

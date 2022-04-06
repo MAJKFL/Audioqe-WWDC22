@@ -47,8 +47,6 @@ struct TrackView: View {
                 HStack {
                     Slider(value: $track.audioPlayer.volume, in: 0...1)
                         .frame(width: 200)
-
-                    Spacer(minLength: 50)
                     
                     Button {
                         withAnimation {
@@ -82,8 +80,6 @@ struct TrackView: View {
                     }
                     .buttonStyle(.borderedProminent)
                     .tint(.purple)
-                    
-                    Spacer(minLength: 50)
                     
                     Button {
                         withAnimation {
