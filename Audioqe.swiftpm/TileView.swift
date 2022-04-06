@@ -46,32 +46,34 @@ struct TileView: View {
                 }
         } else {
             Menu {
+                Text("Add:")
+                
                 Button {
                     bank.effect = AVAudioUnitReverb()
                     editor.connectNodes()
                 } label: {
-                    Label("Add reverb", systemImage: "dot.radiowaves.left.and.right")
+                    Label("Reverb", systemImage: "dot.radiowaves.left.and.right")
                 }
 
                 Button {
                     bank.effect = AVAudioUnitDistortion()
                     editor.connectNodes()
                 } label: {
-                    Label("Add distortion", systemImage: "waveform.path")
+                    Label("Distortion", systemImage: "waveform.path")
                 }
                 
                 Button {
                     bank.effect = AVAudioUnitDelay()
                     editor.connectNodes()
                 } label: {
-                    Label("Add delay", systemImage: "wave.3.right")
+                    Label("Delay", systemImage: "wave.3.right")
                 }
                 
                 Button {
                     bank.effect = AVAudioUnitEQ()
                     editor.connectNodes()
                 } label: {
-                    Label("Add equaliser", systemImage: "slider.vertical.3")
+                    Label("Equaliser", systemImage: "slider.vertical.3")
                 }
             } label: {
                 ZStack {

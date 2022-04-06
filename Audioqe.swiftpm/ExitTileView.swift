@@ -13,7 +13,7 @@ struct ExitTileView: View {
             .fill(Color.red)
             .frame(width: 200, height: 150)
             .overlay {
-                Image(systemName: "backward.end.fill")
+                Image(systemName: "speaker.wave.3.fill")
                     .font(.largeTitle)
             }
     }
