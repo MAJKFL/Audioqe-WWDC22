@@ -6,73 +6,16 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 struct MainEditorView: View {
     @ObservedObject var editor = AudioEditor()
     
     @State private var selectedEditor: SelectedEditor?
-    
-    @Environment(\.editMode) private var editMode: Binding<EditMode>?
+    @State private var isShowingImporter = false
     
     var body: some View {
         VStack {
-            HStack {
-                Button {
-                    editor.playAll()
-                } label: {
-                    Image(systemName: "play.fill")
-                        .frame(width: 30, height: 30)
-                }
-                .buttonStyle(.borderedProminent)
-                
-                Button {
-                    editor.pauseAll()
-                } label: {
-                    Image(systemName: "pause.fill")
-                        .frame(width: 30, height: 30)
-                }
-                .buttonStyle(.borderedProminent)
-                
-                Button {
-                    
-                } label: {
-                    Image(systemName: "doc.fill.badge.plus")
-                        .frame(width: 30, height: 30)
-                }
-                .buttonStyle(.borderedProminent)
-                
-                Button {
-                    
-                } label: {
-                    Image(systemName: "mic.fill.badge.plus")
-                        .frame(width: 30, height: 30)
-                }
-                .buttonStyle(.borderedProminent)
-                
-                Button {
-                    withAnimation(.easeInOut) {
-                        editMode?.wrappedValue = editMode?.wrappedValue == .active ? .inactive : .active
-                    }
-                } label: {
-                    Image(systemName: "waveform.path.badge.minus")
-                        .frame(width: 30, height: 30)
-                }
-                .buttonStyle(.borderedProminent)
-                .tint(.red)
-                
-                Spacer()
-                
-                Button {
-                    
-                } label: {
-                    Image(systemName: "square.and.arrow.up")
-                        .frame(width: 30, height: 30)
-                }
-                .buttonStyle(.borderedProminent)
-            }
-
-            Divider()
-            
             List {
                 ForEach(editor.tracks) { track in
                     TrackView(track: track, selectedEditor: $selectedEditor)
@@ -96,5 +39,61 @@ struct MainEditorView: View {
             }
         }
         .padding()
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                HStack {
+                    Button {
+                        editor.playAll()
+                    } label: {
+                        Image(systemName: "play.fill")
+                    }
+
+                    Button {
+                        editor.pauseAll()
+                    } label: {
+                        Image(systemName: "pause.fill")
+                    }
+                }
+            }
+            
+            ToolbarItem(placement: .navigationBarTrailing) {
+                HStack {
+                    Menu {
+                        Button {
+                            isShowingImporter.toggle()
+                        } label: {
+                            Label("Add file", systemImage: "doc.fill.badge.plus")
+                        }
+                        
+                        Button {
+                            
+                        } label: {
+                            Label("Add recording", systemImage: "mic.fill.badge.plus")
+                        }
+                    } label: {
+                        Image(systemName: "waveform.badge.plus")
+                    }
+                    
+                    Button {
+                        
+                    } label: {
+                        Image(systemName: "square.and.arrow.up")
+                    }
+                }
+            }
+        }
+        .fileImporter(isPresented: $isShowingImporter, allowedContentTypes: [.audio]) { result in
+            do {
+                let fileURL = try result.get()
+                
+                let _ = fileURL.startAccessingSecurityScopedResource()
+                
+                editor.addNewTrack(at: fileURL)
+                
+                fileURL.stopAccessingSecurityScopedResource()
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
     }
 }

@@ -17,8 +17,7 @@ class AudioEditor: ObservableObject {
         self.engine = AVAudioEngine()
         
         tracks = [
-            TrackEditor(engine: engine, fileName: "CleanGuitar"),
-            TrackEditor(engine: engine, fileName: "Rhythm")
+            TrackEditor(engine: engine, fileURL: Bundle.main.url(forResource: "CleanGuitar", withExtension: "aif")!)
         ]
     }
     
@@ -36,5 +35,9 @@ class AudioEditor: ObservableObject {
     
     func removeTrack(at offsets: IndexSet) {
         tracks.remove(atOffsets: offsets)
+    }
+    
+    func addNewTrack(at url: URL) {
+        tracks.append(TrackEditor(engine: engine, fileURL: url))
     }
 }

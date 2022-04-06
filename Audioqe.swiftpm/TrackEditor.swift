@@ -28,12 +28,11 @@ class TrackEditor: ObservableObject, Identifiable {
         }
     }
     
-    init(engine: AVAudioEngine, fileName: String) {
-        self.id = fileName
+    init(engine: AVAudioEngine, fileURL: URL) {
+        self.id = fileURL.lastPathComponent
         self.engine = engine
         
-        let sourceFileURL = Bundle.main.url(forResource: fileName, withExtension: "aif")!
-        self.file = try! AVAudioFile(forReading: sourceFileURL)
+        self.file = try! AVAudioFile(forReading: fileURL)
         
         reverb.loadFactoryPreset(.largeChamber)
         reverb.wetDryMix = 50
