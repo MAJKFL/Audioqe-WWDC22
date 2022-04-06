@@ -31,12 +31,16 @@ struct ContentView: View {
                                 .fill(Color.primary)
                                 .frame(maxWidth: .infinity, maxHeight: 1)
                             
-                            TileView(selectedBank: $selectedBank, bank: bank, editor: editor)
-                                .onDrag {
-                                    editor.draggedBank = bank
-                                    return NSItemProvider(contentsOf: URL(string: bank.id)!)!
-                                }
-                                .onDrop(of: [.url], delegate: TileDropDelegate(editor: editor, bank: bank))
+                            if bank.effect != nil {
+                                TileView(selectedBank: $selectedBank, bank: bank, editor: editor)
+                                    .onDrag {
+                                        editor.draggedBank = bank
+                                        return NSItemProvider(contentsOf: URL(string: bank.id)!)!
+                                    }
+                                    .onDrop(of: [.url], delegate: TileDropDelegate(editor: editor, bank: bank))
+                            } else {
+                                TileView(selectedBank: $selectedBank, bank: bank, editor: editor)
+                            }
                             
                             Rectangle()
                                 .fill(Color.primary)
@@ -67,7 +71,7 @@ struct ContentView: View {
                 }
             }
             .padding(.horizontal)
-            .navigationTitle("Audioqe")
+            .navigationTitle(editor.file.url.lastPathComponent)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     HStack {
