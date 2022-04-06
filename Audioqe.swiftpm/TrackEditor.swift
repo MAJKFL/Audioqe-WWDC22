@@ -58,7 +58,7 @@ class TrackEditor: ObservableObject, Identifiable {
             if nodes.count == 1 {
                 engine.connect(audioPlayer, to: nodes[0], format: format)
                 engine.connect(nodes[0], to: engine.mainMixerNode, format: format)
-                return
+                break
             }
             
             switch index {
@@ -69,6 +69,8 @@ class TrackEditor: ObservableObject, Identifiable {
             default: engine.connect(nodes[index - 1], to: nodes[index], format: format)
             }
         }
+        
+        isPlaying = false
     }
     
     func playPause() {

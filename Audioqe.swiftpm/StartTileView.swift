@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct StartTileView: View {
-    @ObservedObject var editor: TrackEditor
+    @StateObject var editor: TrackEditor
     
     var body: some View {
         RoundedRectangle(cornerRadius: 15)

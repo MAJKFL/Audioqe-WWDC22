@@ -46,31 +46,37 @@ struct TileView: View {
                 }
         } else {
             Menu {
-                Text("Add:")
-                
                 Button {
-                    bank.effect = AVAudioUnitReverb()
+                    withAnimation(.easeInOut.speed(2)) {
+                        bank.effect = AVAudioUnitReverb()
+                    }
                     editor.connectNodes()
                 } label: {
                     Label("Reverb", systemImage: "dot.radiowaves.left.and.right")
                 }
 
                 Button {
-                    bank.effect = AVAudioUnitDistortion()
+                    withAnimation(.easeInOut.speed(2)) {
+                        bank.effect = AVAudioUnitDistortion()
+                    }
                     editor.connectNodes()
                 } label: {
                     Label("Distortion", systemImage: "waveform.path")
                 }
                 
                 Button {
-                    bank.effect = AVAudioUnitDelay()
+                    withAnimation(.easeInOut.speed(2)) {
+                        bank.effect = AVAudioUnitDelay()
+                    }
                     editor.connectNodes()
                 } label: {
                     Label("Delay", systemImage: "wave.3.right")
                 }
                 
                 Button {
-                    bank.effect = AVAudioUnitEQ()
+                    withAnimation(.easeInOut.speed(2)) {
+                        bank.effect = AVAudioUnitEQ()
+                    }
                     editor.connectNodes()
                 } label: {
                     Label("Equaliser", systemImage: "slider.vertical.3")
