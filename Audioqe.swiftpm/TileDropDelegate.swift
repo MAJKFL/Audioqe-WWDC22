@@ -10,7 +10,7 @@ import SwiftUI
 struct TileDropDelegate: DropDelegate {
     @ObservedObject var editor: TrackEditor
     
-    var bank: BankViewModel
+    var bank: Bank
     
     func performDrop(info: DropInfo) -> Bool {
         return true

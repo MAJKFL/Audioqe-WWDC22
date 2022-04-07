@@ -10,7 +10,7 @@ import AVFoundation
 
 struct EqualiserEditorView: View {
     @ObservedObject var editor: TrackEditor
-    @ObservedObject var bank: BankViewModel
+    @ObservedObject var bank: Bank
     
     var body: some View {
         guard let equaliser = bank.effect as? AVAudioUnitEQ else { fatalError() }

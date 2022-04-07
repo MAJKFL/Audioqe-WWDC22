@@ -4,7 +4,7 @@ import AVFoundation
 struct ContentView: View {
     @ObservedObject var editor = TrackEditor(fileURL: Bundle.main.url(forResource: "CleanGuitar", withExtension: "aif")!)
     
-    @State private var selectedBank: BankViewModel?
+    @State private var selectedBank: Bank?
     
     let columns = [
         GridItem(.flexible(), spacing: 0),

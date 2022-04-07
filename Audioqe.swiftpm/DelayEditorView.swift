@@ -10,7 +10,7 @@ import AVFoundation
 
 struct DelayEditorView: View {
     @ObservedObject var editor: TrackEditor
-    @ObservedObject var bank: BankViewModel
+    @ObservedObject var bank: Bank
     
     var body: some View {
         guard let delay = bank.effect as? AVAudioUnitDelay else { fatalError() }

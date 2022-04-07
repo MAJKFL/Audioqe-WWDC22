@@ -12,8 +12,8 @@ class TrackEditor: ObservableObject, Identifiable {
     let id: String
     let engine = AVAudioEngine()
     
-    @Published var effectBanks = [BankViewModel]()
-    @Published var draggedBank: BankViewModel?
+    @Published var effectBanks = [Bank]()
+    @Published var draggedBank: Bank?
     
     @Published var audioPlayer = AVAudioPlayerNode()
     @Published var file: AVAudioFile
@@ -91,12 +91,12 @@ class TrackEditor: ObservableObject, Identifiable {
         let format = file.processingFormat
         
         effectBanks = [
-            BankViewModel(sampleRate: file.fileFormat.sampleRate),
-            BankViewModel(sampleRate: file.fileFormat.sampleRate),
-            BankViewModel(sampleRate: file.fileFormat.sampleRate),
-            BankViewModel(sampleRate: file.fileFormat.sampleRate),
-            BankViewModel(sampleRate: file.fileFormat.sampleRate),
-            BankViewModel(sampleRate: file.fileFormat.sampleRate)
+            Bank(sampleRate: file.fileFormat.sampleRate),
+            Bank(sampleRate: file.fileFormat.sampleRate),
+            Bank(sampleRate: file.fileFormat.sampleRate),
+            Bank(sampleRate: file.fileFormat.sampleRate),
+            Bank(sampleRate: file.fileFormat.sampleRate),
+            Bank(sampleRate: file.fileFormat.sampleRate)
         ]
         
         engine.connect(audioPlayer, to: engine.mainMixerNode, format: format)
@@ -149,13 +149,13 @@ class TrackEditor: ObservableObject, Identifiable {
         }
     }
     
-    func removeBank(_ bank: BankViewModel) {
+    func removeBank(_ bank: Bank) {
         effectBanks.removeAll(where: { $0.id == bank.id })
         
         if let index = effectBanks.firstIndex(where: { $0.effect == nil }) {
-            effectBanks.insert(BankViewModel(sampleRate: bank.sampleRate), at: index)
+            effectBanks.insert(Bank(sampleRate: bank.sampleRate), at: index)
         } else {
-            effectBanks.append(BankViewModel(sampleRate: bank.sampleRate))
+            effectBanks.append(Bank(sampleRate: bank.sampleRate))
         }
         
         connectNodes()

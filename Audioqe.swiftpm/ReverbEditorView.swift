@@ -10,7 +10,7 @@ import AVFoundation
 
 struct ReverbEditorView: View {
     @ObservedObject var editor: TrackEditor
-    @ObservedObject var bank: BankViewModel
+    @ObservedObject var bank: Bank
     
     var body: some View {
         guard let reverb = bank.effect as? AVAudioUnitReverb else { fatalError() }

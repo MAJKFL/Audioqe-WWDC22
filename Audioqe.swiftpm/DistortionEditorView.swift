@@ -10,7 +10,7 @@ import AVFoundation
 
 struct DistortionEditorView: View {
     @ObservedObject var editor: TrackEditor
-    @ObservedObject var bank: BankViewModel
+    @ObservedObject var bank: Bank
     
     var body: some View {
         guard let distortion = bank.effect as? AVAudioUnitDistortion else { fatalError() }

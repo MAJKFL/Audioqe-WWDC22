@@ -9,9 +9,9 @@ import SwiftUI
 import AVFoundation
 
 struct TileView: View {
-    @Binding var selectedBank: BankViewModel?
+    @Binding var selectedBank: Bank?
     
-    @ObservedObject var bank: BankViewModel
+    @ObservedObject var bank: Bank
     @ObservedObject var editor: TrackEditor
     
     @State private var isShowingPopover = false
