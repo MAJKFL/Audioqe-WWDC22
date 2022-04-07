@@ -53,31 +53,31 @@ struct TileView: View {
                 if let reverb = bank.effect as? AVAudioUnitReverb {
                     Text("**Preset** - \(TrackEditor.reverbPresetNames[bank.reverbPreset.rawValue] ?? "")")
                     
-                    Text("**Wet dry mix** - \(String(format: "%.1f", reverb.wetDryMix))")
+                    Text("**Wet dry mix** - \(String(format: "%.0f", reverb.wetDryMix))%")
                 } else if let distortion = bank.effect as? AVAudioUnitDistortion {
                     Text("**Preset** - \(TrackEditor.distortionPresetNames[bank.distortionPreset.rawValue] ?? "")")
                     
-                    Text("**Pre gain** - \(String(format: "%.2f", distortion.preGain))")
+                    Text("**Pre gain** - \(String(format: "%.2f", distortion.preGain)) dB")
                     
-                    Text("**Wet dry mix** - \(String(format: "%.1f", distortion.wetDryMix))")
+                    Text("**Wet dry mix** - \(String(format: "%.0f", distortion.wetDryMix))%")
                 } else if let delay = bank.effect as? AVAudioUnitDelay {
-                    Text("**Feedback** - \(String(format: "%.1f", delay.feedback))")
+                    Text("**Feedback** - \(String(format: "%.0f", delay.feedback))%")
                     
                     Text("**Delay time** - \(String(format: "%.2f", delay.delayTime))")
                     
-                    Text("**LP cutoff** - \(String(format: "%.0f", delay.lowPassCutoff))")
+                    Text("**LP cutoff** - \(String(format: "%.0f", delay.lowPassCutoff)) Hz")
                     
-                    Text("**Wet dry mix** - \(String(format: "%.1f", delay.wetDryMix))")
+                    Text("**Wet dry mix** - \(String(format: "%.0f", delay.wetDryMix))%")
                 } else if let equaliser = bank.effect as? AVAudioUnitEQ {
                     Text("**Filter** - \(TrackEditor.eqFilterNames[bank.distortionPreset.rawValue] ?? "")")
                     
-                    Text("**Bandwidth** - \(String(format: "%.1f", equaliser.bands.first?.bandwidth ?? 0))")
+                    Text("**Bandwidth** - \(String(format: "%.2f", equaliser.bands.first?.bandwidth ?? 0))")
                     
                     Text("**Bypass** - \(equaliser.bands.first?.bypass ?? false ? "On" : "Off")")
                     
-                    Text("**Frequency** - \(String(format: "%.0f", equaliser.bands.first?.frequency ?? 0))")
+                    Text("**Frequency** - \(String(format: "%.0f", equaliser.bands.first?.frequency ?? 0)) Hz")
                     
-                    Text("**Gain** - \(String(format: "%.1f", equaliser.bands.first?.gain ?? 0))")
+                    Text("**Gain** - \(String(format: "%.1f", equaliser.bands.first?.gain ?? 0)) dB")
                 }
             }
             .lineLimit(1)
