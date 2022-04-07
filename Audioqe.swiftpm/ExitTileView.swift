@@ -12,10 +12,16 @@ struct ExitTileView: View {
         RoundedRectangle(cornerRadius: 15)
             .fill(Color.red)
             .frame(width: 220, height: 160)
-            .overlay {
-                Image(systemName: "speaker.wave.3.fill")
-                    .font(.largeTitle)
-            }
+            .overlay(VStack(alignment: .leading) {
+                HStack {
+                    Label("Exit", systemImage: "speaker.wave.3.fill")
+                        .font(.largeTitle)
+                    
+                    Spacer()
+                }
+                
+                Spacer()
+            }.padding())
             .foregroundColor(.white)
     }
 }

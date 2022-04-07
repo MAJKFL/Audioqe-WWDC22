@@ -14,10 +14,19 @@ struct StartTileView: View {
         RoundedRectangle(cornerRadius: 15)
             .fill(Color.green)
             .frame(width: 220, height: 160)
-            .overlay {
-                Image(systemName: editor.isPlaying ? "stop.fill" : "play.fill")
-                    .font(.largeTitle)
-            }
+            .overlay(VStack(alignment: .leading) {
+                HStack {
+                    Label("Start", systemImage: editor.isPlaying ? "stop.fill" : "play.fill")
+                        .font(.largeTitle)
+                        .foregroundColor(.accentColor)
+                    
+                    Spacer()
+                }
+                
+                Text("**File** - \(editor.file.url.lastPathComponent)")
+                
+                Spacer()
+            }.padding())
             .onTapGesture {
                 withAnimation {
                     editor.playPause()

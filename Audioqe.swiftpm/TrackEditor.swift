@@ -112,6 +112,10 @@ class TrackEditor: ObservableObject, Identifiable {
         for node in nodes {
             engine.attach(node)
         }
+        
+        if nodes.isEmpty {
+            engine.connect(audioPlayer, to: engine.mainMixerNode, format: format)
+        }
 
         for index in nodes.indices {
             if nodes.count == 1 {
@@ -153,5 +157,7 @@ class TrackEditor: ObservableObject, Identifiable {
         } else {
             effectBanks.append(BankViewModel(sampleRate: bank.sampleRate))
         }
+        
+        connectNodes()
     }
 }
