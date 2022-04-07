@@ -69,7 +69,7 @@ struct TileView: View {
                     
                     Text("**Wet dry mix** - \(String(format: "%.0f", delay.wetDryMix))%")
                 } else if let equaliser = bank.effect as? AVAudioUnitEQ {
-                    Text("**Filter** - \(TrackEditor.eqFilterNames[bank.distortionPreset.rawValue] ?? "")")
+                    Text("**Filter** - \(TrackEditor.eqFilterNames[bank.equaliserFilterType.rawValue] ?? "")")
                     
                     Text("**Bandwidth** - \(String(format: "%.2f", equaliser.bands.first?.bandwidth ?? 0))")
                     
