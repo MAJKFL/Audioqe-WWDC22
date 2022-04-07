@@ -99,6 +99,7 @@ struct TileView: View {
             RoundedRectangle(cornerRadius: 15)
                 .fill(bgColor)
                 .frame(width: 220, height: 160)
+                .scaleEffect(isSelected ? 0.93 : 1)
                 .overlay(VStack {
                     HStack {
                         Label(name, systemImage: imageName)
@@ -116,11 +117,6 @@ struct TileView: View {
                         Spacer()
                     }
                 }.padding())
-                .overlay(
-                    RoundedRectangle(cornerRadius: 16)
-                        .stroke(.blue, lineWidth: 4)
-                        .opacity(isSelected ? 1 : 0)
-                )
                 .foregroundColor(.white)
                 .onTapGesture {
                     withAnimation(.easeInOut.speed(2)) {
