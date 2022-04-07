@@ -62,7 +62,7 @@ struct ContentView: View {
                         ExitTileView(editor: editor)
                     }
                 }
-                .animation(.default.speed(2), value: editor.activeBanksCount)
+                .animation(.default.speed(1.5), value: editor.activeBanksCount)
             }
             .navigationTitle("Queue name")
             .toolbar {                
