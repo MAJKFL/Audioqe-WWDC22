@@ -40,23 +40,39 @@ struct EqualiserEditorView: View {
         )
         
         return VStack(alignment: .leading) {
+            Text("Filter type:")
+                .font(.headline)
+            
             Picker("Filter type", selection: preset) {
                 ForEach(0..<11, id: \.self) { key in
                     Text(TrackEditor.eqFilterNames[key] ?? "UNKNOWN")
                 }
             }
+            .pickerStyle(.wheel)
             
-            Text("Bandwidth")
-            Slider(value: bandwidth, in: 0.05...5.0)
+            Text("Bandwidth:")
+                .font(.headline)
             
-            Text("Bypass")
-            Toggle(isOn: bypass) { Text("") }
+            Slider(value: bandwidth, in: 0.05...5.0, minimumValueLabel: Text("0.05"), maximumValueLabel: Text("5.00")) {
+                EmptyView()
+            }
+
+            Toggle(isOn: bypass) { Text("Bypass:").font(.headline) }
             
-            Text("Frequency")
-            Slider(value: frequency, in: 20...Float(bank.sampleRate / 2))
+            Text("Frequency:")
+                .font(.headline)
             
-            Text("Gain")
-            Slider(value: gain, in: -96...24)
+            Slider(value: frequency, in: 20...Float(bank.sampleRate / 2), minimumValueLabel: Text("20 Hz"), maximumValueLabel: Text(String(format: "%.0f Hz", Float(bank.sampleRate / 2)))) {
+                EmptyView()
+            }
+            
+            Text("Gain:")
+                .font(.headline)
+            
+            Slider(value: gain, in: -96...24, minimumValueLabel: Text("-96 dB"), maximumValueLabel: Text("24 dB")) {
+                EmptyView()
+            }
         }
+        .padding()
     }
 }
