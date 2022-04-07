@@ -14,6 +14,8 @@ struct TileView: View {
     @ObservedObject var bank: BankViewModel
     @ObservedObject var editor: TrackEditor
     
+    @State private var isShowingPopover = false
+    
     var bgColor: Color? {
         switch bank.effect {
         case is AVAudioUnitReverb: return .mint
@@ -126,6 +128,27 @@ struct TileView: View {
                         } else {
                             selectedBank = bank
                         }
+                    }
+                }
+                .popover(isPresented: $isShowingPopover, content: {
+                    switch selectedBank?.effect {
+                    case is AVAudioUnitDelay:
+                        DelayEditorView(bank: selectedBank!)
+                    case is AVAudioUnitDistortion:
+                        DistortionEditorView(bank: selectedBank!)
+                    case is AVAudioUnitReverb:
+                        ReverbEditorView(bank: selectedBank!)
+                    case is AVAudioUnitEQ:
+                        EqualiserEditorView(bank: selectedBank!)
+                    default:
+                        Text("None")
+                    }
+                })
+                .onChange(of: selectedBank?.id) { newValue in
+                    if newValue == bank.id {
+                        isShowingPopover = true
+                    } else {
+                        isShowingPopover = false 
                     }
                 }
         } else {

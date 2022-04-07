@@ -56,19 +56,6 @@ struct ContentView: View {
                         ExitTileView()
                     }
                 }
-                
-                switch selectedBank?.effect {
-                case is AVAudioUnitDelay:
-                    DelayEditorView(bank: selectedBank!)
-                case is AVAudioUnitDistortion:
-                    DistortionEditorView(bank: selectedBank!)
-                case is AVAudioUnitReverb:
-                    ReverbEditorView(bank: selectedBank!)
-                case is AVAudioUnitEQ:
-                    EqualiserEditorView(bank: selectedBank!)
-                default:
-                    Text("None")
-                }
             }
             .padding(.horizontal)
             .navigationTitle(editor.file.url.lastPathComponent)

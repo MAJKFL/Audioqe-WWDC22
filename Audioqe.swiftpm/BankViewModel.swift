@@ -8,7 +8,7 @@
 import Foundation
 import AVFoundation
 
-class BankViewModel: Identifiable, ObservableObject {
+class BankViewModel: Identifiable, ObservableObject {    
     @Published var id = UUID().uuidString
     @Published var effect: AVAudioUnit?
     @Published var sampleRate: Double

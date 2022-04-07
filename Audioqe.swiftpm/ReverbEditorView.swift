@@ -24,14 +24,19 @@ struct ReverbEditorView: View {
             set: { reverb.wetDryMix = $0 }
         )
         
-        return VStack(alignment: .leading) {
+        return HStack {
+            VStack(alignment: .leading) {
+                Text("Wet dry mix")
+                Slider(value: wetDryMix, in: 0...100)
+            }
+            
             Picker("preset", selection: preset) {
                 ForEach(0..<13, id: \.self) { key in
                     Text(TrackEditor.reverbPresetNames[key] ?? "UNKNOWN")
                 }
             }
-            Text("Wet dry mix")
-            Slider(value: wetDryMix, in: 0...100)
+            .pickerStyle(.wheel)
+            .frame(maxWidth: 300)
         }
     }
 }
