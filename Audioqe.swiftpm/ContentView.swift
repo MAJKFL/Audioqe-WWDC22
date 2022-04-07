@@ -30,6 +30,9 @@ struct ContentView: View {
                             Rectangle()
                                 .fill(Color.primary)
                                 .frame(maxWidth: .infinity, maxHeight: 1)
+                                .transaction { transaction in
+                                    transaction.animation = nil
+                                }
                             
                             if bank.effect != nil {
                                 TileView(selectedBank: $selectedBank, bank: bank, editor: editor)
@@ -45,6 +48,9 @@ struct ContentView: View {
                             Rectangle()
                                 .fill(Color.primary)
                                 .frame(maxWidth: .infinity, maxHeight: 1)
+                                .transaction { transaction in
+                                    transaction.animation = nil
+                                }
                         }
                     }
                     
