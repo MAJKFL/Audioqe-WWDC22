@@ -59,7 +59,7 @@ struct ContentView: View {
                             .fill(Color.primary)
                             .frame(maxWidth: .infinity, maxHeight: 1)
                         
-                        ExitTileView()
+                        ExitTileView(editor: editor)
                     }
                 }
                 .animation(.default.speed(2), value: editor.activeBanksCount)
