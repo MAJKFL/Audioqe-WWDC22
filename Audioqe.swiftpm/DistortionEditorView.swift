@@ -30,17 +30,30 @@ struct DistortionEditorView: View {
         )
         
         return VStack(alignment: .leading) {
+            Text("Pre gain:")
+                .font(.headline)
+            
+            Slider(value: preGain, in: -80...20, minimumValueLabel: Text("-80 dB"), maximumValueLabel: Text("20 dB")) {
+                EmptyView()
+            }
+            
+            Text("Preset:")
+                .font(.headline)
+            
             Picker("preset", selection: preset) {
                 ForEach(0..<22, id: \.self) { key in
                     Text(TrackEditor.distortionPresetNames[key] ?? "UNKNOWN")
                 }
             }
+            .pickerStyle(.wheel)
             
-            Text("Pre gain")
-            Slider(value: preGain, in: -80...20)
+            Text("Wet dry mix:")
+                .font(.headline)
             
-            Text("Wet dry mix")
-            Slider(value: wetDryMix, in: 0...100)
+            Slider(value: wetDryMix, in: 0...100, minimumValueLabel: Text("0%"), maximumValueLabel: Text("100%")) {
+                EmptyView()
+            }
         }
+        .padding()
     }
 }

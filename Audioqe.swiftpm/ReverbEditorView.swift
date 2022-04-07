@@ -34,12 +34,11 @@ struct ReverbEditorView: View {
                 }
             }
             .pickerStyle(.wheel)
-            .frame(maxWidth: 200)
             
             Text("Wet dry mix:")
                 .font(.headline)
             
-            Slider(value: wetDryMix, in: 0...100, minimumValueLabel: Text("0"), maximumValueLabel: Text("100")) {
+            Slider(value: wetDryMix, in: 0...100, minimumValueLabel: Text("0%"), maximumValueLabel: Text("100%")) {
                 EmptyView()
             }
         }
