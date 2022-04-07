@@ -134,13 +134,13 @@ struct TileView: View {
                 .popover(isPresented: $isShowingPopover, content: {
                     switch selectedBank?.effect {
                     case is AVAudioUnitDelay:
-                        DelayEditorView(bank: selectedBank!)
+                        DelayEditorView(editor: editor, bank: selectedBank!)
                     case is AVAudioUnitDistortion:
-                        DistortionEditorView(bank: selectedBank!)
+                        DistortionEditorView(editor: editor, bank: selectedBank!)
                     case is AVAudioUnitReverb:
-                        ReverbEditorView(bank: selectedBank!)
+                        ReverbEditorView(editor: editor, bank: selectedBank!)
                     case is AVAudioUnitEQ:
-                        EqualiserEditorView(bank: selectedBank!)
+                        EqualiserEditorView(editor: editor, bank: selectedBank!)
                     default:
                         Text("None")
                     }
@@ -210,6 +210,9 @@ struct TileView: View {
                 }
             }
             .disabled(!isLastEmptyBank)
+            .transaction { transaction in
+                transaction.animation = nil
+            }
         }
     }
 }

@@ -144,4 +144,14 @@ class TrackEditor: ObservableObject, Identifiable {
             isPlaying = true
         }
     }
+    
+    func removeBank(_ bank: BankViewModel) {
+        effectBanks.removeAll(where: { $0.id == bank.id })
+        
+        if let index = effectBanks.firstIndex(where: { $0.effect == nil }) {
+            effectBanks.insert(BankViewModel(sampleRate: bank.sampleRate), at: index)
+        } else {
+            effectBanks.append(BankViewModel(sampleRate: bank.sampleRate))
+        }
+    }
 }

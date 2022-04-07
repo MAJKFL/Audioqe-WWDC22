@@ -9,6 +9,7 @@ import SwiftUI
 import AVFoundation
 
 struct DelayEditorView: View {
+    @ObservedObject var editor: TrackEditor
     @ObservedObject var bank: BankViewModel
     
     var body: some View {
@@ -34,34 +35,39 @@ struct DelayEditorView: View {
             set: { delay.wetDryMix = $0 }
         )
         
-        return VStack(alignment: .leading) {
-            Text("Feedback:")
-                .font(.headline)
-            
-            Slider(value: feedback, in: -100...100, minimumValueLabel: Text("-100%"), maximumValueLabel: Text("100%")) {
-                EmptyView()
+        return VStack {
+            VStack(alignment: .leading) {
+                Text("Feedback:")
+                    .font(.headline)
+                
+                Slider(value: feedback, in: -100...100, minimumValueLabel: Text("-100%"), maximumValueLabel: Text("100%")) {
+                    EmptyView()
+                }
+                
+                Text("Delay time:")
+                    .font(.headline)
+                
+                Slider(value: delayTime, in: 0...2, minimumValueLabel: Text("0"), maximumValueLabel: Text("2")) {
+                    EmptyView()
+                }
+                
+                Text("Low pass cutoff:")
+                    .font(.headline)
+                
+                Slider(value: lowPassCutoff, in: 10...Float(bank.sampleRate / 2), minimumValueLabel: Text("10 Hz"), maximumValueLabel: Text(String(format: "%.0f Hz", Float(bank.sampleRate / 2)))) {
+                    EmptyView()
+                }
+                
+                Text("Wet dry mix:")
+                    .font(.headline)
+                
+                Slider(value: wetDryMix, in: 0...100, minimumValueLabel: Text("0%"), maximumValueLabel: Text("100%")) {
+                    EmptyView()
+                }
             }
             
-            Text("Delay time:")
-                .font(.headline)
-            
-            Slider(value: delayTime, in: 0...2, minimumValueLabel: Text("0"), maximumValueLabel: Text("2")) {
-                EmptyView()
-            }
-            
-            Text("Low pass cutoff:")
-                .font(.headline)
-            
-            Slider(value: lowPassCutoff, in: 10...Float(bank.sampleRate / 2), minimumValueLabel: Text("10 Hz"), maximumValueLabel: Text(String(format: "%.0f Hz", Float(bank.sampleRate / 2)))) {
-                EmptyView()
-            }
-            
-            Text("Wet dry mix:")
-                .font(.headline)
-            
-            Slider(value: wetDryMix, in: 0...100, minimumValueLabel: Text("0%"), maximumValueLabel: Text("100%")) {
-                EmptyView()
-            }
+            Button(role: .destructive, action: { editor.removeBank(bank) }, label: { Label("Remove", systemImage: "trash") })
+                .padding()
         }
         .frame(width: 300)
         .padding()
