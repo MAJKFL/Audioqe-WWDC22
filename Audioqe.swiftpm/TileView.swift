@@ -165,7 +165,9 @@ struct TileView: View {
             Menu {
                 Button {
                     withAnimation(.easeInOut.speed(2)) {
-                        bank.effect = AVAudioUnitReverb()
+                        let reverb = AVAudioUnitReverb()
+                        reverb.wetDryMix = 50
+                        bank.effect = reverb
                     }
                     editor.connectNodes()
                 } label: {
@@ -174,7 +176,9 @@ struct TileView: View {
 
                 Button {
                     withAnimation(.easeInOut.speed(2)) {
-                        bank.effect = AVAudioUnitDistortion()
+                        let distortion = AVAudioUnitDistortion()
+                        distortion.wetDryMix = 50
+                        bank.effect = distortion
                     }
                     editor.connectNodes()
                 } label: {
