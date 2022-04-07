@@ -62,6 +62,7 @@ struct ContentView: View {
                         ExitTileView()
                     }
                 }
+                .animation(.default.speed(2), value: editor.activeBanksCount)
             }
             .padding(.horizontal)
             .navigationTitle(editor.file.url.lastPathComponent)

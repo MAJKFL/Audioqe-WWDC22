@@ -162,59 +162,54 @@ struct TileView: View {
                     }
                 }
         } else {
-            if isLastEmptyBank {
-                Menu {
-                    Button {
-                        withAnimation(.easeInOut.speed(2)) {
-                            bank.effect = AVAudioUnitReverb()
-                        }
-                        editor.connectNodes()
-                    } label: {
-                        Label("Reverb", systemImage: "dot.radiowaves.left.and.right")
+            Menu {
+                Button {
+                    withAnimation(.easeInOut.speed(2)) {
+                        bank.effect = AVAudioUnitReverb()
                     }
-
-                    Button {
-                        withAnimation(.easeInOut.speed(2)) {
-                            bank.effect = AVAudioUnitDistortion()
-                        }
-                        editor.connectNodes()
-                    } label: {
-                        Label("Distortion", systemImage: "waveform.path")
-                    }
-                    
-                    Button {
-                        withAnimation(.easeInOut.speed(2)) {
-                            bank.effect = AVAudioUnitDelay()
-                        }
-                        editor.connectNodes()
-                    } label: {
-                        Label("Delay", systemImage: "wave.3.right")
-                    }
-                    
-                    Button {
-                        withAnimation(.easeInOut.speed(2)) {
-                            bank.effect = AVAudioUnitEQ()
-                        }
-                        editor.connectNodes()
-                    } label: {
-                        Label("Equaliser", systemImage: "slider.vertical.3")
-                    }
+                    editor.connectNodes()
                 } label: {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 15)
-                            .fill(Color.secondary.opacity(0.1))
-                            .frame(width: 220, height: 160)
-                        
-                        Rectangle()
-                            .fill(Color.primary)
-                            .frame(maxWidth: .infinity, maxHeight: 1)
-                    }
+                    Label("Reverb", systemImage: "dot.radiowaves.left.and.right")
                 }
-            } else {
-                Rectangle()
-                    .fill(Color.primary)
-                    .frame(maxWidth: .infinity, maxHeight: 1)
+
+                Button {
+                    withAnimation(.easeInOut.speed(2)) {
+                        bank.effect = AVAudioUnitDistortion()
+                    }
+                    editor.connectNodes()
+                } label: {
+                    Label("Distortion", systemImage: "waveform.path")
+                }
+                
+                Button {
+                    withAnimation(.easeInOut.speed(2)) {
+                        bank.effect = AVAudioUnitDelay()
+                    }
+                    editor.connectNodes()
+                } label: {
+                    Label("Delay", systemImage: "wave.3.right")
+                }
+                
+                Button {
+                    withAnimation(.easeInOut.speed(2)) {
+                        bank.effect = AVAudioUnitEQ()
+                    }
+                    editor.connectNodes()
+                } label: {
+                    Label("Equaliser", systemImage: "slider.vertical.3")
+                }
+            } label: {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 15)
+                        .fill(Color.secondary.opacity(isLastEmptyBank ? 0.1 : 0))
+                        .frame(width: 220, height: 160)
+                    
+                    Rectangle()
+                        .fill(Color.primary)
+                        .frame(maxWidth: .infinity, maxHeight: 1)
+                }
             }
+            .disabled(!isLastEmptyBank)
         }
     }
 }
