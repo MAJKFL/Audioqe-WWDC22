@@ -11,20 +11,6 @@ import AVFoundation
 struct EqualiserEditorView: View {
     @ObservedObject var bank: BankViewModel
     
-    let filterNames = [
-        0:  "parametric",
-        1:  "low pass",
-        2:  "high pass",
-        3:  "resonant low pass",
-        4:  "resonant high pass",
-        5:  "band pass",
-        6:  "band stop",
-        7:  "low shelf",
-        8:  "high shelf",
-        9:  "resonant low shelf",
-        10: "resonant high shelf"
-    ]
-    
     var body: some View {
         guard let equaliser = bank.effect as? AVAudioUnitEQ else { fatalError() }
         
@@ -56,7 +42,7 @@ struct EqualiserEditorView: View {
         return VStack(alignment: .leading) {
             Picker("Filter type", selection: preset) {
                 ForEach(0..<11, id: \.self) { key in
-                    Text(filterNames[key] ?? "UNKNOWN")
+                    Text(TrackEditor.eqFilterNames[key] ?? "UNKNOWN")
                 }
             }
             

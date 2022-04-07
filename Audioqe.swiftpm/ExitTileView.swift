@@ -11,10 +11,11 @@ struct ExitTileView: View {
     var body: some View {
         RoundedRectangle(cornerRadius: 15)
             .fill(Color.red)
-            .frame(width: 200, height: 150)
+            .frame(width: 220, height: 160)
             .overlay {
                 Image(systemName: "speaker.wave.3.fill")
                     .font(.largeTitle)
             }
+            .foregroundColor(.white)
     }
 }

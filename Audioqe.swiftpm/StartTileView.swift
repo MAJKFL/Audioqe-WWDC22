@@ -13,7 +13,7 @@ struct StartTileView: View {
     var body: some View {
         RoundedRectangle(cornerRadius: 15)
             .fill(Color.green)
-            .frame(width: 200, height: 150)
+            .frame(width: 220, height: 160)
             .overlay {
                 Image(systemName: editor.isPlaying ? "stop.fill" : "play.fill")
                     .font(.largeTitle)
@@ -23,5 +23,6 @@ struct StartTileView: View {
                     editor.playPause()
                 }
             }
+            .foregroundColor(.white)
     }
 }
