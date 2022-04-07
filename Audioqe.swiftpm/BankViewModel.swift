@@ -39,14 +39,4 @@ class BankViewModel: Identifiable, ObservableObject {
             band.filterType = equaliserFilterType
         }
     }
-    
-    func setPreset(_ preset: AVAudioUnitReverbPreset) {
-        guard let reverb = effect as? AVAudioUnitReverb else { return }
-        reverb.loadFactoryPreset(preset)
-    }
-    
-    func setPreset(_ preset: AVAudioUnitDistortionPreset) {
-        guard let distortion = effect as? AVAudioUnitDistortion else { return }
-        distortion.loadFactoryPreset(preset)
-    }
 }

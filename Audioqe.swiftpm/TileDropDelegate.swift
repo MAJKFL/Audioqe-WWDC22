@@ -27,10 +27,10 @@ struct TileDropDelegate: DropDelegate {
         
         let toIndex = editor.effectBanks.firstIndex(where: { $0.id == draggedBank.id })!
         
-        if fromIndex != toIndex {
-            let fromBank = editor.effectBanks[fromIndex]
-            editor.effectBanks[fromIndex] = editor.effectBanks[toIndex]
-            editor.effectBanks[toIndex] = fromBank
+        withAnimation {
+            if fromIndex != toIndex {
+                editor.effectBanks.move(fromOffsets: IndexSet(integer: fromIndex), toOffset: toIndex > fromIndex ? toIndex + 1 : toIndex)
+            }
         }
         
         editor.connectNodes()
