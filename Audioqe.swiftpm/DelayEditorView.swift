@@ -35,17 +35,35 @@ struct DelayEditorView: View {
         )
         
         return VStack(alignment: .leading) {
-            Text("Feedback")
-            Slider(value: feedback, in: -100...100)
+            Text("Feedback:")
+                .font(.headline)
             
-            Text("Delay time")
-            Slider(value: delayTime, in: 0...2)
+            Slider(value: feedback, in: -100...100, minimumValueLabel: Text("-100%"), maximumValueLabel: Text("100%")) {
+                EmptyView()
+            }
             
-            Text("Low pass cutoff")
-            Slider(value: lowPassCutoff, in: 10...Float(bank.sampleRate / 2))
+            Text("Delay time:")
+                .font(.headline)
             
-            Text("Wet dry mix")
-            Slider(value: wetDryMix, in: 0...100)
+            Slider(value: delayTime, in: 0...2, minimumValueLabel: Text("0"), maximumValueLabel: Text("2")) {
+                EmptyView()
+            }
+            
+            Text("Low pass cutoff:")
+                .font(.headline)
+            
+            Slider(value: lowPassCutoff, in: 10...Float(bank.sampleRate / 2), minimumValueLabel: Text("10 Hz"), maximumValueLabel: Text(String(format: "%.0f Hz", Float(bank.sampleRate / 2)))) {
+                EmptyView()
+            }
+            
+            Text("Wet dry mix:")
+                .font(.headline)
+            
+            Slider(value: wetDryMix, in: 0...100, minimumValueLabel: Text("0%"), maximumValueLabel: Text("100%")) {
+                EmptyView()
+            }
         }
+        .frame(width: 300)
+        .padding()
     }
 }
