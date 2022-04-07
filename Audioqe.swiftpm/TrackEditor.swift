@@ -20,6 +20,10 @@ class TrackEditor: ObservableObject, Identifiable {
     
     @Published var isPlaying = false
     
+    var activeBanksCount: Int {
+        effectBanks.compactMap({ $0.effect }).count
+    }
+    
     init(fileURL: URL) {
         self.id = fileURL.lastPathComponent
         

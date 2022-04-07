@@ -28,6 +28,10 @@ struct TileView: View {
         bank.id == selectedBank?.id
     }
     
+    var isLastEmptyBank: Bool {
+        editor.effectBanks.firstIndex(where: { $0.id == bank.id }) == editor.activeBanksCount
+    }
+    
     var body: some View {
         if let bgColor = bgColor {
             RoundedRectangle(cornerRadius: 15)
@@ -41,7 +45,11 @@ struct TileView: View {
                 )
                 .onTapGesture {
                     withAnimation(.easeInOut.speed(2)) {
-                        selectedBank = bank
+                        if isSelected {
+                            selectedBank = nil
+                        } else {
+                            selectedBank = bank
+                        }
                     }
                 }
         } else {
@@ -84,7 +92,7 @@ struct TileView: View {
             } label: {
                 ZStack {
                     RoundedRectangle(cornerRadius: 15)
-                        .fill(Color.secondary.opacity(0.1))
+                        .fill(Color.secondary.opacity(isLastEmptyBank ? 0.1 : 0))
                         .frame(width: 200, height: 150)
                     
                     Rectangle()
