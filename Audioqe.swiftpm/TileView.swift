@@ -77,6 +77,7 @@ struct TileView: View {
                     Text("**Gain** - \(String(format: "%.1f", equaliser.bands.first?.gain ?? 0))")
                 }
             }
+            .lineLimit(1)
             
             Spacer()
         }
@@ -100,12 +101,17 @@ struct TileView: View {
                         Label(name, systemImage: imageName)
                             .font(.title)
                         
-                        Spacer()
+                        if !isSelected {
+                            Spacer()
+                        }
                     }
                     
-                    detailedView
-                    
-                    Spacer()
+                    if !isSelected {
+                        detailedView
+                            .transition(.opacity.combined(with: .move(edge: .bottom)))
+                        
+                        Spacer()
+                    }
                 }.padding())
                 .overlay(
                     RoundedRectangle(cornerRadius: 16)
