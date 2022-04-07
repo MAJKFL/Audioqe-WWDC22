@@ -64,7 +64,6 @@ struct ContentView: View {
                 }
                 .animation(.default.speed(2), value: editor.activeBanksCount)
             }
-            .padding(.horizontal)
             .navigationTitle("Queue name")
             .toolbar {                
                 ToolbarItem(placement: .navigationBarTrailing) {

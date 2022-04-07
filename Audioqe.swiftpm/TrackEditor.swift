@@ -86,7 +86,7 @@ class TrackEditor: ObservableObject, Identifiable {
         
         engine.attach(audioPlayer)
         
-        audioPlayer.volume = 0.5
+        audioPlayer.volume = 1
         
         let format = file.processingFormat
         

@@ -33,5 +33,6 @@ struct StartTileView: View {
                 }
             }
             .foregroundColor(.white)
+            .padding(.leading)
     }
 }

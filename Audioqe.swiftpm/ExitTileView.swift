@@ -39,5 +39,6 @@ struct ExitTileView: View {
                 Spacer()
             }.padding())
             .foregroundColor(.white)
+            .padding(.trailing)
     }
 }
