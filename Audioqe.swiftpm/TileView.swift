@@ -15,6 +15,7 @@ struct TileView: View {
     @ObservedObject var editor: TrackEditor
     
     @State private var isShowingPopover = false
+    @State private var oldShowingPopoverValue = false
     
     var bgColor: Color? {
         switch bank.effect {
@@ -147,8 +148,17 @@ struct TileView: View {
                 .onChange(of: selectedBank?.id) { newValue in
                     if newValue == bank.id {
                         isShowingPopover = true
+                        oldShowingPopoverValue = true
                     } else {
-                        isShowingPopover = false 
+                        isShowingPopover = false
+                        oldShowingPopoverValue = false
+                    }
+                }
+                .onChange(of: isShowingPopover) { newValue in
+                    if oldShowingPopoverValue && !newValue {
+                        withAnimation(.easeInOut.speed(1.5)) {
+                            selectedBank = nil
+                        }
                     }
                 }
         } else {
