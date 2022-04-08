@@ -2,33 +2,26 @@ import SwiftUI
 import AVFoundation
 
 struct ContentView: View {
+    @ObservedObject var orientationInfo = OrientationInfo()
     @ObservedObject var editor = TrackEditor()
     
     @State private var selectedBank: Bank?
     @State private var isShowingImporter = false
-    @State private var orientation = UIDevice.current.orientation
     
     var columns: [GridItem] {
-//        if orientation == .unknown ? UIDevice.current.orientation.isLandscape : orientation.isLandscape {
-//            return [
-//                GridItem(.flexible(), spacing: 0),
-//                GridItem(.flexible(), spacing: 0),
-//                GridItem(.flexible(), spacing: 0),
-//                GridItem(.flexible(), spacing: 0)
-//            ]
-//        } else {
-//            return [
-//                GridItem(.flexible(), spacing: 0),
-//                GridItem(.flexible(), spacing: 0)
-//            ]
-//        }
-        
-        return [
-            GridItem(.flexible(), spacing: 0),
-            GridItem(.flexible(), spacing: 0),
-            GridItem(.flexible(), spacing: 0),
-            GridItem(.flexible(), spacing: 0)
-        ]
+        if orientationInfo.orientation == .landscape {
+            return [
+                GridItem(.flexible(), spacing: 0),
+                GridItem(.flexible(), spacing: 0),
+                GridItem(.flexible(), spacing: 0),
+                GridItem(.flexible(), spacing: 0)
+            ]
+        } else {
+            return [
+                GridItem(.flexible(), spacing: 0),
+                GridItem(.flexible(), spacing: 0)
+            ]
+        }
     }
     
     var body: some View {
@@ -126,9 +119,6 @@ struct ContentView: View {
                     print(error.localizedDescription)
                 }
             })
-            .onRotate { newOrientation in
-                orientation = newOrientation
-            }
         }
         .navigationViewStyle(.stack)
     }
@@ -140,24 +130,6 @@ struct ContentView: View {
         ac.popoverPresentationController?.sourceView = UIApplication.shared.keyWindow
         ac.popoverPresentationController?.sourceRect = buttonRect
         UIApplication.shared.keyWindow?.rootViewController!.present(ac, animated: true)
-    }
-}
-
-struct DeviceRotationViewModifier: ViewModifier {
-    let action: (UIDeviceOrientation) -> Void
-
-    func body(content: Content) -> some View {
-        content
-            .onAppear()
-            .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
-                action(UIDevice.current.orientation)
-            }
-    }
-}
-
-extension View {
-    func onRotate(perform action: @escaping (UIDeviceOrientation) -> Void) -> some View {
-        self.modifier(DeviceRotationViewModifier(action: action))
     }
 }
 
