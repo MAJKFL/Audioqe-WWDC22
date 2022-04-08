@@ -6,13 +6,23 @@ struct ContentView: View {
     
     @State private var selectedBank: Bank?
     @State private var isShowingImporter = false
+    @State private var orientation = UIDevice.current.orientation
     
-    let columns = [
-        GridItem(.flexible(), spacing: 0),
-        GridItem(.flexible(), spacing: 0),
-        GridItem(.flexible(), spacing: 0),
-        GridItem(.flexible(), spacing: 0)
-    ]
+    var columns: [GridItem] {        
+        if orientation == .unknown ? UIDevice.current.orientation.isLandscape : orientation.isLandscape {
+            return [
+                GridItem(.flexible(), spacing: 0),
+                GridItem(.flexible(), spacing: 0),
+                GridItem(.flexible(), spacing: 0),
+                GridItem(.flexible(), spacing: 0)
+            ]
+        } else {
+            return [
+                GridItem(.flexible(), spacing: 0),
+                GridItem(.flexible(), spacing: 0)
+            ]
+        }
+    }
     
     var body: some View {
         NavigationView {
@@ -106,7 +116,28 @@ struct ContentView: View {
                     print(error.localizedDescription)
                 }
             })
+            .onRotate { newOrientation in
+                orientation = newOrientation
+            }
         }
         .navigationViewStyle(.stack)
+    }
+}
+
+struct DeviceRotationViewModifier: ViewModifier {
+    let action: (UIDeviceOrientation) -> Void
+
+    func body(content: Content) -> some View {
+        content
+            .onAppear()
+            .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
+                action(UIDevice.current.orientation)
+            }
+    }
+}
+
+extension View {
+    func onRotate(perform action: @escaping (UIDeviceOrientation) -> Void) -> some View {
+        self.modifier(DeviceRotationViewModifier(action: action))
     }
 }
