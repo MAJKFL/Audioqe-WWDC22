@@ -33,11 +33,20 @@ struct StartTileView: View {
                 
                 Text("**File** - \(editor.file.url.lastPathComponent)")
                 
-                Text("**Length** - \(String(format: "%.0f", Double(editor.file.length) / 60000)) s")
+                Text("**Length** - \(secondsToMinutesSeconds(Int(editor.file.length) / 60000))")
                 
                 Spacer()
             }.padding())
             .foregroundColor(.white)
             .padding(.leading)
+    }
+    
+    func secondsToHoursMinutesSeconds(_ seconds: Int) -> (Int, Int, Int) {
+        return (seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60)
+    }
+    
+    func secondsToMinutesSeconds(_ seconds: Int) -> String {
+        let (h, m, s) = secondsToHoursMinutesSeconds(seconds)
+        return "\(h != 0 ? "\(h) h" : "") \(m != 0 ? "\(m) m" : "") \(s != 0 ? "\(s) s" : "")"
     }
 }
