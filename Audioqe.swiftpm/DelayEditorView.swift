@@ -54,7 +54,7 @@ struct DelayEditorView: View {
                 Text("Low pass cutoff:")
                     .font(.headline)
                 
-                Slider(value: lowPassCutoff, in: 10...Float(bank.sampleRate / 2), minimumValueLabel: Text("10 Hz"), maximumValueLabel: Text(String(format: "%.0f Hz", Float(bank.sampleRate / 2)))) {
+                Slider(value: lowPassCutoff, in: 10...Float((bank.editor.file?.fileFormat.sampleRate ?? 20) / 2), minimumValueLabel: Text("10 Hz"), maximumValueLabel: Text(String(format: "%.0f Hz", Float((bank.editor.file?.fileFormat.sampleRate ?? 20) / 2)))) {
                     EmptyView()
                 }
                 

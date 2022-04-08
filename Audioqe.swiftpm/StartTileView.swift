@@ -31,9 +31,10 @@ struct StartTileView: View {
                 }
                 .font(.largeTitle)
                 
-                Text("**File** - \(editor.file.url.lastPathComponent)")
+                Text("**File** - \(editor.file?.url.lastPathComponent ?? "No file")")
+                    .foregroundColor(editor.file == nil ? .red : .white)
                 
-                Text("**Length** - \(secondsToMinutesSeconds(Int(editor.file.length) / 60000))")
+                Text("**Length** - \(timeStringFromSeconds(Int(editor.file?.length ?? 0) / 60000))")
                 
                 Spacer()
             }.padding())
@@ -45,7 +46,7 @@ struct StartTileView: View {
         return (seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60)
     }
     
-    func secondsToMinutesSeconds(_ seconds: Int) -> String {
+    func timeStringFromSeconds(_ seconds: Int) -> String {
         let (h, m, s) = secondsToHoursMinutesSeconds(seconds)
         return "\(h != 0 ? "\(h) h" : "") \(m != 0 ? "\(m) m" : "") \(s != 0 ? "\(s) s" : "")"
     }

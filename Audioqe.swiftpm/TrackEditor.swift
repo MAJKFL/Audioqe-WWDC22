@@ -17,7 +17,8 @@ class TrackEditor: ObservableObject, Identifiable {
     @Published var draggedBank: Bank?
     
     @Published var audioPlayer = AVAudioPlayerNode()
-    @Published var file: AVAudioFile
+    
+    @Published var file: AVAudioFile?
     @Published var buffer: AVAudioPCMBuffer?
     
     @Published var isPlaying = false
@@ -81,10 +82,26 @@ class TrackEditor: ObservableObject, Identifiable {
         21: "speech waves"
     ]
     
-    init(fileURL: URL) {
-        self.id = fileURL.lastPathComponent
+    init() {
+        self.id = UUID().uuidString
         
-        self.file = try! AVAudioFile(forReading: fileURL)
+        engine.attach(audioPlayer)
+        audioPlayer.volume = 1
+        
+        effectBanks = [
+            Bank(editor: self),
+            Bank(editor: self),
+            Bank(editor: self),
+            Bank(editor: self),
+            Bank(editor: self),
+            Bank(editor: self)
+        ]
+    }
+    
+    func loadFile(url: URL) {
+        file = try? AVAudioFile(forReading: url)
+        
+        guard let file = file else { return }
         
         buffer = AVAudioPCMBuffer(pcmFormat: file.processingFormat, frameCapacity: AVAudioFrameCount(file.length))
         
@@ -97,28 +114,11 @@ class TrackEditor: ObservableObject, Identifiable {
             print(error)
         }
         
-        engine.attach(audioPlayer)
-        
-        audioPlayer.volume = 1
-        
-        let format = file.processingFormat
-        
-        effectBanks = [
-            Bank(sampleRate: file.fileFormat.sampleRate),
-            Bank(sampleRate: file.fileFormat.sampleRate),
-            Bank(sampleRate: file.fileFormat.sampleRate),
-            Bank(sampleRate: file.fileFormat.sampleRate),
-            Bank(sampleRate: file.fileFormat.sampleRate),
-            Bank(sampleRate: file.fileFormat.sampleRate)
-        ]
-        
-        engine.connect(audioPlayer, to: engine.mainMixerNode, format: format)
-        
         connectNodes()
     }
     
     func connectNodes() {
-        let format = file.processingFormat
+        guard let format = file?.processingFormat else { return }
         
         let nodes = effectBanks.compactMap { $0.effect }
 
@@ -175,9 +175,9 @@ class TrackEditor: ObservableObject, Identifiable {
         effectBanks.removeAll(where: { $0.id == bank.id })
         
         if let index = effectBanks.firstIndex(where: { $0.effect == nil }) {
-            effectBanks.insert(Bank(sampleRate: bank.sampleRate), at: index)
+            effectBanks.insert(Bank(editor: self), at: index)
         } else {
-            effectBanks.append(Bank(sampleRate: bank.sampleRate))
+            effectBanks.append(Bank(editor: self))
         }
         
         connectNodes()

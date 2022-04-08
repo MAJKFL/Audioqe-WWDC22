@@ -158,6 +158,7 @@ struct TileView: View {
                         }
                     }
                 }
+                .disabled(editor.file == nil)
         } else {
             Menu {
                 Button {
@@ -210,7 +211,7 @@ struct TileView: View {
                         .frame(maxWidth: .infinity, maxHeight: 1)
                 }
             }
-            .disabled(!isLastEmptyBank)
+            .disabled(!isLastEmptyBank || editor.file == nil)
             .transaction { transaction in
                 transaction.animation = nil
             }

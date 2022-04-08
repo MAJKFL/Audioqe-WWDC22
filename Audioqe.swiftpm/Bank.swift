@@ -10,11 +10,11 @@ import AVFoundation
 
 class Bank: Identifiable, ObservableObject {    
     @Published var id = UUID().uuidString
+    @Published var editor: TrackEditor
     @Published var effect: AVAudioUnit?
-    @Published var sampleRate: Double
     
-    init(sampleRate: Double, effect: AVAudioUnit? = nil) {
-        self.sampleRate = sampleRate
+    init(editor: TrackEditor, effect: AVAudioUnit? = nil) {
+        self.editor = editor
         self.effect = effect
     }
     

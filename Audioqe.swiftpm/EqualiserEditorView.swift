@@ -64,7 +64,7 @@ struct EqualiserEditorView: View {
                 Text("Frequency:")
                     .font(.headline)
                 
-                Slider(value: frequency, in: 20...Float(bank.sampleRate / 2), minimumValueLabel: Text("20 Hz"), maximumValueLabel: Text(String(format: "%.0f Hz", Float(bank.sampleRate / 2)))) {
+                Slider(value: frequency, in: 20...Float((bank.editor.file?.fileFormat.sampleRate ?? 40) / 2), minimumValueLabel: Text("20 Hz"), maximumValueLabel: Text(String(format: "%.0f Hz", Float((bank.editor.file?.fileFormat.sampleRate ?? 40) / 2)))) {
                     EmptyView()
                 }
                 

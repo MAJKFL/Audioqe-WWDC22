@@ -2,9 +2,10 @@ import SwiftUI
 import AVFoundation
 
 struct ContentView: View {
-    @ObservedObject var editor = TrackEditor(fileURL: Bundle.main.url(forResource: "CleanGuitar", withExtension: "aif")!)
+    @ObservedObject var editor = TrackEditor()
     
     @State private var selectedBank: Bank?
+    @State private var isShowingImporter = false
     
     let columns = [
         GridItem(.flexible(), spacing: 0),
@@ -70,7 +71,7 @@ struct ContentView: View {
                     HStack {
                         Menu {
                             Button {
-//                                isShowingImporter.toggle()
+                                isShowingImporter.toggle()
                             } label: {
                                 Label("Add file", systemImage: "doc.fill.badge.plus")
                             }
@@ -92,6 +93,19 @@ struct ContentView: View {
                     }
                 }
             }
+            .fileImporter(isPresented: $isShowingImporter, allowedContentTypes: [.audio], onCompletion: { result in
+                do {
+                    let fileURL = try result.get()
+                    
+                    let _ = fileURL.startAccessingSecurityScopedResource()
+                    
+                    editor.loadFile(url: fileURL)
+                    
+                    fileURL.stopAccessingSecurityScopedResource()
+                } catch {
+                    print(error.localizedDescription)
+                }
+            })
         }
         .navigationViewStyle(.stack)
     }
