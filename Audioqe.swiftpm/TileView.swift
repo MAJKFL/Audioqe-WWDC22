@@ -116,17 +116,18 @@ struct TileView: View {
                         
                         Spacer()
                     }
-                }.padding())
+                }
+                    .padding()
+                )
                 .foregroundColor(.white)
                 .onTapGesture {
-                    withAnimation(.easeInOut.speed(2)) {
-                        if isSelected {
-                            selectedBank = nil
-                        } else {
-                            selectedBank = bank
-                        }
+                    if isSelected {
+                        selectedBank = nil
+                    } else {
+                        selectedBank = bank
                     }
                 }
+                .animation(.spring().speed(2), value: isSelected)
                 .popover(isPresented: $isShowingPopover, content: {
                     switch selectedBank?.effect {
                     case is AVAudioUnitDelay:

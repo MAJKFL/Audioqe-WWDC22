@@ -7,6 +7,7 @@
 
 import Foundation
 import AVFoundation
+import SwiftUI
 
 class TrackEditor: ObservableObject, Identifiable {
     let id: String
@@ -17,6 +18,7 @@ class TrackEditor: ObservableObject, Identifiable {
     
     @Published var audioPlayer = AVAudioPlayerNode()
     @Published var file: AVAudioFile
+    @Published var buffer: AVAudioPCMBuffer?
     
     @Published var isPlaying = false
     
@@ -84,6 +86,17 @@ class TrackEditor: ObservableObject, Identifiable {
         
         self.file = try! AVAudioFile(forReading: fileURL)
         
+        buffer = AVAudioPCMBuffer(pcmFormat: file.processingFormat, frameCapacity: AVAudioFrameCount(file.length))
+        
+        guard let buffer = buffer else { return }
+
+        do {
+            print("read")
+            try file.read(into: buffer)
+        } catch {
+            print(error)
+        }
+        
         engine.attach(audioPlayer)
         
         audioPlayer.volume = 1
@@ -139,9 +152,18 @@ class TrackEditor: ObservableObject, Identifiable {
     func playPause() {
         if audioPlayer.isPlaying {
             audioPlayer.stop()
+            engine.stop()
             isPlaying = false
         } else {
-            audioPlayer.scheduleFile(file, at: nil)
+            guard let buffer = buffer else { return }
+
+            audioPlayer.scheduleBuffer(buffer, completionHandler: {
+                DispatchQueue.main.async {
+                    withAnimation {
+                        self.isPlaying = false
+                    }
+                }
+            })
             
             try? engine.start()
             audioPlayer.play()
