@@ -8,20 +8,27 @@ struct ContentView: View {
     @State private var isShowingImporter = false
     @State private var orientation = UIDevice.current.orientation
     
-    var columns: [GridItem] {        
-        if orientation == .unknown ? UIDevice.current.orientation.isLandscape : orientation.isLandscape {
-            return [
-                GridItem(.flexible(), spacing: 0),
-                GridItem(.flexible(), spacing: 0),
-                GridItem(.flexible(), spacing: 0),
-                GridItem(.flexible(), spacing: 0)
-            ]
-        } else {
-            return [
-                GridItem(.flexible(), spacing: 0),
-                GridItem(.flexible(), spacing: 0)
-            ]
-        }
+    var columns: [GridItem] {
+//        if orientation == .unknown ? UIDevice.current.orientation.isLandscape : orientation.isLandscape {
+//            return [
+//                GridItem(.flexible(), spacing: 0),
+//                GridItem(.flexible(), spacing: 0),
+//                GridItem(.flexible(), spacing: 0),
+//                GridItem(.flexible(), spacing: 0)
+//            ]
+//        } else {
+//            return [
+//                GridItem(.flexible(), spacing: 0),
+//                GridItem(.flexible(), spacing: 0)
+//            ]
+//        }
+        
+        return [
+            GridItem(.flexible(), spacing: 0),
+            GridItem(.flexible(), spacing: 0),
+            GridItem(.flexible(), spacing: 0),
+            GridItem(.flexible(), spacing: 0)
+        ]
     }
     
     var body: some View {
@@ -95,11 +102,14 @@ struct ContentView: View {
                             Image(systemName: "waveform.badge.plus")
                         }
                         
-                        Button {
-                            
-                        } label: {
-                            Image(systemName: "square.and.arrow.up")
+                        GeometryReader { geo in
+                            Button {
+                                shareRenderedFile(url: editor.render(), buttonRect: geo.frame(in: CoordinateSpace.global))
+                            } label: {
+                                Image(systemName: "square.and.arrow.up")
+                            }
                         }
+                        .padding(.trailing)
                     }
                 }
             }
@@ -122,6 +132,15 @@ struct ContentView: View {
         }
         .navigationViewStyle(.stack)
     }
+    
+    func shareRenderedFile(url: URL?, buttonRect: CGRect) {
+        guard let url = url else { return }
+
+        let ac = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        ac.popoverPresentationController?.sourceView = UIApplication.shared.keyWindow
+        ac.popoverPresentationController?.sourceRect = buttonRect
+        UIApplication.shared.keyWindow?.rootViewController!.present(ac, animated: true)
+    }
 }
 
 struct DeviceRotationViewModifier: ViewModifier {
@@ -139,5 +158,15 @@ struct DeviceRotationViewModifier: ViewModifier {
 extension View {
     func onRotate(perform action: @escaping (UIDeviceOrientation) -> Void) -> some View {
         self.modifier(DeviceRotationViewModifier(action: action))
+    }
+}
+
+extension UIApplication {
+    var keyWindow: UIWindow? {
+        return UIApplication.shared.connectedScenes
+            .filter { $0.activationState == .foregroundActive }
+            .first(where: { $0 is UIWindowScene })
+            .flatMap({ $0 as? UIWindowScene })?.windows
+            .first(where: \.isKeyWindow)
     }
 }

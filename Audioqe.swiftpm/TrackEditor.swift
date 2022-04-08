@@ -157,15 +157,7 @@ class TrackEditor: ObservableObject, Identifiable {
             engine.stop()
             isPlaying = false
         } else {
-            guard let buffer = buffer else { return }
-
-            audioPlayer.scheduleBuffer(buffer, at: nil, options: playbackOptions, completionHandler: {
-                DispatchQueue.main.async {
-                    withAnimation {
-                        self.isPlaying = false
-                    }
-                }
-            })
+            scheduldeBuffer()
             
             try? engine.start()
             audioPlayer.play()
@@ -183,5 +175,75 @@ class TrackEditor: ObservableObject, Identifiable {
         }
         
         connectNodes()
+    }
+    
+    func scheduldeBuffer() {
+        guard let buffer = buffer else { return }
+
+        audioPlayer.scheduleBuffer(buffer, at: nil, options: playbackOptions, completionHandler: {
+            DispatchQueue.main.async {
+                withAnimation {
+                    self.isPlaying = false
+                }
+            }
+        })
+    }
+    
+    func render() -> URL? {
+        guard let file = file else { return nil }
+        let format = file.processingFormat
+        
+        scheduldeBuffer()
+        
+        let maxFrames: AVAudioFrameCount = 4096
+        
+        do {
+            try engine.enableManualRenderingMode(.offline, format: format, maximumFrameCount: maxFrames)
+        } catch {
+            fatalError("Enabling manual rendering mode failed: \(error).")
+        }
+        
+        do {
+            try engine.start()
+            audioPlayer.play()
+        } catch {
+            fatalError("Unable to start audio engine: \(error).")
+        }
+        
+        let outputBuffer = AVAudioPCMBuffer(pcmFormat: engine.manualRenderingFormat, frameCapacity: engine.manualRenderingMaximumFrameCount)!
+
+        let outputFile: AVAudioFile
+        do {
+            let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            let outputURL = documentsURL.appendingPathComponent("\(file.url.deletingPathExtension().lastPathComponent)-processed.m4a")
+            outputFile = try AVAudioFile(forWriting: outputURL, settings: file.fileFormat.settings)
+        } catch {
+            fatalError("Unable to open output audio file: \(error).")
+        }
+        
+        while engine.manualRenderingSampleTime < file.length {
+            do {
+                let frameCount = file.length - engine.manualRenderingSampleTime
+                let framesToRender = min(AVAudioFrameCount(frameCount), outputBuffer.frameCapacity)
+                
+                let status = try engine.renderOffline(framesToRender, to: outputBuffer)
+                
+                switch status {
+                case .success: try outputFile.write(from: outputBuffer)
+                case .insufficientDataFromInputNode: break
+                case .cannotDoInCurrentContext: break
+                case .error: fatalError("The manual rendering failed.")
+                @unknown default: fatalError("Unknown error")
+                }
+            } catch {
+                fatalError("The manual rendering failed: \(error).")
+            }
+        }
+
+        audioPlayer.stop()
+        engine.stop()
+        engine.disableManualRenderingMode()
+        
+        return outputFile.url
     }
 }
