@@ -22,7 +22,6 @@ class TrackEditor: ObservableObject, Identifiable {
     @Published var buffer: AVAudioPCMBuffer?
     
     @Published var isPlaying = false
-    
     @Published var playbackOptions = AVAudioPlayerNodeBufferOptions.loops
     
     var activeBanksCount: Int {
@@ -30,58 +29,58 @@ class TrackEditor: ObservableObject, Identifiable {
     }
     
     static let reverbPresetNames = [
-        0:  "small room",
-        1:  "medium room",
-        2:  "large room",
-        3:  "medium hall",
-        4:  "large hall",
-        5:  "plate",
-        6:  "medium chamber",
-        7:  "large chamber",
-        8:  "cathedral",
-        9:  "large room 2",
-        10: "medium hall 2",
-        11: "medium hall 3",
-        12: "large hall 2"
+        0:  "Small room",
+        1:  "Medium room",
+        2:  "Large room",
+        3:  "Medium hall",
+        4:  "Large hall",
+        5:  "Plate",
+        6:  "Medium chamber",
+        7:  "Large chamber",
+        8:  "Cathedral",
+        9:  "Large room 2",
+        10: "Medium hall 2",
+        11: "Medium hall 3",
+        12: "Large hall 2"
     ]
     
     static let eqFilterNames = [
-        0:  "parametric",
-        1:  "low pass",
-        2:  "high pass",
-        3:  "resonant low pass",
-        4:  "resonant high pass",
-        5:  "band pass",
-        6:  "band stop",
-        7:  "low shelf",
-        8:  "high shelf",
-        9:  "resonant low shelf",
-        10: "resonant high shelf"
+        0:  "Parametric",
+        1:  "Low pass",
+        2:  "High pass",
+        3:  "Resonant low pass",
+        4:  "Resonant high pass",
+        5:  "Band pass",
+        6:  "Band stop",
+        7:  "Low shelf",
+        8:  "High shelf",
+        9:  "Resonant low shelf",
+        10: "Resonant high shelf"
     ]
     
     static let distortionPresetNames = [
-        0:  "drums bit brush",
-        1:  "drums buffer beats",
-        2:  "drums lo fi",
-        3:  "multi broken speaker",
-        4:  "multi cell phone speaker",
-        5:  "multi decimated 1",
-        6:  "multi decimated 2",
-        7:  "multi decimated 3",
-        8:  "multi decimated 4",
-        9:  "multi distorted funk",
-        10: "multi distorted cube",
-        11: "multi distorted squared",
-        12: "multi echo 1",
-        13: "multi echo 2",
-        14: "multi echo tight 1",
-        15: "multi echo tight 2",
-        16: "multi everything is broken",
-        17: "speech alien chatter",
-        18: "speech cosmic interference",
-        19: "speech golden pi",
-        20: "speech radio tower",
-        21: "speech waves"
+        0:  "Drums bit brush",
+        1:  "Drums buffer beats",
+        2:  "Drums lo fi",
+        3:  "Multi broken speaker",
+        4:  "Multi cell phone speaker",
+        5:  "Multi decimated 1",
+        6:  "Multi decimated 2",
+        7:  "Multi decimated 3",
+        8:  "Multi decimated 4",
+        9:  "Multi distorted funk",
+        10: "Multi distorted cube",
+        11: "Multi distorted squared",
+        12: "Multi echo 1",
+        13: "Multi echo 2",
+        14: "Multi echo tight 1",
+        15: "Multi echo tight 2",
+        16: "Multi everything is broken",
+        17: "Speech alien chatter",
+        18: "Speech cosmic interference",
+        19: "Speech golden pi",
+        20: "Speech radio tower",
+        21: "Speech waves"
     ]
     
     init() {
@@ -157,7 +156,7 @@ class TrackEditor: ObservableObject, Identifiable {
             engine.stop()
             isPlaying = false
         } else {
-            scheduldeBuffer()
+            scheduleBuffer()
             
             try? engine.start()
             audioPlayer.play()
@@ -165,7 +164,7 @@ class TrackEditor: ObservableObject, Identifiable {
         }
     }
     
-    func removeBank(_ bank: Bank) {
+    func clearBank(_ bank: Bank) {
         effectBanks.removeAll(where: { $0.id == bank.id })
         
         if let index = effectBanks.firstIndex(where: { $0.effect == nil }) {
@@ -177,7 +176,7 @@ class TrackEditor: ObservableObject, Identifiable {
         connectNodes()
     }
     
-    func scheduldeBuffer() {
+    func scheduleBuffer() {
         guard let buffer = buffer else { return }
 
         audioPlayer.scheduleBuffer(buffer, at: nil, options: playbackOptions, completionHandler: {
@@ -193,7 +192,7 @@ class TrackEditor: ObservableObject, Identifiable {
         guard let file = file else { return nil }
         let format = file.processingFormat
         
-        scheduldeBuffer()
+        scheduleBuffer()
         
         let maxFrames: AVAudioFrameCount = 4096
         
@@ -211,8 +210,8 @@ class TrackEditor: ObservableObject, Identifiable {
         }
         
         let outputBuffer = AVAudioPCMBuffer(pcmFormat: engine.manualRenderingFormat, frameCapacity: engine.manualRenderingMaximumFrameCount)!
-
         let outputFile: AVAudioFile
+        
         do {
             let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
             let outputURL = documentsURL.appendingPathComponent("\(file.url.deletingPathExtension().lastPathComponent)-processed.m4a")

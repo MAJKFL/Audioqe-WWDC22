@@ -97,7 +97,7 @@ struct ContentView: View {
                         
                         GeometryReader { geo in
                             Button {
-                                shareRenderedFile(url: editor.render(), buttonRect: geo.frame(in: CoordinateSpace.global))
+                                shareFile(url: editor.render(), buttonRect: geo.frame(in: CoordinateSpace.global))
                             } label: {
                                 Image(systemName: "square.and.arrow.up")
                             }
@@ -123,7 +123,7 @@ struct ContentView: View {
         .navigationViewStyle(.stack)
     }
     
-    func shareRenderedFile(url: URL?, buttonRect: CGRect) {
+    func shareFile(url: URL?, buttonRect: CGRect) {
         guard let url = url else { return }
 
         let ac = UIActivityViewController(activityItems: [url], applicationActivities: nil)

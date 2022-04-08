@@ -56,7 +56,7 @@ struct DistortionEditorView: View {
                     EmptyView()
                 }
             }
-            Button(role: .destructive, action: { editor.removeBank(bank) }, label: { Label("Remove", systemImage: "trash") })
+            Button(role: .destructive, action: { editor.clearBank(bank) }, label: { Label("Remove", systemImage: "trash") })
                 .padding()
         }
         .padding()
