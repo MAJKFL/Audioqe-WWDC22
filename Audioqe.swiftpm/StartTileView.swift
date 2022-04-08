@@ -28,6 +28,19 @@ struct StartTileView: View {
                     Text("Start")
                     
                     Spacer()
+                    
+                    Button {
+                        withAnimation {
+                            if editor.playbackOptions == .loops {
+                                editor.playbackOptions = .interrupts
+                            } else {
+                                editor.playbackOptions = .loops
+                            }
+                        }
+                    } label: {
+                        Image(systemName: editor.playbackOptions == .loops ? "repeat" : "arrow.right")
+                            .foregroundColor(.accentColor)
+                    }
                 }
                 .font(.largeTitle)
                 

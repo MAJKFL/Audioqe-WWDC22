@@ -23,6 +23,8 @@ class TrackEditor: ObservableObject, Identifiable {
     
     @Published var isPlaying = false
     
+    @Published var playbackOptions = AVAudioPlayerNodeBufferOptions.loops
+    
     var activeBanksCount: Int {
         effectBanks.compactMap({ $0.effect }).count
     }
@@ -157,7 +159,7 @@ class TrackEditor: ObservableObject, Identifiable {
         } else {
             guard let buffer = buffer else { return }
 
-            audioPlayer.scheduleBuffer(buffer, completionHandler: {
+            audioPlayer.scheduleBuffer(buffer, at: nil, options: playbackOptions, completionHandler: {
                 DispatchQueue.main.async {
                     withAnimation {
                         self.isPlaying = false
