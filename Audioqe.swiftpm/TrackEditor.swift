@@ -151,16 +151,24 @@ class TrackEditor: ObservableObject, Identifiable {
     
     func playPause() {
         if audioPlayer.isPlaying {
-            audioPlayer.stop()
-            engine.stop()
-            isPlaying = false
+            pause()
         } else {
-            scheduleBuffer()
-            
-            try? engine.start()
-            audioPlayer.play()
-            isPlaying = true
+            play()
         }
+    }
+    
+    func play() {
+        scheduleBuffer()
+        
+        try? engine.start()
+        audioPlayer.play()
+        isPlaying = true
+    }
+    
+    func pause() {
+        audioPlayer.stop()
+        engine.stop()
+        isPlaying = false
     }
     
     func clearBank(_ bank: Bank) {
@@ -190,6 +198,8 @@ class TrackEditor: ObservableObject, Identifiable {
     func render() -> URL? {
         guard let file = file else { return nil }
         let format = file.processingFormat
+        
+        pause()
         
         scheduleBuffer()
         

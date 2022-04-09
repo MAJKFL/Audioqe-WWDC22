@@ -99,12 +99,10 @@ struct AudioRecorder: View {
                         .frame(width: 75, height: 75)
                 }
                 .padding(.trailing)
+                .padding(.leading, 5)
             }
         }
         .frame(width: 400, height: 300)
-        .background(Material.ultraThin)
-        .clipShape(RoundedRectangle(cornerRadius: 15))
-        .transition(.move(edge: .bottom).combined(with: .opacity))
         .onAppear {
             session = AVAudioSession.sharedInstance()
             try? session.setCategory(.playAndRecord)
