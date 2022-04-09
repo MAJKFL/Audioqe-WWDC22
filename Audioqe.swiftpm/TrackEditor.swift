@@ -87,7 +87,6 @@ class TrackEditor: ObservableObject, Identifiable {
         self.id = UUID().uuidString
         
         engine.attach(audioPlayer)
-        audioPlayer.volume = 1
         
         effectBanks = [
             Bank(editor: self),

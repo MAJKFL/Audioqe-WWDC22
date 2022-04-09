@@ -7,6 +7,7 @@ struct ContentView: View {
     
     @State private var selectedBank: Bank?
     @State private var isShowingImporter = false
+    @State private var isShowingRecorder = false
     
     var columns: [GridItem] {
         if orientationInfo.orientation == .landscape {
@@ -87,13 +88,16 @@ struct ContentView: View {
                             }
                             
                             Button {
-                                
+                                withAnimation {
+                                    isShowingRecorder.toggle()
+                                }
                             } label: {
-                                Label("Add recording", systemImage: "mic.fill.badge.plus")
+                                Label("Choose recording", systemImage: "mic.fill.badge.plus")
                             }
                         } label: {
                             Image(systemName: "waveform.badge.plus")
                         }
+                        .popover(isPresented: $isShowingRecorder, content: { AudioRecorder(editor: editor) })
                         
                         GeometryReader { geo in
                             Button {
@@ -107,12 +111,28 @@ struct ContentView: View {
                 }
             }
             .fileImporter(isPresented: $isShowingImporter, allowedContentTypes: [.audio], onCompletion: { result in
+                let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+                let documentsURL = URL(string: path)!
+                let recordingsURL = documentsURL.appendingPathComponent("recordings")
+                
+                if !FileManager.default.fileExists(atPath: recordingsURL.path) {
+                    do {
+                        try FileManager.default.createDirectory(atPath: recordingsURL.path, withIntermediateDirectories: true, attributes: nil)
+                    } catch {
+                        print(error.localizedDescription)
+                    }
+                }
+                
                 do {
                     let fileURL = try result.get()
                     
                     let _ = fileURL.startAccessingSecurityScopedResource()
                     
-                    editor.loadFile(url: fileURL)
+                    let destination = URL(string: "file://\(recordingsURL.appendingPathComponent(fileURL.lastPathComponent).absoluteString)")!
+                    
+                    try FileManager.default.copyItem(at: fileURL, to: destination)
+                    
+                    editor.loadFile(url: destination)
                     
                     fileURL.stopAccessingSecurityScopedResource()
                 } catch {
