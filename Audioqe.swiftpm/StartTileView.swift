@@ -41,13 +41,14 @@ struct StartTileView: View {
                         Image(systemName: editor.playbackOptions == .loops ? "repeat" : "arrow.right")
                             .foregroundColor(.accentColor)
                     }
+                    .disabled(editor.isPlaying)
                 }
                 .font(.largeTitle)
                 
                 Text("**File** - \(editor.file?.url.lastPathComponent ?? "No file")")
                     .foregroundColor(editor.file == nil ? .red : .white)
                 
-                Text("**Length** - \(timeStringFromSeconds(Int(editor.file?.length ?? 0) / 60000))")
+                Text("**Length** - \(timeStringFromSeconds(Int(editor.file?.duration ?? 0)))")
                 
                 Spacer()
             }.padding())

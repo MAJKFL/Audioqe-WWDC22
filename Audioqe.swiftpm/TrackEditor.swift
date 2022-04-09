@@ -255,3 +255,11 @@ class TrackEditor: ObservableObject, Identifiable {
         return outputFile.url
     }
 }
+
+extension AVAudioFile{
+    var duration: TimeInterval{
+        let sampleRateSong = Double(processingFormat.sampleRate)
+        let lengthSongSeconds = Double(length) / sampleRateSong
+        return lengthSongSeconds
+    }
+}
