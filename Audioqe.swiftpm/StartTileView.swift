@@ -61,6 +61,6 @@ struct StartTileView: View {
     
     func timeStringFromSeconds(_ seconds: Int) -> String {
         let (h, m, s) = secondsToHoursMinutesSeconds(seconds)
-        return "\(h != 0 ? "\(h) h" : "") \(m != 0 ? "\(m) m" : "") \(s != 0 ? "\(s) s" : "")"
+        return "\(h != 0 ? "\(h) h" : "") \(m != 0 ? "\(m) m" : "") \(s) s"
     }
 }

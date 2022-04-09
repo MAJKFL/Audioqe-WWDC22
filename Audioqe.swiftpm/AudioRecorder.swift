@@ -7,12 +7,12 @@
 
 import SwiftUI
 import AVKit
+import Combine
 
 struct AudioRecorder: View {
     @ObservedObject var editor: TrackEditor
     
-    @State var record = false
-    @State var alert = false
+    @State var isRecording = false
     
     @State var session: AVAudioSession!
     @State var recorder: AVAudioRecorder!
@@ -41,48 +41,56 @@ struct AudioRecorder: View {
         HStack {
             List {
                 ForEach(audios, id: \.self) { url in
-                    Button {
-                        editor.loadFile(url: url)
-                    } label: {
-                        Text(url.relativeString)
+                    HStack {
+                        Text(url.lastPathComponent)
+                        
+                        Spacer()
+                        
+                        Button {
+                            editor.loadFile(url: url)
+                        } label: {
+                            Image(systemName: "plus.circle")
+                        }
                     }
                 }
                 .onDelete(perform: removeRecording)
             }
             
             Button(action: {
-                do {
-                    if record {
-                        recorder.stop()
-                        withAnimation {
-                            record.toggle()
-                        }
-                        getRecordings()
-                        return
-                    }
-                    
-                    let filName = url.appendingPathComponent("\(UUID().uuidString).m4a")
-                    
-                    let settings = [
-                        AVFormatIDKey : Int(kAudioFormatMPEG4AAC),
-                        AVSampleRateKey : 12000,
-                        AVNumberOfChannelsKey : 1,
-                        AVEncoderAudioQualityKey : AVAudioQuality.high.rawValue
-                    ]
-                    
-                    recorder = try AVAudioRecorder(url: filName, settings: settings)
-                    recorder.record()
+                if isRecording {
+                    recorder.stop()
                     withAnimation {
-                        record.toggle()
+                        isRecording.toggle()
                     }
-                } catch {
-                    print(error.localizedDescription)
+                    getRecordings()
+                    return
+                }
+                
+                let names: [String] = audios.map { url in
+                    url.deletingPathExtension().lastPathComponent
+                }
+                
+                let filteredNames = names.filter({ $0.contains("Recording") })
+                
+                let filName = url.appendingPathComponent("Recording\(filteredNames.count + 1).m4a")
+                
+                let settings = [
+                    AVFormatIDKey : Int(kAudioFormatMPEG4AAC),
+                    AVSampleRateKey : 12000,
+                    AVNumberOfChannelsKey : 1,
+                    AVEncoderAudioQualityKey : AVAudioQuality.high.rawValue
+                ]
+                
+                recorder = try? AVAudioRecorder(url: filName, settings: settings)
+                recorder.record()
+                withAnimation {
+                    isRecording.toggle()
                 }
             }) {
                 ZStack {
-                    RoundedRectangle(cornerRadius: record ? 5 : 90)
+                    RoundedRectangle(cornerRadius: isRecording ? 5 : 90)
                         .fill(Color.red)
-                        .frame(width: record ? 33 : 63, height: record ? 33 : 63)
+                        .frame(width: isRecording ? 33 : 63, height: isRecording ? 33 : 63)
                     
                     Circle()
                         .stroke(Color.gray, lineWidth: 4)
@@ -95,23 +103,12 @@ struct AudioRecorder: View {
         .background(Material.ultraThin)
         .clipShape(RoundedRectangle(cornerRadius: 15))
         .transition(.move(edge: .bottom).combined(with: .opacity))
-        .alert(isPresented: $alert, content: {
-            Alert(title: Text("Error"), message: Text("Enable Acess"))
-        })
         .onAppear {
-            do {
-                session = AVAudioSession.sharedInstance()
-                try session.setCategory(.playAndRecord)
-                session.requestRecordPermission { (status) in
-                    if !status {
-                        alert.toggle()
-                    } else {
-                        getRecordings()
-                    }
-                }
-            } catch {
-                print(error.localizedDescription)
-            }
+            session = AVAudioSession.sharedInstance()
+            try? session.setCategory(.playAndRecord)
+            session.requestRecordPermission { _ in }
+            
+            getRecordings()
         }
     }
     
@@ -124,6 +121,8 @@ struct AudioRecorder: View {
             for i in result {
                 self.audios.append(i)
             }
+            
+            audios.sort(by: { $0.lastPathComponent < $1.lastPathComponent })
         } catch {
             print(error.localizedDescription)
         }
