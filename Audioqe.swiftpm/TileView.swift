@@ -121,7 +121,7 @@ struct TileView: View {
                 )
                 .foregroundColor(.white)
                 .onTapGesture {
-                    if isSelected {
+                    if isSelected || selectedBank != nil {
                         selectedBank = nil
                     } else {
                         selectedBank = bank
