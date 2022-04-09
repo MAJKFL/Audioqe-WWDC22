@@ -10,6 +10,8 @@ import AVKit
 import Combine
 
 struct AudioRecorder: View {
+    @Environment(\.colorScheme) var colorScheme
+    
     @ObservedObject var editor: TrackEditor
     
     @State var isRecording = false
@@ -93,7 +95,7 @@ struct AudioRecorder: View {
                         .frame(width: isRecording ? 33 : 63, height: isRecording ? 33 : 63)
                     
                     Circle()
-                        .stroke(Color.gray, lineWidth: 4)
+                        .stroke(colorScheme == .light ? Color.gray : Color.white, lineWidth: 4)
                         .frame(width: 75, height: 75)
                 }
                 .padding(.trailing)
