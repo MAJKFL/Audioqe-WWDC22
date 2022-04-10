@@ -9,30 +9,44 @@ import SwiftUI
 import AVFoundation
 
 struct DelayEditorView: View {
-    @ObservedObject var editor: TrackEditor
+    @ObservedObject var editor: QueueEditor
     @ObservedObject var bank: Bank
+    
+    @State private var debounceTimer: Timer?
     
     var body: some View {
         guard let delay = bank.effect as? AVAudioUnitDelay else { fatalError() }
         
         let feedback = Binding(
             get: { delay.feedback },
-            set: { delay.feedback = $0 }
+            set: {
+                delay.feedback = $0
+                save()
+            }
         )
         
         let delayTime = Binding(
             get: { delay.delayTime },
-            set: { delay.delayTime = $0 }
+            set: {
+                delay.delayTime = $0
+                save()
+            }
         )
         
         let lowPassCutoff = Binding(
             get: { delay.lowPassCutoff },
-            set: { delay.lowPassCutoff = $0 }
+            set: {
+                delay.lowPassCutoff = $0
+                save()
+            }
         )
         
         let wetDryMix = Binding(
             get: { delay.wetDryMix },
-            set: { delay.wetDryMix = $0 }
+            set: {
+                delay.wetDryMix = $0
+                save()
+            }
         )
         
         return VStack {
@@ -71,5 +85,12 @@ struct DelayEditorView: View {
         }
         .frame(width: 300)
         .padding()
+    }
+    
+    func save() {
+        debounceTimer?.invalidate()
+        debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
+            editor.save()
+        }
     }
 }

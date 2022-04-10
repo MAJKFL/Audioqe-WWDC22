@@ -9,35 +9,52 @@ import SwiftUI
 import AVFoundation
 
 struct EqualiserEditorView: View {
-    @ObservedObject var editor: TrackEditor
+    @ObservedObject var editor: QueueEditor
     @ObservedObject var bank: Bank
+    
+    @State private var debounceTimer: Timer?
     
     var body: some View {
         guard let equaliser = bank.effect as? AVAudioUnitEQ else { fatalError() }
         
         let preset = Binding(
             get: { Int(bank.equaliserFilterType.rawValue) },
-            set: { bank.equaliserFilterType = AVAudioUnitEQFilterType(rawValue: $0) ?? .parametric }
+            set: {
+                bank.equaliserFilterType = AVAudioUnitEQFilterType(rawValue: $0) ?? .parametric
+                save()
+            }
         )
         
         let bandwidth = Binding(
             get: { equaliser.bands.first?.bandwidth ?? 0 },
-            set: { equaliser.bands.first?.bandwidth = $0 }
+            set: {
+                equaliser.bands.first?.bandwidth = $0
+                save()
+            }
         )
         
         let bypass = Binding(
             get: { equaliser.bands.first?.bypass ?? false },
-            set: { equaliser.bands.first?.bypass = $0 }
+            set: {
+                equaliser.bands.first?.bypass = $0
+                save()
+            }
         )
         
         let frequency = Binding(
             get: { equaliser.bands.first?.frequency ?? 0 },
-            set: { equaliser.bands.first?.frequency = $0 }
+            set: {
+                equaliser.bands.first?.frequency = $0
+                save()
+            }
         )
         
         let gain = Binding(
             get: { equaliser.bands.first?.gain ?? 0 },
-            set: { equaliser.bands.first?.gain = $0 }
+            set: {
+                equaliser.bands.first?.gain = $0
+                save()
+            }
         )
         
         return VStack {
@@ -47,7 +64,7 @@ struct EqualiserEditorView: View {
                 
                 Picker("Filter type", selection: preset) {
                     ForEach(0..<11, id: \.self) { key in
-                        Text(TrackEditor.eqFilterNames[key] ?? "UNKNOWN")
+                        Text(QueueEditor.eqFilterNames[key] ?? "UNKNOWN")
                     }
                 }
                 .pickerStyle(.wheel)
@@ -80,5 +97,12 @@ struct EqualiserEditorView: View {
                 .padding()
         }
         .padding()
+    }
+    
+    func save() {
+        debounceTimer?.invalidate()
+        debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
+            editor.save()
+        }
     }
 }

@@ -12,14 +12,12 @@ struct TileView: View {
     @Binding var selectedBank: Bank?
     
     @ObservedObject var bank: Bank
-    @ObservedObject var editor: TrackEditor
+    @ObservedObject var editor: QueueEditor
     
     let viewSize: CGSize
     
     var sizeMultiplier: Double {
-        print(viewSize.width)
-        
-        return viewSize.width == 873.5 ? 0.9 : 1
+        viewSize.width == 873.5 ? 0.9 : 1
     }
     
     @State private var isShowingPopover = false
@@ -59,11 +57,11 @@ struct TileView: View {
         HStack {
             VStack(alignment: .leading) {
                 if let reverb = bank.effect as? AVAudioUnitReverb {
-                    Text("**Preset** - \(TrackEditor.reverbPresetNames[bank.reverbPreset.rawValue] ?? "")")
+                    Text("**Preset** - \(QueueEditor.reverbPresetNames[bank.reverbPreset.rawValue] ?? "")")
                     
                     Text("**Wet dry mix** - \(String(format: "%.0f", reverb.wetDryMix))%")
                 } else if let distortion = bank.effect as? AVAudioUnitDistortion {
-                    Text("**Preset** - \(TrackEditor.distortionPresetNames[bank.distortionPreset.rawValue] ?? "")")
+                    Text("**Preset** - \(QueueEditor.distortionPresetNames[bank.distortionPreset.rawValue] ?? "")")
                     
                     Text("**Pre gain** - \(String(format: "%.2f", distortion.preGain)) dB")
                     
@@ -77,7 +75,7 @@ struct TileView: View {
                     
                     Text("**Wet dry mix** - \(String(format: "%.0f", delay.wetDryMix))%")
                 } else if let equaliser = bank.effect as? AVAudioUnitEQ {
-                    Text("**Filter** - \(TrackEditor.eqFilterNames[bank.equaliserFilterType.rawValue] ?? "")")
+                    Text("**Filter** - \(QueueEditor.eqFilterNames[bank.equaliserFilterType.rawValue] ?? "")")
                     
                     Text("**Bandwidth** - \(String(format: "%.2f", equaliser.bands.first?.bandwidth ?? 0))")
                     

@@ -8,13 +8,11 @@
 import SwiftUI
 
 struct StartTileView: View {
-    @StateObject var editor: TrackEditor
+    @StateObject var editor: QueueEditor
     let viewSize: CGSize
     
     var sizeMultiplier: Double {
-        print(viewSize.width)
-        
-        return viewSize.width == 873.5 ? 0.9 : 1
+        viewSize.width == 873.5 ? 0.9 : 1
     }
     
     var body: some View {

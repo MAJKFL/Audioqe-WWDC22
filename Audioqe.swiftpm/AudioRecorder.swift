@@ -12,7 +12,7 @@ import Combine
 struct AudioRecorder: View {
     @Environment(\.colorScheme) var colorScheme
     
-    @ObservedObject var editor: TrackEditor
+    @ObservedObject var editor: QueueEditor
     
     @State var isRecording = false
     
@@ -23,7 +23,7 @@ struct AudioRecorder: View {
     
     let url: URL
     
-    init(editor: TrackEditor) {
+    init(editor: QueueEditor) {
         self.editor = editor
         
         let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]

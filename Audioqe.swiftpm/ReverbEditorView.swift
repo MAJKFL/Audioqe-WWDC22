@@ -9,20 +9,28 @@ import SwiftUI
 import AVFoundation
 
 struct ReverbEditorView: View {
-    @ObservedObject var editor: TrackEditor
+    @ObservedObject var editor: QueueEditor
     @ObservedObject var bank: Bank
+    
+    @State private var debounceTimer: Timer?
     
     var body: some View {
         guard let reverb = bank.effect as? AVAudioUnitReverb else { fatalError() }
         
         let preset = Binding(
             get: { Int(bank.reverbPreset.rawValue) },
-            set: { bank.reverbPreset = AVAudioUnitReverbPreset(rawValue: $0) ?? .smallRoom }
+            set: {
+                bank.reverbPreset = AVAudioUnitReverbPreset(rawValue: $0) ?? .smallRoom
+                save()
+            }
         )
         
         let wetDryMix = Binding(
             get: { reverb.wetDryMix },
-            set: { reverb.wetDryMix = $0 }
+            set: {
+                reverb.wetDryMix = $0
+                save()
+            }
         )
         
         return VStack {
@@ -32,7 +40,7 @@ struct ReverbEditorView: View {
                 
                 Picker("preset", selection: preset) {
                     ForEach(0..<13, id: \.self) { key in
-                        Text(TrackEditor.reverbPresetNames[key] ?? "UNKNOWN")
+                        Text(QueueEditor.reverbPresetNames[key] ?? "UNKNOWN")
                     }
                 }
                 .pickerStyle(.wheel)
@@ -49,5 +57,12 @@ struct ReverbEditorView: View {
                 .padding()
         }
         .padding()
+    }
+    
+    func save() {
+        debounceTimer?.invalidate()
+        debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
+            editor.save()
+        }
     }
 }

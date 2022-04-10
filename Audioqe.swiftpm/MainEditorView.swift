@@ -10,7 +10,7 @@ import AVFoundation
 
 struct MainEditorView: View {
     @ObservedObject var orientationInfo = OrientationInfo()
-    @ObservedObject var editor = TrackEditor()
+    @ObservedObject var editor: QueueEditor
     
     @State private var selectedBank: Bank?
     @State private var isShowingImporter = false
@@ -87,7 +87,7 @@ struct MainEditorView: View {
                 
                 Spacer()
             }
-            .navigationTitle("Queue name")
+            .navigationTitle(editor.name)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     HStack {

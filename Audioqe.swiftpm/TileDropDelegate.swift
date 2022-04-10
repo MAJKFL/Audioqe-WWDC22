@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TileDropDelegate: DropDelegate {
-    @ObservedObject var editor: TrackEditor
+    @ObservedObject var editor: QueueEditor
     
     var bank: Bank
     
