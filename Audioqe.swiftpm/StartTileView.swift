@@ -9,11 +9,18 @@ import SwiftUI
 
 struct StartTileView: View {
     @StateObject var editor: TrackEditor
+    let viewSize: CGSize
+    
+    var sizeMultiplier: Double {
+        print(viewSize.width)
+        
+        return viewSize.width == 873.5 ? 0.9 : 1
+    }
     
     var body: some View {
         RoundedRectangle(cornerRadius: 15)
             .fill(Color.green)
-            .frame(width: 220, height: 160)
+            .frame(width: 220 * sizeMultiplier, height: 160 * sizeMultiplier)
             .overlay(VStack(alignment: .leading) {
                 HStack {
                     Button {

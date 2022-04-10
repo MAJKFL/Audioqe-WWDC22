@@ -9,6 +9,13 @@ import SwiftUI
 
 struct ExitTileView: View {
     @ObservedObject var editor: TrackEditor
+    let viewSize: CGSize
+    
+    var sizeMultiplier: Double {
+        print(viewSize.width)
+        
+        return viewSize.width == 873.5 ? 0.9 : 1
+    }
     
     var body: some View {
         let volume = Binding(
@@ -18,7 +25,7 @@ struct ExitTileView: View {
         
         return RoundedRectangle(cornerRadius: 15)
             .fill(Color.red)
-            .frame(width: 220, height: 160)
+            .frame(width: 220 * sizeMultiplier, height: 160 * sizeMultiplier)
             .overlay(VStack(alignment: .leading, spacing: 0) {
                 HStack {
                     Label("Exit", systemImage: "speaker.wave.3.fill")
