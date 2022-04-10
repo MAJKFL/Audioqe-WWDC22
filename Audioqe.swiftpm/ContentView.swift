@@ -6,6 +6,8 @@ struct ContentView: View {
     
     @State private var searchText = ""
     
+    @State private var selectedQueue: Int? = 0
+    
     var queues: [QueueEditor] {
         if searchText == "" {
             return queueList.queues
@@ -17,14 +19,14 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             List {
-                ForEach(queues) { queue in
-                    NavigationLink(destination: MainEditorView(editor: queue), label: { Label(queue.name, systemImage: "arrow.right.square") })
+                ForEach(queues.indices, id: \.self) { index in
+                    NavigationLink(destination: MainEditorView(editor: queues[index]), tag: index, selection: $selectedQueue, label: { Label(queues[index].name, systemImage: "arrow.right.square") })
                 }
                 .onDelete(perform: queueList.remove)
             }
             .searchable(text: $searchText)
             .listStyle(.sidebar)
-            .navigationTitle("Queues")
+            .navigationTitle("Saved")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
