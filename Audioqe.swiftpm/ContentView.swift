@@ -101,7 +101,9 @@ struct ContentView: View {
                         
                         GeometryReader { geo in
                             Button {
-                                shareFile(url: editor.render(), buttonRect: geo.frame(in: CoordinateSpace.global))
+                                Task {
+                                    await shareFile(url: editor.render(), buttonRect: geo.frame(in: CoordinateSpace.global))
+                                }
                             } label: {
                                 Image(systemName: "square.and.arrow.up")
                             }

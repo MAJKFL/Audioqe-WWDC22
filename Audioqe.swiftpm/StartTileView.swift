@@ -54,6 +54,7 @@ struct StartTileView: View {
             }.padding())
             .foregroundColor(.white)
             .padding(.leading)
+            .disabled(editor.file == nil)
     }
     
     func secondsToHoursMinutesSeconds(_ seconds: Int) -> (Int, Int, Int) {

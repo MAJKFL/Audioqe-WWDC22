@@ -88,6 +88,10 @@ class TrackEditor: ObservableObject, Identifiable {
         
         engine.attach(audioPlayer)
         
+        engine.mainMixerNode.volume = 1
+//        engine.inputNode.volume = 1
+//        engine.mainMixerNode.outputVolume = 1
+        
         effectBanks = [
             Bank(editor: self),
             Bank(editor: self),
@@ -195,7 +199,7 @@ class TrackEditor: ObservableObject, Identifiable {
         })
     }
     
-    func render() -> URL? {
+    func render() async -> URL? {
         guard let file = file else { return nil }
         let format = file.processingFormat
         
