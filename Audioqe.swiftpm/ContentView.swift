@@ -10,6 +10,7 @@ struct ContentView: View {
                 ForEach(queueList.queues) { queue in
                     NavigationLink(destination: MainEditorView(editor: queue), label: { Label(queue.name, systemImage: "arrow.right.square") })
                 }
+                .onDelete(perform: queueList.remove)
             }
             .listStyle(.sidebar)
             .navigationTitle("Queues")
