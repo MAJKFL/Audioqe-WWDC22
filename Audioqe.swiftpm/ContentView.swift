@@ -21,8 +21,8 @@ struct ContentView: View {
                     NavigationLink(destination: MainEditorView(editor: queue), label: { Label(queue.name, systemImage: "arrow.right.square") })
                 }
                 .onDelete(perform: queueList.remove)
-                .searchable(text: $searchText)
             }
+            .searchable(text: $searchText)
             .listStyle(.sidebar)
             .navigationTitle("Queues")
             .toolbar {
