@@ -143,6 +143,10 @@ struct MainEditorView: View {
                     
                     let destination = URL(string: "file://\(recordingsURL.appendingPathComponent(fileURL.lastPathComponent).absoluteString)")!
                     
+                    if FileManager.default.fileExists(atPath: destination.path) {
+                        try FileManager.default.removeItem(at: destination)
+                    }
+                    
                     try FileManager.default.copyItem(at: fileURL, to: destination)
                     
                     editor.loadFile(url: destination)
