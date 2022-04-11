@@ -9,7 +9,11 @@ import SwiftUI
 
 struct StartTileView: View {
     @StateObject var editor: QueueEditor
+    
     let viewSize: CGSize
+    
+    @Binding var isShowingRecorder: Bool
+    @Binding var isShowingImporter: Bool
     
     var sizeMultiplier: Double {
         viewSize.width == 873.5 ? 0.9 : 1
@@ -49,17 +53,38 @@ struct StartTileView: View {
                     .disabled(editor.isPlaying)
                 }
                 .font(.largeTitle)
+                .disabled(editor.file == nil)
                 
-                Text("**File** - \(editor.file?.url.lastPathComponent ?? "No file")")
-                    .foregroundColor(editor.file == nil ? .red : .white)
-                
-                Text("**Length** - \(timeStringFromSeconds(Int(editor.file?.duration ?? 0)))")
+                if let file = editor.file {
+                    Text("**File** - \(file.url.lastPathComponent)")
+                    
+                    Text("**Length** - \(timeStringFromSeconds(Int(file.duration)))")
+                } else {
+                    Menu {
+                        Button {
+                            isShowingImporter.toggle()
+                        } label: {
+                            Label("Add file", systemImage: "doc.fill.badge.plus")
+                        }
+                        
+                        Button {
+                            withAnimation {
+                                isShowingRecorder.toggle()
+                            }
+                        } label: {
+                            Label("Choose recording", systemImage: "mic.fill.badge.plus")
+                        }
+                    } label: {
+                        Label("Add file", systemImage: "plus")
+                            .foregroundColor(.accentColor)
+                            .font(.headline)
+                    }
+                }
                 
                 Spacer()
             }.padding())
             .foregroundColor(.white)
             .padding(.leading)
-            .disabled(editor.file == nil)
     }
     
     func secondsToHoursMinutesSeconds(_ seconds: Int) -> (Int, Int, Int) {

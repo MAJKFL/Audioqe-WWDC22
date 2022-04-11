@@ -39,7 +39,7 @@ struct MainEditorView: View {
                 
                 LazyVGrid(columns: columns, spacing: 50) {
                     HStack(spacing: 0) {
-                        StartTileView(editor: editor, viewSize: geo.size)
+                        StartTileView(editor: editor, viewSize: geo.size, isShowingRecorder: $isShowingRecorder, isShowingImporter: $isShowingImporter)
                         
                         Rectangle()
                             .fill(Color.primary)

@@ -164,7 +164,6 @@ struct TileView: View {
                         }
                     }
                 }
-                .disabled(editor.file == nil)
         } else {
             Menu {
                 Button {
