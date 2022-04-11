@@ -18,10 +18,10 @@ class OrientationInfo: ObservableObject {
     private var _observer: NSObjectProtocol?
     
     init() {
-        if UIDevice.current.orientation.isLandscape {
-            self.orientation = .landscape
-        } else {
+        if UIDevice.current.orientation.isPortrait {
             self.orientation = .portrait
+        } else {
+            self.orientation = .landscape
         }
         
         _observer = NotificationCenter.default.addObserver(forName: UIDevice.orientationDidChangeNotification, object: nil, queue: nil) { [unowned self] note in
