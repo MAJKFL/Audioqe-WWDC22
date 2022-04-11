@@ -118,6 +118,7 @@ struct MainEditorView: View {
                             } label: {
                                 Image(systemName: "square.and.arrow.up")
                             }
+                            .disabled(editor.file == nil)
                         }
                         .padding(.trailing)
                     }

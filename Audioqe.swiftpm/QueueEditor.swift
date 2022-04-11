@@ -252,7 +252,7 @@ class QueueEditor: ObservableObject, Identifiable {
     }
     
     func connectNodes() {
-        guard let format = file?.processingFormat else { return }
+        let format = file?.processingFormat 
         
         let nodes = effectBanks.compactMap { $0.effect }
 

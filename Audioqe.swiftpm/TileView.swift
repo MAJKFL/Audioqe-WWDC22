@@ -216,7 +216,7 @@ struct TileView: View {
                         .frame(maxWidth: .infinity, maxHeight: 1)
                 }
             }
-            .disabled(!isLastEmptyBank || editor.file == nil)
+            .disabled(!isLastEmptyBank)
             .transaction { transaction in
                 transaction.animation = nil
             }
