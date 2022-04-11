@@ -113,6 +113,10 @@ class QueueEditor: ObservableObject, Identifiable {
         
         engine.mainMixerNode.volume = 1
         
+        if let url = savedQueue.lastOpenedFile {
+            loadFile(url: url)
+        }
+        
         for bank in savedQueue.banks {
             switch bank["type"] {
             case SavedBankType.reverb.rawValue:
@@ -204,7 +208,7 @@ class QueueEditor: ObservableObject, Identifiable {
             }
         }
         
-        return SaveQueue(id: id, name: name, volume: audioPlayer.volume, banks: savedBanks)
+        return SaveQueue(id: id, name: name, volume: audioPlayer.volume, lastOpenedFile: file?.url, banks: savedBanks)
     }
     
     func save() {
