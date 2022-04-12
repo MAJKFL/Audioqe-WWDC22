@@ -12,7 +12,7 @@ struct ExitTileView: View {
     let viewSize: CGSize
     
     var sizeMultiplier: Double {
-        viewSize.width == 873.5 ? 0.9 : 1
+        viewSize.width <= 873.5 ? 0.9 : 1.1
     }
     
     var body: some View {
