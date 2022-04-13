@@ -59,6 +59,8 @@ struct AudioRecorder: View {
             }
             
             Button(action: {
+                guard AVAudioSession.sharedInstance().recordPermission == .granted else { return }
+                
                 if isRecording {
                     recorder.stop()
                     withAnimation {
@@ -92,7 +94,7 @@ struct AudioRecorder: View {
             }) {
                 ZStack {
                     RoundedRectangle(cornerRadius: isRecording ? 5 : 90)
-                        .fill(Color.red)
+                        .fill(AVAudioSession.sharedInstance().recordPermission == .denied ? Color.secondary : Color.red)
                         .frame(width: isRecording ? 33 : 63, height: isRecording ? 33 : 63)
                     
                     Circle()
@@ -102,6 +104,7 @@ struct AudioRecorder: View {
                 .padding(.trailing)
                 .padding(.leading, 5)
             }
+            .disabled(AVAudioSession.sharedInstance().recordPermission == .denied)
         }
         .frame(width: 400, height: 300)
         .onAppear {
