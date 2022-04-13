@@ -110,7 +110,7 @@ struct TileView: View {
         if let bgColor = bgColor {
             RoundedRectangle(cornerRadius: 15)
                 .fill(bgColor)
-                .frame(width: 220 * sizeMultiplier, height: 160 * sizeMultiplier)
+                .frame(width: 220 * sizeMultiplier, height: 160 * 1.1)
                 .scaleEffect(isSelected ? 0.93 : 1)
                 .overlay(VStack {
                     HStack {
@@ -225,7 +225,7 @@ struct TileView: View {
                 ZStack {
                     RoundedRectangle(cornerRadius: 15)
                         .fill(Color.secondary.opacity(isLastEmptyBank ? 0.1 : 0))
-                        .frame(width: 220 * sizeMultiplier, height: 160 * sizeMultiplier)
+                        .frame(width: 220 * sizeMultiplier, height: 160 * 1.1)
                     
                     Rectangle()
                         .fill(Color.primary)

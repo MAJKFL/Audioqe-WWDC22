@@ -22,7 +22,7 @@ struct StartTileView: View {
     var body: some View {
         RoundedRectangle(cornerRadius: 15)
             .fill(Color.green)
-            .frame(width: 220 * sizeMultiplier, height: 160 * sizeMultiplier)
+            .frame(width: 220 * sizeMultiplier, height: 160 * 1.1)
             .overlay(VStack(alignment: .leading) {
                 HStack {
                     Button {

@@ -23,7 +23,7 @@ struct ExitTileView: View {
         
         return RoundedRectangle(cornerRadius: 15)
             .fill(Color.red)
-            .frame(width: 220 * sizeMultiplier, height: 160 * sizeMultiplier)
+            .frame(width: 220 * sizeMultiplier, height: 160 * 1.1)
             .overlay(VStack(alignment: .leading, spacing: 0) {
                 HStack {
                     Label("Exit", systemImage: "speaker.wave.3.fill")
