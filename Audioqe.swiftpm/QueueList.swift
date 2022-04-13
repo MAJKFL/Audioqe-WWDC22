@@ -31,10 +31,14 @@ class QueueList: ObservableObject {
     }
 
     func add(_ queue: QueueEditor) {
-        let unnamedQueuesCount = queues.filter({ $0.name.contains("Queue") }).count
+        let maxNumber = queues
+            .filter({ $0.name.contains("Queue") })
+            .map({ $0.name.replacingOccurrences(of: "Queue ", with: "") })
+            .map({ Int($0) ?? 0 })
+            .max() ?? 0
         
         let newQueue = QueueEditor(queue.exportQueue())
-        newQueue.name = "Queue \(unnamedQueuesCount + 1)"
+        newQueue.name = "Queue \(maxNumber + 1)"
         
         queues.append(newQueue)
         save()

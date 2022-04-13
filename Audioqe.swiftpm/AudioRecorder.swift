@@ -68,13 +68,14 @@ struct AudioRecorder: View {
                     return
                 }
                 
-                let names: [String] = audios.map { url in
-                    url.deletingPathExtension().lastPathComponent
-                }
+                let maxNumber = audios
+                    .map({ $0.deletingPathExtension().lastPathComponent })
+                    .filter({ $0.contains("Recording") })
+                    .map({ $0.replacingOccurrences(of: "Recording", with: "") })
+                    .map({ Int($0) ?? 0 })
+                    .max() ?? 0
                 
-                let filteredNames = names.filter({ $0.contains("Recording") })
-                
-                let filName = url.appendingPathComponent("Recording\(filteredNames.count + 1).m4a")
+                let filName = url.appendingPathComponent("Recording\(maxNumber + 1).m4a")
                 
                 let settings = [
                     AVFormatIDKey : Int(kAudioFormatMPEG4AAC),
