@@ -20,7 +20,7 @@ struct ContentView: View {
         NavigationView {
             List {
                 ForEach(queues.indices, id: \.self) { index in
-                    NavigationLink(destination: MainEditorView(editor: queues[index]), tag: index, selection: $selectedQueue, label: { Label(queues[index].name, systemImage: "arrow.right.square") })
+                    NavigationLink(destination: MainEditorView(editor: queues[index]), tag: index, selection: $selectedQueue, label: { SidebarRow(queueList: queueList, editor: queues[index]) })
                 }
                 .onDelete(perform: queueList.remove)
             }
@@ -37,5 +37,29 @@ struct ContentView: View {
                 }
             }
         }
+    }
+}
+
+struct SidebarRow: View {
+    @ObservedObject var queueList: QueueList
+    @ObservedObject var editor: QueueEditor
+    
+    var body: some View {
+        Label(editor.name, systemImage: "arrow.right.square")
+            .contextMenu {
+                Button {
+                    textFieldAlert(title: "Rename", message: "Enter new name", hintText: "New name", primaryTitle: "Done", secondaryTitle: "Cancel", primaryAction: rename, secondaryAction: {})
+                } label: {
+                    Label("Rename", systemImage: "pencil")
+                }
+
+            }
+    }
+    
+    func rename(_ newName: String) {
+        guard !newName.isEmpty else { return }
+        guard !queueList.queues.map({ $0.name }).contains(newName) else { return }
+        editor.name = newName
+        editor.save()
     }
 }
