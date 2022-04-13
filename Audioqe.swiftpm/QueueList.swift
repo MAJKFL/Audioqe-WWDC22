@@ -44,8 +44,8 @@ class QueueList: ObservableObject {
         save()
     }
     
-    func remove(at offsets: IndexSet) {
-        queues.remove(atOffsets: offsets)
+    func remove(_ queue: QueueEditor) {
+        queues.removeAll(where: { $0.id == queue.id })
         save()
     }
 }
