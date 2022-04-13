@@ -75,8 +75,6 @@ struct EqualiserEditorView: View {
                 Slider(value: bandwidth, in: 0.05...5.0, minimumValueLabel: Text("0.05"), maximumValueLabel: Text("5.00")) {
                     EmptyView()
                 }
-
-                Toggle(isOn: bypass) { Text("Bypass:").font(.headline) }
                 
                 Text("Frequency:")
                     .font(.headline)
@@ -91,6 +89,8 @@ struct EqualiserEditorView: View {
                 Slider(value: gain, in: -96...24, minimumValueLabel: Text("-96 dB"), maximumValueLabel: Text("24 dB")) {
                     EmptyView()
                 }
+                
+                Toggle(isOn: bypass) { Text("Bypass:").font(.headline) }
             }
             
             Button(role: .destructive, action: { editor.clearBank(bank) }, label: { Label("Remove", systemImage: "trash") })

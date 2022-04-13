@@ -41,6 +41,14 @@ struct DistortionEditorView: View {
             }
         )
         
+        let bypass = Binding(
+            get: { distortion.bypass },
+            set: {
+                distortion.bypass = $0
+                save()
+            }
+        )
+        
         return VStack {
             VStack(alignment: .leading) {
                 Text("Pre gain:")
@@ -66,6 +74,8 @@ struct DistortionEditorView: View {
                 Slider(value: wetDryMix, in: 0...100, minimumValueLabel: Text("0%"), maximumValueLabel: Text("100%")) {
                     EmptyView()
                 }
+                
+                Toggle(isOn: bypass) { Text("Bypass:").font(.headline) }
             }
             Button(role: .destructive, action: { editor.clearBank(bank) }, label: { Label("Remove", systemImage: "trash") })
                 .padding()

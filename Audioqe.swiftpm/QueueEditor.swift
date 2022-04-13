@@ -126,6 +126,7 @@ class QueueEditor: ObservableObject, Identifiable {
                     reverb.loadFactoryPreset(preset)
                 }
                 reverb.wetDryMix = Float(bank["wetDryMix"]!)!
+                reverb.bypass = bank["bypass"] == "On" ? true : false
                 
                 effectBanks.append(Bank(editor: self, effect: reverb))
             case SavedBankType.distortion.rawValue:
@@ -136,6 +137,7 @@ class QueueEditor: ObservableObject, Identifiable {
                 }
                 distortion.preGain = Float(bank["preGain"]!)!
                 distortion.wetDryMix = Float(bank["wetDryMix"]!)!
+                distortion.bypass = bank["bypass"] == "On" ? true : false
                 
                 effectBanks.append(Bank(editor: self, effect: distortion))
             case SavedBankType.delay.rawValue:
@@ -145,6 +147,7 @@ class QueueEditor: ObservableObject, Identifiable {
                 delay.delayTime = Double(bank["delayTime"]!)!
                 delay.lowPassCutoff = Float(bank["lowPassCutoff"]!)!
                 delay.wetDryMix = Float(bank["wetDryMix"]!)!
+                delay.bypass = bank["bypass"] == "On" ? true : false
                 
                 effectBanks.append(Bank(editor: self, effect: delay))
             case SavedBankType.equaliser.rawValue:
@@ -163,6 +166,8 @@ class QueueEditor: ObservableObject, Identifiable {
                 effectBanks.append(Bank(editor: self))
             }
         }
+        
+        connectNodes()
     }
     
     func exportQueue() -> SaveQueue {
@@ -182,12 +187,14 @@ class QueueEditor: ObservableObject, Identifiable {
                 savedBanks[index]["type"] = SavedBankType.reverb.rawValue
                 savedBanks[index]["preset"] = "\(effectBanks[index].reverbPreset.rawValue)"
                 savedBanks[index]["wetDryMix"] = "\(effect.wetDryMix)"
+                savedBanks[index]["bypass"] = "\(effect.bypass ? "On" : "Off")"
             case is AVAudioUnitDistortion:
                 guard let effect = effectBanks[index].effect as? AVAudioUnitDistortion else { break }
                 savedBanks[index]["type"] = SavedBankType.distortion.rawValue
                 savedBanks[index]["preset"] = "\(effectBanks[index].distortionPreset.rawValue)"
                 savedBanks[index]["preGain"] = "\(effect.preGain)"
                 savedBanks[index]["wetDryMix"] = "\(effect.wetDryMix)"
+                savedBanks[index]["bypass"] = "\(effect.bypass ? "On" : "Off")"
             case is AVAudioUnitDelay:
                 guard let effect = effectBanks[index].effect as? AVAudioUnitDelay else { break }
                 savedBanks[index]["type"] = SavedBankType.delay.rawValue
@@ -195,6 +202,7 @@ class QueueEditor: ObservableObject, Identifiable {
                 savedBanks[index]["delayTime"] = "\(effect.delayTime)"
                 savedBanks[index]["lowPassCutoff"] = "\(effect.lowPassCutoff)"
                 savedBanks[index]["wetDryMix"] = "\(effect.wetDryMix)"
+                savedBanks[index]["bypass"] = "\(effect.bypass ? "On" : "Off")"
             case is AVAudioUnitEQ:
                 guard let effect = effectBanks[index].effect as? AVAudioUnitEQ else { break }
                 savedBanks[index]["type"] = SavedBankType.equaliser.rawValue

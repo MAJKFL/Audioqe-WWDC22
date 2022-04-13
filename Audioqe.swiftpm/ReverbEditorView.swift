@@ -33,6 +33,14 @@ struct ReverbEditorView: View {
             }
         )
         
+        let bypass = Binding(
+            get: { reverb.bypass },
+            set: {
+                reverb.bypass = $0
+                save()
+            }
+        )
+        
         return VStack {
             VStack(alignment: .leading) {
                 Text("Preset:")
@@ -51,6 +59,8 @@ struct ReverbEditorView: View {
                 Slider(value: wetDryMix, in: 0...100, minimumValueLabel: Text("0%"), maximumValueLabel: Text("100%")) {
                     EmptyView()
                 }
+                
+                Toggle(isOn: bypass) { Text("Bypass:").font(.headline) }
             }
             
             Button(role: .destructive, action: { editor.clearBank(bank) }, label: { Label("Remove", systemImage: "trash") })

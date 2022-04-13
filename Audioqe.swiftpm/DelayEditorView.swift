@@ -49,6 +49,14 @@ struct DelayEditorView: View {
             }
         )
         
+        let bypass = Binding(
+            get: { delay.bypass },
+            set: {
+                delay.bypass = $0
+                save()
+            }
+        )
+        
         return VStack {
             VStack(alignment: .leading) {
                 Text("Feedback:")
@@ -78,6 +86,8 @@ struct DelayEditorView: View {
                 Slider(value: wetDryMix, in: 0...100, minimumValueLabel: Text("0%"), maximumValueLabel: Text("100%")) {
                     EmptyView()
                 }
+                
+                Toggle(isOn: bypass) { Text("Bypass:").font(.headline) }
             }
             
             Button(role: .destructive, action: { editor.clearBank(bank) }, label: { Label("Remove", systemImage: "trash") })
