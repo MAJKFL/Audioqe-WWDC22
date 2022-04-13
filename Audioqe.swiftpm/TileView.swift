@@ -187,6 +187,7 @@ struct TileView: View {
                     withAnimation(.easeInOut.speed(2)) {
                         let distortion = AVAudioUnitDistortion()
                         distortion.wetDryMix = 50
+                        distortion.preGain = -22
                         bank.effect = distortion
                     }
                     editor.connectNodes()
@@ -196,7 +197,11 @@ struct TileView: View {
                 
                 Button {
                     withAnimation(.easeInOut.speed(2)) {
-                        bank.effect = AVAudioUnitDelay()
+                        let newDelay = AVAudioUnitDelay()
+                        newDelay.feedback = 50
+                        newDelay.delayTime = 0.25
+                        newDelay.lowPassCutoff = 1500
+                        bank.effect = newDelay
                     }
                     editor.connectNodes()
                 } label: {
@@ -206,6 +211,9 @@ struct TileView: View {
                 Button {
                     withAnimation(.easeInOut.speed(2)) {
                         let newEqualiser = AVAudioUnitEQ(numberOfBands: 1)
+                        newEqualiser.bands.first?.bandwidth = 1
+                        newEqualiser.bands.first?.frequency = 7500
+                        newEqualiser.bands.first?.gain = -30
                         newEqualiser.bands.first?.bypass = false
                         bank.effect = newEqualiser
                     }
