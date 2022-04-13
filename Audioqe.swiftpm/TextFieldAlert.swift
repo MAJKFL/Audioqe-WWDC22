@@ -12,7 +12,7 @@ extension View {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
         alert.addTextField { field in
-            field.placeholder = hintText
+            field.placeholder = title
         }
         
         alert.addAction(.init(title: secondaryTitle, style: .cancel, handler: { _ in

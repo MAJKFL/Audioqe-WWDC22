@@ -48,7 +48,7 @@ struct SidebarRow: View {
         Label(editor.name, systemImage: "arrow.right.square")
             .contextMenu {
                 Button {
-                    textFieldAlert(title: "Rename", message: "Enter new name", hintText: "New name", primaryTitle: "Done", secondaryTitle: "Cancel", primaryAction: rename, secondaryAction: {})
+                    textFieldAlert(title: editor.name, message: "Enter new name", hintText: "New name", primaryTitle: "Done", secondaryTitle: "Cancel", primaryAction: rename, secondaryAction: {})
                 } label: {
                     Label("Rename", systemImage: "pencil")
                 }
