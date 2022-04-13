@@ -26,25 +26,23 @@ struct StartTileView: View {
             .overlay(VStack(alignment: .leading) {
                 HStack {
                     Button {
-                        withAnimation {
-                            editor.playPause()
-                        }
+                        editor.playPause()
                     } label: {
                         Image(systemName: editor.isPlaying ? "stop.fill" : "play.fill")
                             .foregroundColor(.accentColor)
+                            .frame(width: 20, height: 20)
                     }
+                    .padding(.horizontal, 5)
                     
                     Text("Start")
                     
                     Spacer()
                     
                     Button {
-                        withAnimation {
-                            if editor.playbackOptions == .loops {
-                                editor.playbackOptions = .interrupts
-                            } else {
-                                editor.playbackOptions = .loops
-                            }
+                        if editor.playbackOptions == .loops {
+                            editor.playbackOptions = .interrupts
+                        } else {
+                            editor.playbackOptions = .loops
                         }
                     } label: {
                         Image(systemName: editor.playbackOptions == .loops ? "repeat" : "arrow.right")

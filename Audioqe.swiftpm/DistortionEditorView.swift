@@ -51,13 +51,6 @@ struct DistortionEditorView: View {
         
         return VStack {
             VStack(alignment: .leading) {
-                Text("Pre gain:")
-                    .font(.headline)
-                
-                Slider(value: preGain, in: -80...20, minimumValueLabel: Text("-80 dB"), maximumValueLabel: Text("20 dB")) {
-                    EmptyView()
-                }
-                
                 Text("Preset:")
                     .font(.headline)
                 
@@ -67,6 +60,13 @@ struct DistortionEditorView: View {
                     }
                 }
                 .pickerStyle(.wheel)
+                
+                Text("Pre gain:")
+                    .font(.headline)
+                
+                Slider(value: preGain, in: -80...20, minimumValueLabel: Text("-80 dB"), maximumValueLabel: Text("20 dB")) {
+                    EmptyView()
+                }
                 
                 Text("Wet dry mix:")
                     .font(.headline)
