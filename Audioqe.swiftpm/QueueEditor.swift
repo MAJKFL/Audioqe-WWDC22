@@ -91,8 +91,6 @@ class QueueEditor: ObservableObject, Identifiable {
         engine.attach(audioPlayer)
         
         engine.mainMixerNode.volume = 1
-//        engine.inputNode.volume = 1
-//        engine.mainMixerNode.outputVolume = 1
         
         effectBanks = [
             Bank(editor: self),
@@ -294,7 +292,7 @@ class QueueEditor: ObservableObject, Identifiable {
     }
     
     func playPause() {
-        if audioPlayer.isPlaying {
+        if isPlaying {
             pause()
         } else {
             play()
