@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  Audioqe
-//
-//  Created by Jakub Florek on 10/04/2022.
-//
-
 import Foundation
 
 class QueueList: ObservableObject {

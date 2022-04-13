@@ -1,10 +1,3 @@
-//
-//  DelayEditorView.swift
-//  Audioqe
-//
-//  Created by Jakub Florek on 05/04/2022.
-//
-
 import SwiftUI
 import AVFoundation
 

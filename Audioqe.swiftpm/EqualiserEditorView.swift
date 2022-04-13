@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  Audioqe
-//
-//  Created by Jakub Florek on 06/04/2022.
-//
-
 import SwiftUI
 import AVFoundation
 
