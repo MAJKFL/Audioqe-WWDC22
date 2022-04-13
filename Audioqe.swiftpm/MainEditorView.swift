@@ -9,35 +9,30 @@ import SwiftUI
 import AVFoundation
 
 struct MainEditorView: View {
-    @ObservedObject var orientationInfo = OrientationInfo()
     @ObservedObject var editor: QueueEditor
     
     @State private var selectedBank: Bank?
     @State private var isShowingImporter = false
     @State private var isShowingRecorder = false
     
-    var columns: [GridItem] {
-        if orientationInfo.orientation == .landscape {
-            return [
-                GridItem(.flexible(), spacing: 0),
-                GridItem(.flexible(), spacing: 0),
-                GridItem(.flexible(), spacing: 0),
-                GridItem(.flexible(), spacing: 0)
-            ]
-        } else {
-            return [
-                GridItem(.flexible(), spacing: 0),
-                GridItem(.flexible(), spacing: 0)
-            ]
-        }
-    }
+    let portraitColumns = [
+        GridItem(.flexible(), spacing: 0),
+        GridItem(.flexible(), spacing: 0)
+    ]
+    
+    let landscapeColumns = [
+        GridItem(.flexible(), spacing: 0),
+        GridItem(.flexible(), spacing: 0),
+        GridItem(.flexible(), spacing: 0),
+        GridItem(.flexible(), spacing: 0)
+    ]
     
     var body: some View {
         GeometryReader { geo in
             VStack(spacing: 100) {
                 Spacer()
                 
-                LazyVGrid(columns: columns, spacing: 50) {
+                LazyVGrid(columns: geo.size.width > geo.size.height ? landscapeColumns : portraitColumns, spacing: 50) {
                     HStack(spacing: 0) {
                         StartTileView(editor: editor, viewSize: geo.size, isShowingRecorder: $isShowingRecorder, isShowingImporter: $isShowingImporter)
                         
