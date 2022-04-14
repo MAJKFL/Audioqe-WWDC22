@@ -24,6 +24,7 @@ struct ContentView: View {
                 }
                 .onDelete { offsets in
                     guard let index = offsets.first else { return }
+                    if selectedQueue == queues[index].id { selectedQueue = queues.first?.id }
                     queueList.remove(queues[index])
                 }
             }
