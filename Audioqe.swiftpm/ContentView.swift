@@ -39,10 +39,10 @@ struct ContentView: View {
                     }
                 }
             }
-            .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                    selectedQueue = queueList.queues.first?.id
-                }
+        }
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                selectedQueue = queues.first?.id
             }
         }
     }
@@ -60,7 +60,6 @@ struct SidebarRow: View {
                 } label: {
                     Label("Rename", systemImage: "pencil")
                 }
-
             }
     }
     
