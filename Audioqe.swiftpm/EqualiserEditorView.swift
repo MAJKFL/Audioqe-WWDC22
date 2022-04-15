@@ -70,45 +70,51 @@ struct EqualiserEditorView: View {
                 Text("Bandwidth:")
                     .font(.headline)
                 
-                Slider(value: bandwidth, in: 0.05...5) {
-                    Text("Bandwidth")
-                } minimumValueLabel: {
-                    Text("0.05")
-                } maximumValueLabel: {
-                    Text("5.00")
-                } onEditingChanged: { isEditing in
-                    withAnimation {
-                        editingMessage = isEditing ? "" : nil
+                if ![1, 2, 7, 8].contains(where: { $0 == bank.equaliserFilterType.rawValue }) {
+                    Slider(value: bandwidth, in: 0.05...5) {
+                        Text("Bandwidth")
+                    } minimumValueLabel: {
+                        Text("0.05")
+                    } maximumValueLabel: {
+                        Text("5.00")
+                    } onEditingChanged: { isEditing in
+                        withAnimation {
+                            editingMessage = isEditing ? "" : nil
+                        }
                     }
                 }
                 
                 Text("Frequency:")
                     .font(.headline)
                 
-                Slider(value: frequency, in: 20...Float((bank.editor.file?.fileFormat.sampleRate ?? 40) / 2)) {
+                Slider(value: frequency, in: 20...Float((bank.editor.file?.fileFormat.sampleRate ?? 44100) / 2), step: 5) {
                     Text("Frequency")
                 } minimumValueLabel: {
                     Text("20 Hz")
                 } maximumValueLabel: {
-                    Text(String(format: "%.0f Hz", Float((bank.editor.file?.fileFormat.sampleRate ?? 40) / 2)))
+                    Text(editor.file == nil ? "No file" : String(format: "%.0f Hz", Float((bank.editor.file?.fileFormat.sampleRate ?? 40) / 2)))
+                        .foregroundColor(editor.file == nil ? .red : .primary)
                 } onEditingChanged: { isEditing in
                     withAnimation {
                         editingMessage = isEditing ? "" : nil
                     }
                 }
+                .disabled(editor.file == nil)
                 
                 Text("Gain:")
                     .font(.headline)
                 
-                Slider(value: gain, in: -96...24) {
-                    Text("Gain")
-                } minimumValueLabel: {
-                    Text("-96 dB")
-                } maximumValueLabel: {
-                    Text("24 dB")
-                } onEditingChanged: { isEditing in
-                    withAnimation {
-                        editingMessage = isEditing ? "" : nil
+                if ![1, 2, 3, 4, 5, 6].contains(where: { $0 == bank.equaliserFilterType.rawValue }) {
+                    Slider(value: gain, in: -96...24) {
+                        Text("Gain")
+                    } minimumValueLabel: {
+                        Text("-96 dB")
+                    } maximumValueLabel: {
+                        Text("24 dB")
+                    } onEditingChanged: { isEditing in
+                        withAnimation {
+                            editingMessage = isEditing ? "" : nil
+                        }
                     }
                 }
                 
