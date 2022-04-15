@@ -67,10 +67,10 @@ struct EqualiserEditorView: View {
                 }
                 .pickerStyle(.wheel)
                 
-                Text("Bandwidth:")
-                    .font(.headline)
-                
                 if ![1, 2, 7, 8].contains(where: { $0 == bank.equaliserFilterType.rawValue }) {
+                    Text("Bandwidth:")
+                        .font(.headline)
+                    
                     Slider(value: bandwidth, in: 0.05...5) {
                         Text("Bandwidth")
                     } minimumValueLabel: {
@@ -101,10 +101,10 @@ struct EqualiserEditorView: View {
                 }
                 .disabled(editor.file == nil)
                 
-                Text("Gain:")
-                    .font(.headline)
-                
                 if ![1, 2, 3, 4, 5, 6].contains(where: { $0 == bank.equaliserFilterType.rawValue }) {
+                    Text("Gain:")
+                        .font(.headline)
+                    
                     Slider(value: gain, in: -96...24) {
                         Text("Gain")
                     } minimumValueLabel: {

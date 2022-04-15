@@ -52,31 +52,35 @@ struct TileView: View {
         HStack {
             VStack(alignment: .leading) {
                 if let reverb = bank.effect as? AVAudioUnitReverb {
-                    Text("**Preset** - \(QueueEditor.reverbPresetNames[bank.reverbPreset.rawValue] ?? "")")
+                    Text("Preset - **\(QueueEditor.reverbPresetNames[bank.reverbPreset.rawValue] ?? "")**")
                     
-                    Text("**Wet dry mix** - \(String(format: "%.0f", reverb.wetDryMix))%")
+                    Text("Wet dry mix - **\(String(format: "%.0f", reverb.wetDryMix))%**")
                 } else if let distortion = bank.effect as? AVAudioUnitDistortion {
-                    Text("**Preset** - \(QueueEditor.distortionPresetNames[bank.distortionPreset.rawValue] ?? "")")
+                    Text("Preset - **\(QueueEditor.distortionPresetNames[bank.distortionPreset.rawValue] ?? "")**")
                     
-                    Text("**Pre gain** - \(String(format: "%.2f", distortion.preGain)) dB")
+                    Text("Pre gain - **\(String(format: "%.2f", distortion.preGain)) dB**")
                     
-                    Text("**Wet dry mix** - \(String(format: "%.0f", distortion.wetDryMix))%")
+                    Text("Wet dry mix - **\(String(format: "%.0f", distortion.wetDryMix))%**")
                 } else if let delay = bank.effect as? AVAudioUnitDelay {
-                    Text("**Feedback** - \(String(format: "%.0f", delay.feedback))%")
+                    Text("Feedback - **\(String(format: "%.0f", delay.feedback))%**")
                     
-                    Text("**Delay time** - \(String(format: "%.2f", delay.delayTime))")
+                    Text("Delay time - **\(String(format: "%.2f", delay.delayTime))**")
                     
-                    Text("**LP cutoff** - \(String(format: "%.0f", delay.lowPassCutoff)) Hz")
+                    Text("LP cutoff - **\(String(format: "%.0f", delay.lowPassCutoff)) Hz**")
                     
-                    Text("**Wet dry mix** - \(String(format: "%.0f", delay.wetDryMix))%")
+                    Text("Wet dry mix - **\(String(format: "%.0f", delay.wetDryMix))%**")
                 } else if let equaliser = bank.effect as? AVAudioUnitEQ {
-                    Text("**Filter** - \(QueueEditor.eqFilterNames[bank.equaliserFilterType.rawValue] ?? "")")
+                    Text("Filter - **\(QueueEditor.eqFilterNames[bank.equaliserFilterType.rawValue] ?? "")**")
                     
-                    Text("**Bandwidth** - \(String(format: "%.2f", equaliser.bands.first?.bandwidth ?? 0))")
+                    if ![1, 2, 7, 8].contains(where: { $0 == equaliser.bands.first?.filterType.rawValue }) {
+                        Text("Bandwidth - **\(String(format: "%.2f", equaliser.bands.first?.bandwidth ?? 0))**")
+                    }
                     
-                    Text("**Frequency** - \(String(format: "%.0f", equaliser.bands.first?.frequency ?? 0)) Hz")
+                    Text("Frequency - **\(String(format: "%.0f", equaliser.bands.first?.frequency ?? 0)) Hz**")
                     
-                    Text("**Gain** - \(String(format: "%.1f", equaliser.bands.first?.gain ?? 0)) dB")
+                    if ![1, 2, 3, 4, 5, 6].contains(where: { $0 == equaliser.bands.first?.filterType.rawValue }) {
+                        Text("Gain - **\(String(format: "%.1f", equaliser.bands.first?.gain ?? 0)) dB**")
+                    }
                 }
             }
             .lineLimit(1)

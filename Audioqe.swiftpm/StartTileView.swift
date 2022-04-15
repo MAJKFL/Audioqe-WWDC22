@@ -47,9 +47,9 @@ struct StartTileView: View {
                 .disabled(editor.file == nil)
                 
                 if let file = editor.file {
-                    Text("**File** - \(file.url.lastPathComponent)")
+                    Text("File - **\(file.url.lastPathComponent)**")
                     
-                    Text("**Length** - \(timeStringFromSeconds(Int(file.duration)))")
+                    Text("Length - **\(timeStringFromSeconds(Int(file.duration)))**")
                 } else {
                     Menu {
                         Button {
