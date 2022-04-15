@@ -2,10 +2,13 @@ import SwiftUI
 import AVFoundation
 
 struct ReverbEditorView: View {
+    @Environment(\.presentationMode) var presentationMode
+    
     @ObservedObject var editor: QueueEditor
     @ObservedObject var bank: Bank
     
     @Binding var editingMessage: String?
+    @Binding var helpWindowSetting: HelpWindowSetting?
     
     @State private var debounceTimer: Timer?
     
@@ -29,13 +32,13 @@ struct ReverbEditorView: View {
             }
         )
         
-        let bypass = Binding(
-            get: { reverb.bypass },
-            set: {
-                reverb.bypass = $0
-                save()
-            }
-        )
+//        let bypass = Binding(
+//            get: { reverb.bypass },
+//            set: {
+//                reverb.bypass = $0
+//                save()
+//            }
+//        )
         
         return VStack {
             VStack(alignment: .leading) {
@@ -64,11 +67,20 @@ struct ReverbEditorView: View {
                     }
                 }
                 
-                Toggle(isOn: bypass) { Text("Bypass:").font(.headline) }
+//                Toggle(isOn: bypass) { Text("Bypass:").font(.headline) }
             }
             
-            Button(role: .destructive, action: { editor.clearBank(bank) }, label: { Label("Remove", systemImage: "trash") })
-                .padding()
+            HStack {
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss()
+                    helpWindowSetting = .reverb
+                }, label: { Label("Help", systemImage: "questionmark.circle") })
+                
+                Spacer()
+                
+                Button(role: .destructive, action: { editor.clearBank(bank) }, label: { Label("Remove", systemImage: "trash") })
+            }
+            .padding()
         }
         .padding()
     }

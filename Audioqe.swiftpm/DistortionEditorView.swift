@@ -2,10 +2,13 @@ import SwiftUI
 import AVFoundation
 
 struct DistortionEditorView: View {
+    @Environment(\.presentationMode) var presentationMode
+    
     @ObservedObject var editor: QueueEditor
     @ObservedObject var bank: Bank
     
     @Binding var editingMessage: String?
+    @Binding var helpWindowSetting: HelpWindowSetting?
     
     @State private var debounceTimer: Timer?
     
@@ -91,8 +94,18 @@ struct DistortionEditorView: View {
                 
                 Toggle(isOn: bypass) { Text("Bypass:").font(.headline) }
             }
-            Button(role: .destructive, action: { editor.clearBank(bank) }, label: { Label("Remove", systemImage: "trash") })
-                .padding()
+            
+            HStack {
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss()
+                    helpWindowSetting = .distortion
+                }, label: { Label("Help", systemImage: "questionmark.circle") })
+                
+                Spacer()
+                
+                Button(role: .destructive, action: { editor.clearBank(bank) }, label: { Label("Remove", systemImage: "trash") })
+            }
+            .padding()
         }
         .padding()
     }

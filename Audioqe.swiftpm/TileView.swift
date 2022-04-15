@@ -8,6 +8,7 @@ struct TileView: View {
     @ObservedObject var editor: QueueEditor
     
     @State private var editingMessage: String?
+    @State private var helpWindowSetting: HelpWindowSetting?
     
     let viewSize: CGSize
     
@@ -115,11 +116,13 @@ struct TileView: View {
                         if !isSelected {
                             Spacer()
                             
-                            Button {
-                                bank.toggleBypass()
-                            } label: {
-                                Image(systemName: bank.effect?.auAudioUnit.shouldBypassEffect ?? true ? "power.circle" : "power.circle.fill")
-                                    .foregroundColor(.accentColor)
+                            if !(bank.effect is AVAudioUnitReverb) {
+                                Button {
+                                    bank.toggleBypass()
+                                } label: {
+                                    Image(systemName: bank.effect?.auAudioUnit.shouldBypassEffect ?? true ? "power.circle" : "power.circle.fill")
+                                        .foregroundColor(.accentColor)
+                                }
                             }
                         }
                     }
@@ -146,13 +149,13 @@ struct TileView: View {
                 .popover(isPresented: $isShowingPopover, content: {
                     switch selectedBank?.effect {
                     case is AVAudioUnitDelay:
-                        DelayEditorView(editor: editor, bank: selectedBank!, editingMessage: $editingMessage)
+                        DelayEditorView(editor: editor, bank: selectedBank!, editingMessage: $editingMessage, helpWindowSetting: $helpWindowSetting)
                     case is AVAudioUnitDistortion:
-                        DistortionEditorView(editor: editor, bank: selectedBank!, editingMessage: $editingMessage)
+                        DistortionEditorView(editor: editor, bank: selectedBank!, editingMessage: $editingMessage, helpWindowSetting: $helpWindowSetting)
                     case is AVAudioUnitReverb:
-                        ReverbEditorView(editor: editor, bank: selectedBank!, editingMessage: $editingMessage)
+                        ReverbEditorView(editor: editor, bank: selectedBank!, editingMessage: $editingMessage, helpWindowSetting: $helpWindowSetting)
                     case is AVAudioUnitEQ:
-                        EqualiserEditorView(editor: editor, bank: selectedBank!, editingMessage: $editingMessage)
+                        EqualiserEditorView(editor: editor, bank: selectedBank!, editingMessage: $editingMessage, helpWindowSetting: $helpWindowSetting)
                     default:
                         Text("None")
                     }
@@ -171,6 +174,17 @@ struct TileView: View {
                         withAnimation(.easeInOut.speed(1.5)) {
                             selectedBank = nil
                         }
+                    }
+                }
+                .sheet(item: $helpWindowSetting) { setting in
+                    NavigationView {
+                        VStack {
+                            setting.detailedView
+                            
+                            Spacer()
+                        }
+                        .padding(.horizontal)
+                        .navigationTitle(setting.title)
                     }
                 }
         } else {
