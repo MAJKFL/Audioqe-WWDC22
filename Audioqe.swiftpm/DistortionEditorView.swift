@@ -108,7 +108,7 @@ struct DistortionEditorView: View {
             }
             .padding()
         }
-        .frame(width: 320)
+        .frame(width: 375)
         .padding()
     }
     
