@@ -9,7 +9,7 @@ class QueueList: ObservableObject {
             if let decoded = try? JSONDecoder().decode([SaveQueue].self, from: data) {
                 queues = decoded.map({ savedQueue in
                     QueueEditor(savedQueue)
-                }).sorted(by: { $0.name < $1.name })
+                })
                 return
             }
         }

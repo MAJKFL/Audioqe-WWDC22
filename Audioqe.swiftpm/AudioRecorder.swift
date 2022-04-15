@@ -72,12 +72,11 @@ struct AudioRecorder: View {
                 
                 let filName = url.appendingPathComponent("Recording\(maxNumber + 1).m4a")
                 
-                let settings = [
-                    AVFormatIDKey : Int(kAudioFormatMPEG4AAC),
-                    AVSampleRateKey : 12000,
-                    AVNumberOfChannelsKey : 1,
-                    AVEncoderAudioQualityKey : AVAudioQuality.high.rawValue
-                ]
+                let settings = [ AVFormatIDKey : kAudioFormatMPEG4AAC,
+                      AVEncoderAudioQualityKey : AVAudioQuality.max.rawValue,
+                      AVEncoderBitRateKey: 320000,
+                      AVNumberOfChannelsKey : 2,
+                      AVSampleRateKey : 44100.0 ] as [String : Any]
                 
                 recorder = try? AVAudioRecorder(url: filName, settings: settings)
                 recorder.record()
