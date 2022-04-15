@@ -64,63 +64,66 @@ struct DelayEditorView: View {
                 Text("Feedback:")
                     .font(.headline)
                 
-                Slider(value: feedback, in: -100...100) {
-                    Text("Feedback")
-                } minimumValueLabel: {
-                    Text("-100%")
-                } maximumValueLabel: {
-                    Text("100%")
-                } onEditingChanged: { isEditing in
-                    withAnimation {
-                        editingMessage = isEditing ? "" : nil
+                HStack {
+                    Spacer().overlay(Text("-100%"))
+                    
+                    Slider(value: feedback, in: -100...100) { isEditing in
+                        withAnimation {
+                            editingMessage = isEditing ? "" : nil
+                        }
                     }
+                    .frame(width: 200)
+                    
+                    Spacer().overlay(Text("100%"))
                 }
                 
                 Text("Delay time:")
                     .font(.headline)
                 
-                Slider(value: delayTime, in: 0...2) {
-                    Text("Delay time")
-                } minimumValueLabel: {
-                    Text("0")
-                } maximumValueLabel: {
-                    Text("2")
-                } onEditingChanged: { isEditing in
-                    withAnimation {
-                        editingMessage = isEditing ? "" : nil
+                HStack {
+                    Spacer().overlay(Text("0"))
+                    
+                    Slider(value: delayTime, in: 0...2) { isEditing in
+                        withAnimation {
+                            editingMessage = isEditing ? "" : nil
+                        }
                     }
+                    .frame(width: 200)
+                    
+                    Spacer().overlay(Text("2"))
                 }
                 
                 Text("Low pass cutoff:")
                     .font(.headline)
                 
-                Slider(value: lowPassCutoff, in: 10...Float((bank.editor.file?.fileFormat.sampleRate ?? 44100) / 2), step: 5) {
-                    Text("Low pass cutoff")
-                } minimumValueLabel: {
-                    Text("10 Hz")
-                } maximumValueLabel: {
-                    Text(editor.file == nil ? "No file" : String(format: "%.0f Hz", Float((bank.editor.file?.fileFormat.sampleRate ?? 40) / 2)))
-                        .foregroundColor(editor.file == nil ? .red : .primary)
-                } onEditingChanged: { isEditing in
-                    withAnimation {
-                        editingMessage = isEditing ? "" : nil
+                HStack {
+                    Spacer().overlay(Text("10 Hz"))
+                    
+                    Slider(value: lowPassCutoff, in: 10...Float((bank.editor.file?.fileFormat.sampleRate ?? 44100) / 2), step: 5) { isEditing in
+                        withAnimation {
+                            editingMessage = isEditing ? "" : nil
+                        }
                     }
+                    .disabled(editor.file == nil)
+                    .frame(width: 200)
+                    
+                    Spacer().overlay(Text(editor.file == nil ? "No file" : String(format: "%.0f Hz", Float((bank.editor.file?.fileFormat.sampleRate ?? 40) / 2))).foregroundColor(editor.file == nil ? .red : .primary))
                 }
-                .disabled(editor.file == nil)
                 
                 Text("Wet dry mix:")
                     .font(.headline)
                 
-                Slider(value: wetDryMix, in: 0...100) {
-                    Text("Wet dry mix")
-                } minimumValueLabel: {
-                    Text("0%")
-                } maximumValueLabel: {
-                    Text("100%")
-                } onEditingChanged: { isEditing in
-                    withAnimation {
-                        editingMessage = isEditing ? "" : nil
+                HStack {
+                    Spacer().overlay(Text("0%"))
+                    
+                    Slider(value: wetDryMix, in: 0...100) { isEditing in
+                        withAnimation {
+                            editingMessage = isEditing ? "" : nil
+                        }
                     }
+                    .frame(width: 200)
+                    
+                    Spacer().overlay(Text("100%"))
                 }
                 
                 Toggle(isOn: bypass) { Text("Bypass:").font(.headline) }
@@ -138,7 +141,7 @@ struct DelayEditorView: View {
             }
             .padding()
         }
-        .frame(width: 300)
+        .frame(width: 320)
         .padding()
     }
     

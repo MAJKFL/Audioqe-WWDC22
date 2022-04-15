@@ -55,16 +55,17 @@ struct ReverbEditorView: View {
                 Text("Wet dry mix:")
                     .font(.headline)
                 
-                Slider(value: wetDryMix, in: 0...100) {
-                    Text("Wet dry mix")
-                } minimumValueLabel: {
-                    Text("0%")
-                } maximumValueLabel: {
-                    Text("100%")
-                } onEditingChanged: { isEditing in
-                    withAnimation {
-                        editingMessage = isEditing ? "" : nil
+                HStack {
+                    Spacer().overlay(Text("0%"))
+                    
+                    Slider(value: wetDryMix, in: 0...100) { isEditing in
+                        withAnimation {
+                            editingMessage = isEditing ? "" : nil
+                        }
                     }
+                    .frame(width: 200)
+                    
+                    Spacer().overlay(Text("100%"))
                 }
                 
                 Toggle(isOn: bypass) { Text("Bypass:").font(.headline) }
@@ -82,6 +83,7 @@ struct ReverbEditorView: View {
             }
             .padding()
         }
+        .frame(width: 320)
         .padding()
     }
     

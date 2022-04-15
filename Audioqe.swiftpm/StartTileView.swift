@@ -49,6 +49,7 @@ struct StartTileView: View {
                 
                 if let file = editor.file {
                     Text("File - **\(file.url.lastPathComponent)**")
+                        .lineLimit(1)
                     
                     Text("Length - **\(timeStringFromSeconds(Int(file.duration)))**")
                 } else {

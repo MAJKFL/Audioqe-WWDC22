@@ -64,32 +64,33 @@ struct DistortionEditorView: View {
                 Text("Pre gain:")
                     .font(.headline)
                 
-                Slider(value: preGain, in: -80...20) {
-                    Text("Pre gain")
-                } minimumValueLabel: {
-                    Text("-80 dB")
-                } maximumValueLabel: {
-                    Text("20 dB")
-                } onEditingChanged: { isEditing in
-                    withAnimation {
-                        editingMessage = isEditing ? "" : nil
+                HStack {
+                    Spacer().overlay(Text("-80 dB"))
+                    
+                    Slider(value: preGain, in: -80...20) { isEditing in
+                        withAnimation {
+                            editingMessage = isEditing ? "" : nil
+                        }
                     }
+                    .frame(width: 200)
+                    
+                    Spacer().overlay(Text("20 dB"))
                 }
-
                 
                 Text("Wet dry mix:")
                     .font(.headline)
                 
-                Slider(value: wetDryMix, in: 0...100) {
-                    Text("Wet dry mix")
-                } minimumValueLabel: {
-                    Text("0%")
-                } maximumValueLabel: {
-                    Text("100%")
-                } onEditingChanged: { isEditing in
-                    withAnimation {
-                        editingMessage = isEditing ? "" : nil
+                HStack {
+                    Spacer().overlay(Text("0%"))
+                    
+                    Slider(value: wetDryMix, in: 0...100) { isEditing in
+                        withAnimation {
+                            editingMessage = isEditing ? "" : nil
+                        }
                     }
+                    .frame(width: 200)
+                    
+                    Spacer().overlay(Text("100%"))
                 }
                 
                 Toggle(isOn: bypass) { Text("Bypass:").font(.headline) }
@@ -107,6 +108,7 @@ struct DistortionEditorView: View {
             }
             .padding()
         }
+        .frame(width: 320)
         .padding()
     }
     

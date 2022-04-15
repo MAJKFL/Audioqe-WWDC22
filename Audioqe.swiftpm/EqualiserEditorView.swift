@@ -36,7 +36,6 @@ struct EqualiserEditorView: View {
             get: { equaliser.bypass },
             set: {
                 equaliser.bypass = $0
-                editor.connectNodes()
                 save()
             }
         )
@@ -75,50 +74,52 @@ struct EqualiserEditorView: View {
                     Text("Bandwidth:")
                         .font(.headline)
                     
-                    Slider(value: bandwidth, in: 0.05...5) {
-                        Text("Bandwidth")
-                    } minimumValueLabel: {
-                        Text("0.05")
-                    } maximumValueLabel: {
-                        Text("5.00")
-                    } onEditingChanged: { isEditing in
-                        withAnimation {
-                            editingMessage = isEditing ? "" : nil
+                    HStack {
+                        Spacer().overlay(Text("0.05"))
+                        
+                        Slider(value: bandwidth, in: 0.05...5) { isEditing in
+                            withAnimation {
+                                editingMessage = isEditing ? "" : nil
+                            }
                         }
+                        .frame(width: 200)
+                        
+                        Spacer().overlay(Text("5.00"))
                     }
                 }
                 
                 Text("Frequency:")
                     .font(.headline)
                 
-                Slider(value: frequency, in: 20...Float((bank.editor.file?.fileFormat.sampleRate ?? 44100) / 2), step: 5) {
-                    Text("Frequency")
-                } minimumValueLabel: {
-                    Text("20 Hz")
-                } maximumValueLabel: {
-                    Text(editor.file == nil ? "No file" : String(format: "%.0f Hz", Float((bank.editor.file?.fileFormat.sampleRate ?? 40) / 2)))
-                        .foregroundColor(editor.file == nil ? .red : .primary)
-                } onEditingChanged: { isEditing in
-                    withAnimation {
-                        editingMessage = isEditing ? "" : nil
+                HStack {
+                    Spacer().overlay(Text("20 Hz"))
+                    
+                    Slider(value: frequency, in: 20...Float((bank.editor.file?.fileFormat.sampleRate ?? 44100) / 2), step: 5) { isEditing in
+                        withAnimation {
+                            editingMessage = isEditing ? "" : nil
+                        }
                     }
+                    .disabled(editor.file == nil)
+                    .frame(width: 200)
+                    
+                    Spacer().overlay(Text(editor.file == nil ? "No file" : String(format: "%.0f Hz", Float((bank.editor.file?.fileFormat.sampleRate ?? 40) / 2))).foregroundColor(editor.file == nil ? .red : .primary))
                 }
-                .disabled(editor.file == nil)
                 
                 if ![1, 2, 3, 4, 5, 6].contains(where: { $0 == bank.equaliserFilterType.rawValue }) {
                     Text("Gain:")
                         .font(.headline)
                     
-                    Slider(value: gain, in: -96...24) {
-                        Text("Gain")
-                    } minimumValueLabel: {
-                        Text("-96 dB")
-                    } maximumValueLabel: {
-                        Text("24 dB")
-                    } onEditingChanged: { isEditing in
-                        withAnimation {
-                            editingMessage = isEditing ? "" : nil
+                    HStack {
+                        Spacer().overlay(Text("-96 dB"))
+                        
+                        Slider(value: gain, in: -96...24) { isEditing in
+                            withAnimation {
+                                editingMessage = isEditing ? "" : nil
+                            }
                         }
+                        .frame(width: 200)
+                        
+                        Spacer().overlay(Text("24 dB"))
                     }
                 }
                 
@@ -137,6 +138,7 @@ struct EqualiserEditorView: View {
             }
             .padding()
         }
+        .frame(width: 320)
         .padding()
     }
     
