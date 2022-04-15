@@ -1,4 +1,5 @@
 import SwiftUI
+import AVFoundation
 
 struct StartTileView: View {
     @StateObject var editor: QueueEditor
@@ -59,7 +60,11 @@ struct StartTileView: View {
                         }
                         
                         Button {
-                            withAnimation {
+                            if AVAudioSession.sharedInstance().recordPermission == .undetermined {
+                                let session = AVAudioSession.sharedInstance()
+                                try? session.setCategory(.playAndRecord)
+                                session.requestRecordPermission { _ in }
+                            } else {
                                 isShowingRecorder.toggle()
                             }
                         } label: {

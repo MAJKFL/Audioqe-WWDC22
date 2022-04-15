@@ -232,6 +232,8 @@ class QueueEditor: ObservableObject, Identifiable {
     }
     
     func loadFile(url: URL) {
+        pause()
+        
         file = try? AVAudioFile(forReading: url)
         
         guard let file = file else { return }
