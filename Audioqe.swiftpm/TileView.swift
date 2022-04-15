@@ -49,6 +49,14 @@ struct TileView: View {
         }
     }
     
+    var shouldBypass: Bool {
+        if let equalizer = bank.effect as? AVAudioUnitEQ {
+            return equalizer.bands.first?.bypass ?? false
+        } else {
+            return bank.effect?.auAudioUnit.shouldBypassEffect ?? false
+        }
+    }
+    
     var detailedView: some View {
         HStack {
             VStack(alignment: .leading) {
@@ -116,14 +124,14 @@ struct TileView: View {
                         if !isSelected {
                             Spacer()
                             
-                            if !(bank.effect is AVAudioUnitReverb) {
-                                Button {
-                                    bank.toggleBypass()
-                                } label: {
-                                    Image(systemName: bank.effect?.auAudioUnit.shouldBypassEffect ?? true ? "power.circle" : "power.circle.fill")
-                                        .foregroundColor(.accentColor)
-                                }
+//                            if !(bank.effect is AVAudioUnitReverb) { // Reverb bypass bug
+                            Button {
+                                bank.toggleBypass()
+                            } label: {
+                                Image(systemName: shouldBypass ? "power.circle" : "power.circle.fill")
+                                    .foregroundColor(.accentColor)
                             }
+//                            }
                         }
                     }
                     .font(.title)

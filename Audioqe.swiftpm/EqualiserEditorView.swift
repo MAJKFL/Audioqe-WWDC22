@@ -36,6 +36,7 @@ struct EqualiserEditorView: View {
             get: { equaliser.bypass },
             set: {
                 equaliser.bypass = $0
+                editor.connectNodes()
                 save()
             }
         )

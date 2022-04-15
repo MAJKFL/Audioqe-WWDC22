@@ -43,8 +43,13 @@ class Bank: Identifiable, ObservableObject {
     }
     
     func toggleBypass() {
-        effect?.auAudioUnit.shouldBypassEffect.toggle()
+        if let equalizer = effect as? AVAudioUnitEQ {
+            equalizer.bands.first?.bypass.toggle()
+        } else {
+            effect?.auAudioUnit.shouldBypassEffect.toggle()
+        }
         objectWillChange.send()
         editor.save()
+        if effect is AVAudioUnitReverb { editor.connectNodes() } // Reverb bypass bug
     }
 }

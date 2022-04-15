@@ -32,13 +32,13 @@ struct ReverbEditorView: View {
             }
         )
         
-//        let bypass = Binding(
-//            get: { reverb.bypass },
-//            set: {
-//                reverb.bypass = $0
-//                save()
-//            }
-//        )
+        let bypass = Binding(
+            get: { reverb.bypass },
+            set: {
+                reverb.bypass = $0
+                save()
+            }
+        )
         
         return VStack {
             VStack(alignment: .leading) {
@@ -67,7 +67,7 @@ struct ReverbEditorView: View {
                     }
                 }
                 
-//                Toggle(isOn: bypass) { Text("Bypass:").font(.headline) }
+                Toggle(isOn: bypass) { Text("Bypass:").font(.headline) }
             }
             
             HStack {
