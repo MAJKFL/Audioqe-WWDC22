@@ -7,6 +7,8 @@ struct TileView: View {
     @ObservedObject var bank: Bank
     @ObservedObject var editor: QueueEditor
     
+    @State private var editingMessage: String?
+    
     let viewSize: CGSize
     
     var sizeMultiplier: Double {
@@ -99,8 +101,12 @@ struct TileView: View {
                 .scaleEffect(isSelected ? 0.93 : 1)
                 .overlay(VStack {
                     HStack {
-                        Label(name, systemImage: imageName)
-                            .lineLimit(1)
+                        if let editingMessage = editingMessage {
+                            Text(editingMessage)
+                        } else {
+                            Label(name, systemImage: imageName)
+                                .lineLimit(1)
+                        }
                         
                         if !isSelected {
                             Spacer()
@@ -136,13 +142,13 @@ struct TileView: View {
                 .popover(isPresented: $isShowingPopover, content: {
                     switch selectedBank?.effect {
                     case is AVAudioUnitDelay:
-                        DelayEditorView(editor: editor, bank: selectedBank!)
+                        DelayEditorView(editor: editor, bank: selectedBank!, editingMessage: $editingMessage)
                     case is AVAudioUnitDistortion:
-                        DistortionEditorView(editor: editor, bank: selectedBank!)
+                        DistortionEditorView(editor: editor, bank: selectedBank!, editingMessage: $editingMessage)
                     case is AVAudioUnitReverb:
-                        ReverbEditorView(editor: editor, bank: selectedBank!)
+                        ReverbEditorView(editor: editor, bank: selectedBank!, editingMessage: $editingMessage)
                     case is AVAudioUnitEQ:
-                        EqualiserEditorView(editor: editor, bank: selectedBank!)
+                        EqualiserEditorView(editor: editor, bank: selectedBank!, editingMessage: $editingMessage)
                     default:
                         Text("None")
                     }

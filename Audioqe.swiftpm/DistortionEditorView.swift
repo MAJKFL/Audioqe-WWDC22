@@ -5,6 +5,8 @@ struct DistortionEditorView: View {
     @ObservedObject var editor: QueueEditor
     @ObservedObject var bank: Bank
     
+    @Binding var editingMessage: String?
+    
     @State private var debounceTimer: Timer?
     
     var body: some View {
@@ -22,6 +24,7 @@ struct DistortionEditorView: View {
             get: { distortion.preGain },
             set: {
                 distortion.preGain = $0
+                editingMessage = String(format: "%.2f dB", $0)
                 save()
             }
         )
@@ -30,6 +33,7 @@ struct DistortionEditorView: View {
             get: { distortion.wetDryMix },
             set: {
                 distortion.wetDryMix = $0
+                editingMessage = "\(String(format: "%.0f", $0))%"
                 save()
             }
         )
@@ -57,15 +61,32 @@ struct DistortionEditorView: View {
                 Text("Pre gain:")
                     .font(.headline)
                 
-                Slider(value: preGain, in: -80...20, minimumValueLabel: Text("-80 dB"), maximumValueLabel: Text("20 dB")) {
-                    EmptyView()
+                Slider(value: preGain, in: -80...20) {
+                    Text("Pre gain")
+                } minimumValueLabel: {
+                    Text("-80 dB")
+                } maximumValueLabel: {
+                    Text("20 dB")
+                } onEditingChanged: { isEditing in
+                    withAnimation {
+                        editingMessage = isEditing ? "" : nil
+                    }
                 }
+
                 
                 Text("Wet dry mix:")
                     .font(.headline)
                 
-                Slider(value: wetDryMix, in: 0...100, minimumValueLabel: Text("0%"), maximumValueLabel: Text("100%")) {
-                    EmptyView()
+                Slider(value: wetDryMix, in: 0...100) {
+                    Text("Wet dry mix")
+                } minimumValueLabel: {
+                    Text("0%")
+                } maximumValueLabel: {
+                    Text("100%")
+                } onEditingChanged: { isEditing in
+                    withAnimation {
+                        editingMessage = isEditing ? "" : nil
+                    }
                 }
                 
                 Toggle(isOn: bypass) { Text("Bypass:").font(.headline) }

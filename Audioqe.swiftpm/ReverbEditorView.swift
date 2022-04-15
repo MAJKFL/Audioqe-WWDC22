@@ -5,6 +5,8 @@ struct ReverbEditorView: View {
     @ObservedObject var editor: QueueEditor
     @ObservedObject var bank: Bank
     
+    @Binding var editingMessage: String?
+    
     @State private var debounceTimer: Timer?
     
     var body: some View {
@@ -22,6 +24,7 @@ struct ReverbEditorView: View {
             get: { reverb.wetDryMix },
             set: {
                 reverb.wetDryMix = $0
+                editingMessage = "\(String(format: "%.0f", $0))%"
                 save()
             }
         )
@@ -49,8 +52,16 @@ struct ReverbEditorView: View {
                 Text("Wet dry mix:")
                     .font(.headline)
                 
-                Slider(value: wetDryMix, in: 0...100, minimumValueLabel: Text("0%"), maximumValueLabel: Text("100%")) {
-                    EmptyView()
+                Slider(value: wetDryMix, in: 0...100) {
+                    Text("Wet dry mix")
+                } minimumValueLabel: {
+                    Text("0%")
+                } maximumValueLabel: {
+                    Text("100%")
+                } onEditingChanged: { isEditing in
+                    withAnimation {
+                        editingMessage = isEditing ? "" : nil
+                    }
                 }
                 
                 Toggle(isOn: bypass) { Text("Bypass:").font(.headline) }

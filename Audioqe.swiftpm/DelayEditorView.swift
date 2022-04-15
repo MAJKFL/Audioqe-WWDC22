@@ -5,6 +5,8 @@ struct DelayEditorView: View {
     @ObservedObject var editor: QueueEditor
     @ObservedObject var bank: Bank
     
+    @Binding var editingMessage: String?
+    
     @State private var debounceTimer: Timer?
     
     var body: some View {
@@ -14,6 +16,7 @@ struct DelayEditorView: View {
             get: { delay.feedback },
             set: {
                 delay.feedback = $0
+                editingMessage = "\(String(format: "%.0f", $0))%"
                 save()
             }
         )
@@ -22,6 +25,7 @@ struct DelayEditorView: View {
             get: { delay.delayTime },
             set: {
                 delay.delayTime = $0
+                editingMessage = String(format: "%.2f", $0)
                 save()
             }
         )
@@ -30,6 +34,7 @@ struct DelayEditorView: View {
             get: { delay.lowPassCutoff },
             set: {
                 delay.lowPassCutoff = $0
+                editingMessage = String(format: "%.0f Hz", $0)
                 save()
             }
         )
@@ -38,6 +43,7 @@ struct DelayEditorView: View {
             get: { delay.wetDryMix },
             set: {
                 delay.wetDryMix = $0
+                editingMessage = "\(String(format: "%.0f", $0))%"
                 save()
             }
         )
@@ -55,29 +61,61 @@ struct DelayEditorView: View {
                 Text("Feedback:")
                     .font(.headline)
                 
-                Slider(value: feedback, in: -100...100, minimumValueLabel: Text("-100%"), maximumValueLabel: Text("100%")) {
-                    EmptyView()
+                Slider(value: feedback, in: -100...100) {
+                    Text("Feedback")
+                } minimumValueLabel: {
+                    Text("-100%")
+                } maximumValueLabel: {
+                    Text("100%")
+                } onEditingChanged: { isEditing in
+                    withAnimation {
+                        editingMessage = isEditing ? "" : nil
+                    }
                 }
                 
                 Text("Delay time:")
                     .font(.headline)
                 
-                Slider(value: delayTime, in: 0...2, minimumValueLabel: Text("0"), maximumValueLabel: Text("2")) {
-                    EmptyView()
+                Slider(value: delayTime, in: 0...2) {
+                    Text("Delay time")
+                } minimumValueLabel: {
+                    Text("0")
+                } maximumValueLabel: {
+                    Text("2")
+                } onEditingChanged: { isEditing in
+                    withAnimation {
+                        editingMessage = isEditing ? "" : nil
+                    }
                 }
                 
                 Text("Low pass cutoff:")
                     .font(.headline)
                 
-                Slider(value: lowPassCutoff, in: 10...Float((bank.editor.file?.fileFormat.sampleRate ?? 20) / 2), minimumValueLabel: Text("10 Hz"), maximumValueLabel: Text(String(format: "%.0f Hz", Float((bank.editor.file?.fileFormat.sampleRate ?? 20) / 2)))) {
-                    EmptyView()
+                Slider(value: lowPassCutoff, in: 10...Float((bank.editor.file?.fileFormat.sampleRate ?? 20) / 2)) {
+                    Text("Low pass cutoff")
+                } minimumValueLabel: {
+                    Text("10 Hz")
+                } maximumValueLabel: {
+                    Text(String(format: "%.0f Hz", Float((bank.editor.file?.fileFormat.sampleRate ?? 20) / 2)))
+                } onEditingChanged: { isEditing in
+                    withAnimation {
+                        editingMessage = isEditing ? "" : nil
+                    }
                 }
                 
                 Text("Wet dry mix:")
                     .font(.headline)
                 
-                Slider(value: wetDryMix, in: 0...100, minimumValueLabel: Text("0%"), maximumValueLabel: Text("100%")) {
-                    EmptyView()
+                Slider(value: wetDryMix, in: 0...100) {
+                    Text("Wet dry mix")
+                } minimumValueLabel: {
+                    Text("0%")
+                } maximumValueLabel: {
+                    Text("100%")
+                } onEditingChanged: { isEditing in
+                    withAnimation {
+                        editingMessage = isEditing ? "" : nil
+                    }
                 }
                 
                 Toggle(isOn: bypass) { Text("Bypass:").font(.headline) }
