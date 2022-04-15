@@ -148,7 +148,7 @@ class QueueEditor: ObservableObject, Identifiable {
                     equaliser.bands.first?.filterType = filter
                 }
                 equaliser.bands.first?.bandwidth = Float(bank["bandwidth"]!)!
-                equaliser.bands.first?.bypass = bank["bypass"] == "On" ? true : false
+                equaliser.bypass = bank["bypass"] == "On" ? true : false
                 equaliser.bands.first?.frequency = Float(bank["frequency"]!)!
                 equaliser.bands.first?.gain = Float(bank["gain"]!)!
                 
@@ -199,7 +199,7 @@ class QueueEditor: ObservableObject, Identifiable {
                 savedBanks[index]["type"] = SavedBankType.equaliser.rawValue
                 savedBanks[index]["filter"] = "\(effectBanks[index].equaliserFilterType.rawValue)"
                 savedBanks[index]["bandwidth"] = "\(effect.bands.first?.bandwidth ?? 0.05)"
-                savedBanks[index]["bypass"] = "\(effect.bands.first?.bypass ?? true ? "On" : "Off")"
+                savedBanks[index]["bypass"] = "\(effect.bypass ? "On" : "Off")"
                 savedBanks[index]["frequency"] = "\(effect.bands.first?.frequency ?? 20)"
                 savedBanks[index]["gain"] = "\(effect.bands.first?.gain ?? 0)"
             default:

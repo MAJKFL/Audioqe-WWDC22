@@ -41,4 +41,10 @@ class Bank: Identifiable, ObservableObject {
             band.filterType = equaliserFilterType
         }
     }
+    
+    func toggleBypass() {
+        effect?.auAudioUnit.shouldBypassEffect.toggle()
+        objectWillChange.send()
+        editor.save()
+    }
 }

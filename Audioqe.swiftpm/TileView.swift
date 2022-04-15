@@ -53,16 +53,12 @@ struct TileView: View {
                     Text("**Preset** - \(QueueEditor.reverbPresetNames[bank.reverbPreset.rawValue] ?? "")")
                     
                     Text("**Wet dry mix** - \(String(format: "%.0f", reverb.wetDryMix))%")
-                    
-                    Text("**Bypass** - \(reverb.bypass ? "On" : "Off")")
                 } else if let distortion = bank.effect as? AVAudioUnitDistortion {
                     Text("**Preset** - \(QueueEditor.distortionPresetNames[bank.distortionPreset.rawValue] ?? "")")
                     
                     Text("**Pre gain** - \(String(format: "%.2f", distortion.preGain)) dB")
                     
                     Text("**Wet dry mix** - \(String(format: "%.0f", distortion.wetDryMix))%")
-                    
-                    Text("**Bypass** - \(distortion.bypass ? "On" : "Off")")
                 } else if let delay = bank.effect as? AVAudioUnitDelay {
                     Text("**Feedback** - \(String(format: "%.0f", delay.feedback))%")
                     
@@ -71,8 +67,6 @@ struct TileView: View {
                     Text("**LP cutoff** - \(String(format: "%.0f", delay.lowPassCutoff)) Hz")
                     
                     Text("**Wet dry mix** - \(String(format: "%.0f", delay.wetDryMix))%")
-                    
-                    Text("**Bypass** - \(delay.bypass ? "On" : "Off")")
                 } else if let equaliser = bank.effect as? AVAudioUnitEQ {
                     Text("**Filter** - \(QueueEditor.eqFilterNames[bank.equaliserFilterType.rawValue] ?? "")")
                     
@@ -81,8 +75,6 @@ struct TileView: View {
                     Text("**Frequency** - \(String(format: "%.0f", equaliser.bands.first?.frequency ?? 0)) Hz")
                     
                     Text("**Gain** - \(String(format: "%.1f", equaliser.bands.first?.gain ?? 0)) dB")
-                    
-                    Text("**Bypass** - \(equaliser.bands.first?.bypass ?? false ? "On" : "Off")")
                 }
             }
             .lineLimit(1)
@@ -108,12 +100,20 @@ struct TileView: View {
                 .overlay(VStack {
                     HStack {
                         Label(name, systemImage: imageName)
-                            .font(.title)
+                            .lineLimit(1)
                         
                         if !isSelected {
                             Spacer()
+                            
+                            Button {
+                                bank.toggleBypass()
+                            } label: {
+                                Image(systemName: bank.effect?.auAudioUnit.shouldBypassEffect ?? true ? "power.circle" : "power.circle.fill")
+                                    .foregroundColor(.accentColor)
+                            }
                         }
                     }
+                    .font(.title)
                     
                     if !isSelected {
                         detailedView

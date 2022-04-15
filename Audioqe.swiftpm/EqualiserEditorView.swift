@@ -27,9 +27,9 @@ struct EqualiserEditorView: View {
         )
         
         let bypass = Binding(
-            get: { equaliser.bands.first?.bypass ?? false },
+            get: { equaliser.bypass },
             set: {
-                equaliser.bands.first?.bypass = $0
+                equaliser.bypass = $0
                 save()
             }
         )
