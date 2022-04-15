@@ -27,7 +27,7 @@ struct MainEditorView: View {
                 
                 LazyVGrid(columns: geo.size.width > geo.size.height ? landscapeColumns : portraitColumns, spacing: 50) {
                     HStack(spacing: 0) {
-                        StartTileView(editor: editor, viewSize: geo.size, isShowingRecorder: $isShowingRecorder, isShowingImporter: $isShowingImporter)
+                        StartTileView(editor: editor, isShowingRecorder: $isShowingRecorder, isShowingImporter: $isShowingImporter, viewSize: geo.size)
                         
                         Rectangle()
                             .fill(Color.primary)

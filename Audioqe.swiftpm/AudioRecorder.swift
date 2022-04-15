@@ -1,16 +1,15 @@
 import SwiftUI
 import AVKit
-import Combine
 
 struct AudioRecorder: View {
     @Environment(\.colorScheme) var colorScheme
     
     @ObservedObject var editor: QueueEditor
     
-    @State var isRecording = false
-    
     @State var session: AVAudioSession!
     @State var recorder: AVAudioRecorder!
+    
+    @State var isRecording = false
     
     @State var audios = [URL]()
     
@@ -112,10 +111,10 @@ struct AudioRecorder: View {
         do {
             let result = try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil, options: .producesRelativePathURLs)
             
-            self.audios.removeAll()
+            audios.removeAll()
             
             for i in result {
-                self.audios.append(i)
+                audios.append(i)
             }
             
             audios.sort(by: { $0.lastPathComponent < $1.lastPathComponent })

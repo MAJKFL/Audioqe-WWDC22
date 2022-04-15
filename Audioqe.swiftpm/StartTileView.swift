@@ -4,10 +4,10 @@ import AVFoundation
 struct StartTileView: View {
     @StateObject var editor: QueueEditor
     
-    let viewSize: CGSize
-    
     @Binding var isShowingRecorder: Bool
     @Binding var isShowingImporter: Bool
+    
+    let viewSize: CGSize
     
     var sizeMultiplier: Double {
         viewSize.width <= 873.5 && viewSize.width > viewSize.height ? 0.9 : 1.1

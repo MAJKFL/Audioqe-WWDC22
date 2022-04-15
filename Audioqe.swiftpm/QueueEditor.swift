@@ -14,10 +14,10 @@ class QueueEditor: ObservableObject, Identifiable {
     @Published var file: AVAudioFile?
     @Published var buffer: AVAudioPCMBuffer?
     
-    @Published var name = "Bajo jajo"
-    
     @Published var isPlaying = false
     @Published var playbackOptions = AVAudioPlayerNodeBufferOptions.loops
+    
+    @Published var name = "New editor"
     
     var activeBanksCount: Int {
         effectBanks.compactMap({ $0.effect }).count

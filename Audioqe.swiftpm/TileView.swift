@@ -7,6 +7,9 @@ struct TileView: View {
     @ObservedObject var bank: Bank
     @ObservedObject var editor: QueueEditor
     
+    @State private var isShowingPopover = false
+    @State private var oldShowingPopoverValue = false
+    
     @State private var editingMessage: String?
     @State private var helpWindowSetting: HelpWindowSetting?
     
@@ -15,9 +18,6 @@ struct TileView: View {
     var sizeMultiplier: Double {
         viewSize.width <= 873.5 && viewSize.width > viewSize.height ? 0.9 : 1.1
     }
-    
-    @State private var isShowingPopover = false
-    @State private var oldShowingPopoverValue = false
     
     var bgColor: Color? {
         switch bank.effect {
@@ -249,7 +249,7 @@ struct TileView: View {
             } label: {
                 ZStack {
                     RoundedRectangle(cornerRadius: 15)
-                        .fill(Color.secondary.opacity(isLastEmptyBank ? 0.1 : 0))
+                        .fill(Color.secondary.opacity(isLastEmptyBank ? 0.3 : 0))
                         .frame(width: 220 * sizeMultiplier, height: 160 * 1.1)
                     
                     Rectangle()

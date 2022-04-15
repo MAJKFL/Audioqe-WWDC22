@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ExitTileView: View {
     @ObservedObject var editor: QueueEditor
+    
     let viewSize: CGSize
     
     var sizeMultiplier: Double {
