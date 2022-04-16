@@ -138,7 +138,7 @@ struct AudioRecorder: View {
                 guard let firstDate = firstAttributes?[.modificationDate] as? Date else { return true }
                 guard let secondDate = secondAttributes?[.modificationDate] as? Date else { return false }
                 
-                return firstDate < secondDate
+                return firstDate > secondDate
             })
         } catch {
             print(error.localizedDescription)
