@@ -249,12 +249,19 @@ struct TileView: View {
             } label: {
                 ZStack {
                     RoundedRectangle(cornerRadius: 15)
-                        .fill(Color.secondary.opacity(isLastEmptyBank ? 0.3 : 0))
+                        .fill(Color.secondary.opacity(isLastEmptyBank ? 0.2 : 0))
                         .frame(width: 220 * sizeMultiplier, height: 160 * 1.1)
                     
-                    Rectangle()
-                        .fill(Color.primary)
-                        .frame(maxWidth: .infinity, maxHeight: 1)
+                    if isLastEmptyBank {
+                        Label("Add", systemImage: "plus")
+                            .foregroundColor(.white)
+                            .font(Font.system(size: 50, weight: .bold))
+                            .padding()
+                    } else {
+                        Rectangle()
+                            .fill(Color.primary)
+                            .frame(maxWidth: .infinity, maxHeight: 1)
+                    }
                 }
             }
             .disabled(!isLastEmptyBank)
