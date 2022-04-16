@@ -39,6 +39,9 @@ struct MainEditorView: View {
                             Rectangle()
                                 .fill(Color.primary)
                                 .frame(maxWidth: .infinity, maxHeight: 1)
+                                .overlay {
+                                    Image(systemName: "play.fill").opacity((geo.size.width < geo.size.height ? [1, 3, 5] : geo.size.width <= 873.5 ? [] : [3]).contains(where: { $0 == editor.effectBanks.firstIndex(where: { $0.id == bank.id }) }) ? 1 : 0)
+                                }
                                 .transaction { transaction in
                                     transaction.animation = nil
                                 }
@@ -57,6 +60,9 @@ struct MainEditorView: View {
                             Rectangle()
                                 .fill(Color.primary)
                                 .frame(maxWidth: .infinity, maxHeight: 1)
+                                .overlay {
+                                    Image(systemName: "play.fill").opacity((geo.size.width < geo.size.height ? [0, 2, 4] : geo.size.width <= 873.5 ? [] : [2]).contains(where: { $0 == editor.effectBanks.firstIndex(where: { $0.id == bank.id }) }) ? 1 : 0)
+                                }
                                 .transaction { transaction in
                                     transaction.animation = nil
                                 }

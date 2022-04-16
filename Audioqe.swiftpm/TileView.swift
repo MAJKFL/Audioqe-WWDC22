@@ -21,7 +21,7 @@ struct TileView: View {
     
     var bgColor: Color? {
         switch bank.effect {
-        case is AVAudioUnitReverb: return .mint
+        case is AVAudioUnitReverb: return .cyan
         case is AVAudioUnitDistortion: return .orange
         case is AVAudioUnitDelay: return .indigo
         case is AVAudioUnitEQ: return .yellow
@@ -111,11 +111,12 @@ struct TileView: View {
             RoundedRectangle(cornerRadius: 15)
                 .fill(bgColor)
                 .frame(width: 220 * sizeMultiplier, height: 160 * 1.1)
-                .scaleEffect(isSelected ? 0.93 : 1)
+                .scaleEffect(isSelected ? (editingMessage != nil ? 0.9 : 0.93) : 1)
                 .overlay(VStack {
                     HStack {
                         if let editingMessage = editingMessage {
                             Text(editingMessage)
+                                .transaction({ $0.animation = nil })
                         } else {
                             Label(name, systemImage: imageName)
                                 .lineLimit(1)
@@ -129,7 +130,7 @@ struct TileView: View {
                                 bank.toggleBypass()
                             } label: {
                                 Image(systemName: shouldBypass ? "power.circle" : "power.circle.fill")
-                                    .foregroundColor(.accentColor)
+                                    .foregroundColor(shouldBypass ? .red : .green)
                             }
 //                            }
                         }
@@ -154,6 +155,7 @@ struct TileView: View {
                     }
                 }
                 .animation(.spring().speed(2), value: isSelected)
+                .animation(.spring().speed(2.7), value: editingMessage)
                 .popover(isPresented: $isShowingPopover, content: {
                     switch selectedBank?.effect {
                     case is AVAudioUnitDelay:
@@ -250,19 +252,16 @@ struct TileView: View {
                 ZStack {
                     RoundedRectangle(cornerRadius: 15)
                         .fill(Color.secondary.opacity(isLastEmptyBank ? 0.2 : 0))
-                        .frame(width: 220 * sizeMultiplier, height: 160 * 1.1)
                     
-                    if isLastEmptyBank {
-                        Label("Add", systemImage: "plus")
-                            .foregroundColor(.white)
-                            .font(Font.system(size: 50, weight: .bold))
-                            .padding()
-                    } else {
-                        Rectangle()
-                            .fill(Color.primary)
-                            .frame(maxWidth: .infinity, maxHeight: 1)
-                    }
+                    Rectangle()
+                        .fill(Color.primary.opacity(isLastEmptyBank ? 0 : 1))
+                        .frame(maxWidth: .infinity, maxHeight: 1)
+                    
+                    Label("Add", systemImage: "plus")
+                        .foregroundColor(.white.opacity(isLastEmptyBank ? 1 : 0))
+                        .font(Font.system(size: 50, weight: .bold))
                 }
+                .frame(width: 220 * sizeMultiplier, height: 160 * 1.1)
             }
             .disabled(!isLastEmptyBank)
             .transaction { transaction in
