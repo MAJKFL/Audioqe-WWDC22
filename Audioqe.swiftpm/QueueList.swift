@@ -70,26 +70,26 @@ extension QueueList {
         "name" : "Example queue 1",
         "banks" : [
           {
-            "frequency" : "16065.0",
+            "gain" : "19.83815",
             "filter" : "0",
             "bypass" : "Off",
             "type" : "equaliser",
-            "bandwidth" : "1.0228323",
-            "gain" : "19.83815"
+            "frequency" : "16065.0",
+            "bandwidth" : "1.0228323"
           },
           {
-            "preset" : "2",
+            "bypass" : "Off",
             "type" : "reverb",
-            "wetDryMix" : "23.410406",
-            "bypass" : "Off"
+            "preset" : "2",
+            "wetDryMix" : "23.410406"
           },
           {
             "delayTime" : "0.20809248089790344",
             "lowPassCutoff" : "1600.0",
             "bypass" : "Off",
             "type" : "delay",
-            "wetDryMix" : "13.294798",
-            "feedback" : "-65.31792"
+            "feedback" : "-65.31792",
+            "wetDryMix" : "13.294798"
           },
           {
             "type" : "empty"
@@ -109,24 +109,24 @@ extension QueueList {
         "banks" : [
           {
             "preGain" : "-0.52023315",
-            "preset" : "10",
+            "bypass" : "Off",
             "type" : "distortion",
             "wetDryMix" : "28.323698",
-            "bypass" : "Off"
+            "preset" : "10"
           },
           {
-            "preset" : "2",
+            "bypass" : "Off",
             "type" : "reverb",
-            "wetDryMix" : "54.33526",
-            "bypass" : "Off"
+            "preset" : "2",
+            "wetDryMix" : "54.33526"
           },
           {
-            "frequency" : "4220.0",
+            "gain" : "0.0",
             "filter" : "1",
             "bypass" : "Off",
+            "frequency" : "4220.0",
             "type" : "equaliser",
-            "bandwidth" : "0.0",
-            "gain" : "0.0"
+            "bandwidth" : "0.0"
           },
           {
             "type" : "empty"
@@ -145,33 +145,33 @@ extension QueueList {
         "name" : "Example queue 3",
         "banks" : [
           {
-            "preset" : "1",
-            "type" : "reverb",
-            "wetDryMix" : "59.53757",
-            "bypass" : "Off"
-          },
-          {
-            "preGain" : "2.9479752",
-            "preset" : "14",
+            "preGain" : "-2.832367",
+            "bypass" : "Off",
             "type" : "distortion",
             "wetDryMix" : "41.040462",
-            "bypass" : "Off"
+            "preset" : "14"
           },
           {
-            "frequency" : "7215.0",
+            "bandwidth" : "0.0",
             "filter" : "8",
             "bypass" : "Off",
             "type" : "equaliser",
-            "bandwidth" : "0.0",
+            "frequency" : "7215.0",
             "gain" : "14.982658"
           },
           {
-            "frequency" : "14345.0",
+            "bandwidth" : "1.809682",
             "filter" : "3",
             "bypass" : "Off",
             "type" : "equaliser",
-            "bandwidth" : "1.809682",
+            "frequency" : "14345.0",
             "gain" : "0.0"
+          },
+          {
+            "bypass" : "Off",
+            "type" : "reverb",
+            "preset" : "4",
+            "wetDryMix" : "59.53757"
           },
           {
             "type" : "empty"
@@ -187,17 +187,17 @@ extension QueueList {
         "name" : "Example queue 4",
         "banks" : [
           {
-            "preGain" : "10.1734085",
-            "preset" : "12",
+            "preGain" : "-6.011566",
+            "bypass" : "Off",
             "type" : "distortion",
-            "wetDryMix" : "33.526012",
-            "bypass" : "Off"
+            "wetDryMix" : "60.40462",
+            "preset" : "11"
           },
           {
-            "preset" : "0",
+            "bypass" : "Off",
             "type" : "reverb",
             "wetDryMix" : "50.0",
-            "bypass" : "Off"
+            "preset" : "0"
           },
           {
             "frequency" : "18230.0",
@@ -208,20 +208,20 @@ extension QueueList {
             "gain" : "0.0"
           },
           {
-            "frequency" : "6005.0",
+            "type" : "equaliser",
             "filter" : "8",
             "bypass" : "Off",
-            "type" : "equaliser",
+            "frequency" : "6005.0",
             "bandwidth" : "0.0",
-            "gain" : "24.0"
+            "gain" : "10.127167"
           },
           {
             "delayTime" : "0.13294798135757446",
             "lowPassCutoff" : "1500.0",
             "bypass" : "Off",
             "type" : "delay",
-            "wetDryMix" : "50.0",
-            "feedback" : "17.919075"
+            "feedback" : "17.919075",
+            "wetDryMix" : "50.0"
           },
           {
             "type" : "empty"

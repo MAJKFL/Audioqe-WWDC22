@@ -2,6 +2,8 @@ import SwiftUI
 import AVFoundation
 
 struct MainEditorView: View {
+    @Environment(\.scenePhase) var scenePhase
+    
     @ObservedObject var editor: QueueEditor
     
     @State private var selectedBank: Bank?
@@ -155,6 +157,11 @@ struct MainEditorView: View {
                     print(error.localizedDescription)
                 }
             })
+            .onChange(of: scenePhase) { newPhase in
+                if newPhase != .active {
+                    editor.pause()
+                }
+            }
         }
     }
     

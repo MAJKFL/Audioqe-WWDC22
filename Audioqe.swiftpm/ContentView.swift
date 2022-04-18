@@ -34,7 +34,7 @@ struct ContentView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        queueList.add(QueueEditor())
+                        queueList.printQueues()
                     } label: {
                         Image(systemName: "plus")
                     }
