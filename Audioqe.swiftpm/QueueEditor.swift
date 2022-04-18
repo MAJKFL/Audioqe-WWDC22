@@ -163,12 +163,12 @@ class QueueEditor: ObservableObject, Identifiable {
     
     func exportQueue() -> SaveQueue {
         var savedBanks = [
-            ["": ""],
-            ["": ""],
-            ["": ""],
-            ["": ""],
-            ["": ""],
-            ["": ""]
+            [String: String](),
+            [String: String](),
+            [String: String](),
+            [String: String](),
+            [String: String](),
+            [String: String]()
         ]
         
         for index in effectBanks.indices {
