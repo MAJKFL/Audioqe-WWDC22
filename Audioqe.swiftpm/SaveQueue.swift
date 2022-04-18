@@ -4,7 +4,7 @@ enum SavedBankType: String {
     case reverb
     case distortion
     case delay
-    case equaliser
+    case equalizer
     case empty
 }
 

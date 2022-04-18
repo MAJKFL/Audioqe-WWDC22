@@ -14,8 +14,8 @@ class Bank: Identifiable, ObservableObject {
         case is AVAudioUnitReverb: reverbPreset = AVAudioUnitReverbPreset(rawValue: effect?.auAudioUnit.currentPreset?.number ?? 0) ?? .smallRoom
         case is AVAudioUnitDistortion: distortionPreset = AVAudioUnitDistortionPreset(rawValue: effect?.auAudioUnit.currentPreset?.number ?? 0) ?? .drumsBitBrush
         case is AVAudioUnitEQ:
-            guard let equaliser = effect as? AVAudioUnitEQ else { return }
-            equaliserFilterType = equaliser.bands.first?.filterType ?? .parametric
+            guard let equalizer = effect as? AVAudioUnitEQ else { return }
+            equalizerFilterType = equalizer.bands.first?.filterType ?? .parametric
         default: return
         }
     }
@@ -34,11 +34,11 @@ class Bank: Identifiable, ObservableObject {
         }
     }
     
-    @Published var equaliserFilterType = AVAudioUnitEQFilterType.parametric {
+    @Published var equalizerFilterType = AVAudioUnitEQFilterType.parametric {
         didSet {
-            guard let equaliser = effect as? AVAudioUnitEQ else { return }
-            guard let band = equaliser.bands.first else { return }
-            band.filterType = equaliserFilterType
+            guard let equalizer = effect as? AVAudioUnitEQ else { return }
+            guard let band = equalizer.bands.first else { return }
+            band.filterType = equalizerFilterType
         }
     }
     

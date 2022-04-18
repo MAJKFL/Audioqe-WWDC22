@@ -44,7 +44,7 @@ struct TileView: View {
         case is AVAudioUnitReverb: return "Reverb"
         case is AVAudioUnitDistortion: return "Distortion"
         case is AVAudioUnitDelay: return "Delay"
-        case is AVAudioUnitEQ: return "Equaliser"
+        case is AVAudioUnitEQ: return "Equalizer"
         default: return "UNKNOWN"
         }
     }
@@ -78,17 +78,17 @@ struct TileView: View {
                     Text("LP cutoff - **\(String(format: "%.0f", delay.lowPassCutoff)) Hz**")
                     
                     Text("Wet dry mix - **\(String(format: "%.0f", delay.wetDryMix))%**")
-                } else if let equaliser = bank.effect as? AVAudioUnitEQ {
-                    Text("Filter - **\(QueueEditor.eqFilterNames[bank.equaliserFilterType.rawValue] ?? "")**")
+                } else if let equalizer = bank.effect as? AVAudioUnitEQ {
+                    Text("Filter - **\(QueueEditor.eqFilterNames[bank.equalizerFilterType.rawValue] ?? "")**")
                     
-                    if ![1, 2, 7, 8].contains(where: { $0 == equaliser.bands.first?.filterType.rawValue }) {
-                        Text("Bandwidth - **\(String(format: "%.2f", equaliser.bands.first?.bandwidth ?? 0))**")
+                    if ![1, 2, 7, 8].contains(where: { $0 == equalizer.bands.first?.filterType.rawValue }) {
+                        Text("Bandwidth - **\(String(format: "%.2f", equalizer.bands.first?.bandwidth ?? 0))**")
                     }
                     
-                    Text("Frequency - **\(String(format: "%.0f", equaliser.bands.first?.frequency ?? 0)) Hz**")
+                    Text("Frequency - **\(String(format: "%.0f", equalizer.bands.first?.frequency ?? 0)) Hz**")
                     
-                    if ![1, 2, 3, 4, 5, 6].contains(where: { $0 == equaliser.bands.first?.filterType.rawValue }) {
-                        Text("Gain - **\(String(format: "%.1f", equaliser.bands.first?.gain ?? 0)) dB**")
+                    if ![1, 2, 3, 4, 5, 6].contains(where: { $0 == equalizer.bands.first?.filterType.rawValue }) {
+                        Text("Gain - **\(String(format: "%.1f", equalizer.bands.first?.gain ?? 0)) dB**")
                     }
                 }
             }
@@ -165,7 +165,7 @@ struct TileView: View {
                     case is AVAudioUnitReverb:
                         ReverbEditorView(editor: editor, bank: selectedBank!, editingMessage: $editingMessage, helpWindowSetting: $helpWindowSetting)
                     case is AVAudioUnitEQ:
-                        EqualiserEditorView(editor: editor, bank: selectedBank!, editingMessage: $editingMessage, helpWindowSetting: $helpWindowSetting)
+                        EqualizerEditorView(editor: editor, bank: selectedBank!, editingMessage: $editingMessage, helpWindowSetting: $helpWindowSetting)
                     default:
                         Text("None")
                     }
@@ -237,16 +237,16 @@ struct TileView: View {
                 
                 Button {
                     withAnimation(.easeInOut.speed(2)) {
-                        let newEqualiser = AVAudioUnitEQ(numberOfBands: 1)
-                        newEqualiser.bands.first?.bandwidth = 1
-                        newEqualiser.bands.first?.frequency = 7500
-                        newEqualiser.bands.first?.gain = -30
-                        newEqualiser.bands.first?.bypass = false
-                        bank.effect = newEqualiser
+                        let newEqualizer = AVAudioUnitEQ(numberOfBands: 1)
+                        newEqualizer.bands.first?.bandwidth = 1
+                        newEqualizer.bands.first?.frequency = 7500
+                        newEqualizer.bands.first?.gain = -30
+                        newEqualizer.bands.first?.bypass = false
+                        bank.effect = newEqualizer
                     }
                     editor.connectNodes()
                 } label: {
-                    Label("Equaliser", systemImage: "slider.vertical.3")
+                    Label("Equalizer", systemImage: "slider.vertical.3")
                 }
             } label: {
                 ZStack {

@@ -57,7 +57,7 @@ enum HelpWindowSetting: String, Identifiable {
         """)
         case .equalizer:
             return Text("""
-        An **equaliser** adjusts the volume of different frequency bands within an audio signal. Use different **filters**, adjust its **bandwidth**, **frequency** and **gain**. Not all settings are available for every filter.
+        An **equalizer** adjusts the volume of different frequency bands within an audio signal. Use different **filters**, adjust its **bandwidth**, **frequency** and **gain**. Not all settings are available for every filter.
 
         - **Filter** - The equalizer filter type
         - **Bandwidth** - The bandwidth of the equalizer filter, in octaves

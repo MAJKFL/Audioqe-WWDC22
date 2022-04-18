@@ -1,7 +1,7 @@
 import SwiftUI
 import AVFoundation
 
-struct EqualiserEditorView: View {
+struct EqualizerEditorView: View {
     @Environment(\.presentationMode) var presentationMode
     
     @ObservedObject var editor: QueueEditor
@@ -13,46 +13,46 @@ struct EqualiserEditorView: View {
     @State private var debounceTimer: Timer?
     
     var body: some View {
-        guard let equaliser = bank.effect as? AVAudioUnitEQ else { fatalError() }
+        guard let equalizer = bank.effect as? AVAudioUnitEQ else { fatalError() }
         
         let preset = Binding(
-            get: { Int(bank.equaliserFilterType.rawValue) },
+            get: { Int(bank.equalizerFilterType.rawValue) },
             set: {
-                bank.equaliserFilterType = AVAudioUnitEQFilterType(rawValue: $0) ?? .parametric
+                bank.equalizerFilterType = AVAudioUnitEQFilterType(rawValue: $0) ?? .parametric
                 save()
             }
         )
         
         let bandwidth = Binding(
-            get: { equaliser.bands.first?.bandwidth ?? 0 },
+            get: { equalizer.bands.first?.bandwidth ?? 0 },
             set: {
-                equaliser.bands.first?.bandwidth = $0
+                equalizer.bands.first?.bandwidth = $0
                 editingMessage = String(format: "%.2f", $0)
                 save()
             }
         )
         
         let bypass = Binding(
-            get: { equaliser.bands.first?.bypass ?? false },
+            get: { equalizer.bands.first?.bypass ?? false },
             set: {
-                equaliser.bands.first?.bypass = $0
+                equalizer.bands.first?.bypass = $0
                 save()
             }
         )
         
         let frequency = Binding(
-            get: { equaliser.bands.first?.frequency ?? 0 },
+            get: { equalizer.bands.first?.frequency ?? 0 },
             set: {
-                equaliser.bands.first?.frequency = $0
+                equalizer.bands.first?.frequency = $0
                 editingMessage = String(format: "%.0f Hz", $0)
                 save()
             }
         )
         
         let gain = Binding(
-            get: { equaliser.bands.first?.gain ?? 0 },
+            get: { equalizer.bands.first?.gain ?? 0 },
             set: {
-                equaliser.bands.first?.gain = $0
+                equalizer.bands.first?.gain = $0
                 editingMessage = String(format: "%.2f dB", $0)
                 save()
             }
@@ -70,7 +70,7 @@ struct EqualiserEditorView: View {
                 }
                 .pickerStyle(.wheel)
                 
-                if ![1, 2, 7, 8].contains(where: { $0 == bank.equaliserFilterType.rawValue }) {
+                if ![1, 2, 7, 8].contains(where: { $0 == bank.equalizerFilterType.rawValue }) {
                     Text("Bandwidth:")
                         .font(.headline)
                     
@@ -105,7 +105,7 @@ struct EqualiserEditorView: View {
                     Spacer().overlay(Text(editor.file == nil ? "No file" : String(format: "%.0f Hz", Float((bank.editor.file?.fileFormat.sampleRate ?? 40) / 2))).foregroundColor(editor.file == nil ? .red : .primary))
                 }
                 
-                if ![1, 2, 3, 4, 5, 6].contains(where: { $0 == bank.equaliserFilterType.rawValue }) {
+                if ![1, 2, 3, 4, 5, 6].contains(where: { $0 == bank.equalizerFilterType.rawValue }) {
                     Text("Gain:")
                         .font(.headline)
                     

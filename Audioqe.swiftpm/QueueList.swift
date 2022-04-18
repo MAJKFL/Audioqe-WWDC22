@@ -73,7 +73,7 @@ extension QueueList {
             "gain" : "19.83815",
             "filter" : "0",
             "bypass" : "Off",
-            "type" : "equaliser",
+            "type" : "equalizer",
             "frequency" : "16065.0",
             "bandwidth" : "1.0228323"
           },
@@ -125,7 +125,7 @@ extension QueueList {
             "filter" : "1",
             "bypass" : "Off",
             "frequency" : "4220.0",
-            "type" : "equaliser",
+            "type" : "equalizer",
             "bandwidth" : "0.0"
           },
           {
@@ -155,7 +155,7 @@ extension QueueList {
             "bandwidth" : "0.0",
             "filter" : "8",
             "bypass" : "Off",
-            "type" : "equaliser",
+            "type" : "equalizer",
             "frequency" : "7215.0",
             "gain" : "14.982658"
           },
@@ -163,7 +163,7 @@ extension QueueList {
             "bandwidth" : "1.809682",
             "filter" : "3",
             "bypass" : "Off",
-            "type" : "equaliser",
+            "type" : "equalizer",
             "frequency" : "14345.0",
             "gain" : "0.0"
           },
@@ -203,12 +203,12 @@ extension QueueList {
             "frequency" : "18230.0",
             "filter" : "3",
             "bypass" : "Off",
-            "type" : "equaliser",
+            "type" : "equalizer",
             "bandwidth" : "1.4377166",
             "gain" : "0.0"
           },
           {
-            "type" : "equaliser",
+            "type" : "equalizer",
             "filter" : "8",
             "bypass" : "Off",
             "frequency" : "6005.0",

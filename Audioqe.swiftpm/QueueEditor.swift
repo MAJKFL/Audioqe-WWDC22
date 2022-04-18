@@ -141,18 +141,18 @@ class QueueEditor: ObservableObject, Identifiable {
                 delay.bypass = bank["bypass"] == "On" ? true : false
                 
                 effectBanks.append(Bank(editor: self, effect: delay))
-            case SavedBankType.equaliser.rawValue:
-                let equaliser = AVAudioUnitEQ(numberOfBands: 1)
+            case SavedBankType.equalizer.rawValue:
+                let equalizer = AVAudioUnitEQ(numberOfBands: 1)
                 
                 if let filter = AVAudioUnitEQFilterType(rawValue: Int(bank["filter"]!)!) {
-                    equaliser.bands.first?.filterType = filter
+                    equalizer.bands.first?.filterType = filter
                 }
-                equaliser.bands.first?.bandwidth = Float(bank["bandwidth"]!)!
-                equaliser.bands.first?.bypass = bank["bypass"] == "On" ? true : false
-                equaliser.bands.first?.frequency = Float(bank["frequency"]!)!
-                equaliser.bands.first?.gain = Float(bank["gain"]!)!
+                equalizer.bands.first?.bandwidth = Float(bank["bandwidth"]!)!
+                equalizer.bands.first?.bypass = bank["bypass"] == "On" ? true : false
+                equalizer.bands.first?.frequency = Float(bank["frequency"]!)!
+                equalizer.bands.first?.gain = Float(bank["gain"]!)!
                 
-                effectBanks.append(Bank(editor: self, effect: equaliser))
+                effectBanks.append(Bank(editor: self, effect: equalizer))
             default:
                 effectBanks.append(Bank(editor: self))
             }
@@ -196,8 +196,8 @@ class QueueEditor: ObservableObject, Identifiable {
                 savedBanks[index]["bypass"] = "\(effect.bypass ? "On" : "Off")"
             case is AVAudioUnitEQ:
                 guard let effect = effectBanks[index].effect as? AVAudioUnitEQ else { break }
-                savedBanks[index]["type"] = SavedBankType.equaliser.rawValue
-                savedBanks[index]["filter"] = "\(effectBanks[index].equaliserFilterType.rawValue)"
+                savedBanks[index]["type"] = SavedBankType.equalizer.rawValue
+                savedBanks[index]["filter"] = "\(effectBanks[index].equalizerFilterType.rawValue)"
                 savedBanks[index]["bandwidth"] = "\(effect.bands.first?.bandwidth ?? 0.05)"
                 savedBanks[index]["bypass"] = "\(effect.bands.first?.bypass ?? false ? "On" : "Off")"
                 savedBanks[index]["frequency"] = "\(effect.bands.first?.frequency ?? 20)"
