@@ -2,10 +2,11 @@ import SwiftUI
 import AVFoundation
 
 struct ContentView: View {
+    @Environment(\.horizontalSizeClass) var size
+    
     @ObservedObject var queueList = QueueList()
     
     @State private var searchText = ""
-    
     @State private var selectedQueue: String?
     
     var queues: [QueueEditor] {
@@ -17,35 +18,34 @@ struct ContentView: View {
     }
     
     var body: some View {
-        NavigationView {
-            List {
-                ForEach(queues) { queue in
-                    NavigationLink(destination: MainEditorView(editor: queue, selectedQueue: $selectedQueue), tag: queue.id, selection: $selectedQueue, label: { SidebarRow(queueList: queueList, editor: queue) })
+        if size == .regular {
+            NavigationView {
+                List {
+                    ForEach(queues) { queue in
+                        NavigationLink(destination: MainEditorView(editor: queue, selectedQueue: $selectedQueue), tag: queue.id, selection: $selectedQueue, label: { SidebarRow(queueList: queueList, editor: queue) })
+                    }
+                    .onDelete { offsets in
+                        guard let index = offsets.first else { return }
+                        if selectedQueue == queues[index].id { selectedQueue = queues.first?.id }
+                        queueList.remove(queues[index])
+                    }
                 }
-                .onDelete { offsets in
-                    guard let index = offsets.first else { return }
-                    if selectedQueue == queues[index].id { selectedQueue = queues.first?.id }
-                    queueList.remove(queues[index])
-                }
-            }
-            .searchable(text: $searchText)
-            .listStyle(.sidebar)
-            .navigationTitle("Saved")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        queueList.add(QueueEditor())
-                    } label: {
-                        Image(systemName: "plus")
+                .searchable(text: $searchText)
+                .listStyle(.sidebar)
+                .navigationTitle("Saved")
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button {
+                            queueList.add(QueueEditor())
+                        } label: {
+                            Image(systemName: "plus")
+                        }
                     }
                 }
             }
+        } else {
+            Text("Please open in full screen 😀")
         }
-//        .onAppear {
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-//                selectedQueue = queues.first?.id
-//            }
-//        }
     }
 }
 
