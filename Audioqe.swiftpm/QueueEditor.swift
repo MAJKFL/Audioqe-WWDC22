@@ -243,7 +243,6 @@ class QueueEditor: ObservableObject, Identifiable {
         guard let buffer = buffer else { return }
 
         do {
-            print("read")
             try file.read(into: buffer)
         } catch {
             print(error)
