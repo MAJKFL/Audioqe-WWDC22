@@ -6,7 +6,7 @@ struct MainEditorView: View {
     
     @ObservedObject var editor: QueueEditor
     
-    @Binding var selectedQueue: String?
+    @Binding var selectedQueueID: String?
     
     @State private var selectedBank: Bank?
     @State private var isShowingImporter = false
@@ -164,7 +164,7 @@ struct MainEditorView: View {
                     editor.pause()
                 }
             }
-            .onChange(of: selectedQueue) { _ in
+            .onChange(of: selectedQueueID) { _ in
                 editor.pause()
             }
         }

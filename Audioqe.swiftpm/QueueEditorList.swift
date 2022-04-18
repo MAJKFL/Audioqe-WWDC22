@@ -1,6 +1,6 @@
 import Foundation
 
-class QueueList: ObservableObject {
+class QueueEditorList: ObservableObject {
     @Published var queues: [QueueEditor]
     static let saveKey = "SavedData"
     
@@ -61,7 +61,7 @@ class QueueList: ObservableObject {
     }
 }
 
-extension QueueList {
+extension QueueEditorList {
     static let sampleQueuesJSON = """
     [
       {

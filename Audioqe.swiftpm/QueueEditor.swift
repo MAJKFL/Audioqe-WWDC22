@@ -215,7 +215,7 @@ class QueueEditor: ObservableObject, Identifiable {
         
         var allQueues = [SaveQueue]()
         
-        if let data = UserDefaults.standard.data(forKey: QueueList.saveKey) {
+        if let data = UserDefaults.standard.data(forKey: QueueEditorList.saveKey) {
             if let decoded = try? JSONDecoder().decode([SaveQueue].self, from: data) {
                 allQueues = decoded
                 if let index = allQueues.firstIndex(where: { $0.id == savedQueue.id }) {
@@ -227,7 +227,7 @@ class QueueEditor: ObservableObject, Identifiable {
         }
         
         if let encoded = try? JSONEncoder().encode(allQueues) {
-            UserDefaults.standard.set(encoded, forKey: QueueList.saveKey)
+            UserDefaults.standard.set(encoded, forKey: QueueEditorList.saveKey)
         }
     }
     

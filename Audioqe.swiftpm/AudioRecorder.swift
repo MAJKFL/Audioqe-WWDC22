@@ -6,14 +6,13 @@ struct AudioRecorder: View {
     
     @ObservedObject var editor: QueueEditor
     
-    @State var session: AVAudioSession!
-    @State var recorder: AVAudioRecorder!
+    @State private var session: AVAudioSession!
+    @State private var recorder: AVAudioRecorder!
     
-    @State var isRecording = false
+    @State private var isRecording = false
     
-    @State var audios = [URL]()
-    
-    let url: URL
+    @State private var trackURLs = [URL]()
+    let trackLocation: URL
     
     @State private var time = 0
     let timer = Timer.publish(every: 0.01, on: .main, in: .common).autoconnect()
@@ -23,11 +22,11 @@ struct AudioRecorder: View {
         
         let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
         let documentsURL = URL(string: path)!
-        self.url = documentsURL.appendingPathComponent("recordings")
+        self.trackLocation = documentsURL.appendingPathComponent("recordings")
         
-        if !FileManager.default.fileExists(atPath: url.path) {
+        if !FileManager.default.fileExists(atPath: trackLocation.path) {
             do {
-                try FileManager.default.createDirectory(atPath: url.path, withIntermediateDirectories: true, attributes: nil)
+                try FileManager.default.createDirectory(atPath: trackLocation.path, withIntermediateDirectories: true, attributes: nil)
             } catch {
                 print(error.localizedDescription)
             }
@@ -37,7 +36,7 @@ struct AudioRecorder: View {
     var body: some View {
         HStack {
             List {
-                ForEach(audios, id: \.self) { url in
+                ForEach(trackURLs, id: \.self) { url in
                     HStack {
                         Text(url.lastPathComponent)
                         
@@ -67,14 +66,14 @@ struct AudioRecorder: View {
                         return
                     }
                     
-                    let maxNumber = audios
+                    let maxNumber = trackURLs
                         .map({ $0.deletingPathExtension().lastPathComponent })
                         .filter({ $0.contains("Recording") })
                         .map({ $0.replacingOccurrences(of: "Recording", with: "") })
                         .map({ Int($0) ?? 0 })
                         .max() ?? 0
                     
-                    let filName = url.appendingPathComponent("Recording\(maxNumber + 1).m4a")
+                    let filName = trackLocation.appendingPathComponent("Recording\(maxNumber + 1).m4a")
                     
                     let settings = [ AVFormatIDKey : kAudioFormatMPEG4AAC,
                           AVEncoderAudioQualityKey : AVAudioQuality.max.rawValue,
@@ -123,15 +122,15 @@ struct AudioRecorder: View {
     
     func getRecordings() {
         do {
-            let result = try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil, options: .producesRelativePathURLs)
+            let result = try FileManager.default.contentsOfDirectory(at: trackLocation, includingPropertiesForKeys: nil, options: .producesRelativePathURLs)
             
-            audios.removeAll()
+            trackURLs.removeAll()
             
             for i in result {
-                audios.append(i)
+                trackURLs.append(i)
             }
             
-            audios.sort(by: {
+            trackURLs.sort(by: {
                 let firstAttributes = try? FileManager.default.attributesOfItem(atPath: $0.path)
                 let secondAttributes = try? FileManager.default.attributesOfItem(atPath: $1.path)
                 
@@ -148,7 +147,7 @@ struct AudioRecorder: View {
     func removeRecording(at offsets: IndexSet) {
         guard let index = offsets.first else { return }
         
-        try? FileManager.default.removeItem(at: audios[index])
+        try? FileManager.default.removeItem(at: trackURLs[index])
         
         getRecordings()
     }

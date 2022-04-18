@@ -4,16 +4,16 @@ import AVFoundation
 struct ContentView: View {
     @Environment(\.horizontalSizeClass) var size
     
-    @ObservedObject var queueList = QueueList()
+    @ObservedObject var editorList = QueueEditorList()
     
     @State private var searchText = ""
-    @State private var selectedQueue: String?
+    @State private var selectedQueueID: String?
     
     var queues: [QueueEditor] {
         if searchText == "" {
-            return queueList.queues
+            return editorList.queues
         } else {
-            return queueList.queues.filter({ $0.name.lowercased().contains(searchText.lowercased()) })
+            return editorList.queues.filter({ $0.name.lowercased().contains(searchText.lowercased()) })
         }
     }
     
@@ -22,12 +22,12 @@ struct ContentView: View {
             NavigationView {
                 List {
                     ForEach(queues) { queue in
-                        NavigationLink(destination: MainEditorView(editor: queue, selectedQueue: $selectedQueue), tag: queue.id, selection: $selectedQueue, label: { SidebarRow(queueList: queueList, editor: queue) })
+                        NavigationLink(destination: MainEditorView(editor: queue, selectedQueueID: $selectedQueueID), tag: queue.id, selection: $selectedQueueID, label: { SidebarRow(editorList: editorList, editor: queue) })
                     }
                     .onDelete { offsets in
                         guard let index = offsets.first else { return }
-                        if selectedQueue == queues[index].id { selectedQueue = queues.first?.id }
-                        queueList.remove(queues[index])
+                        if selectedQueueID == queues[index].id { selectedQueueID = queues.first?.id }
+                        editorList.remove(queues[index])
                     }
                 }
                 .searchable(text: $searchText)
@@ -36,7 +36,7 @@ struct ContentView: View {
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button {
-                            queueList.add(QueueEditor())
+                            editorList.add(QueueEditor())
                         } label: {
                             Image(systemName: "plus")
                         }
@@ -50,7 +50,7 @@ struct ContentView: View {
 }
 
 struct SidebarRow: View {
-    @ObservedObject var queueList: QueueList
+    @ObservedObject var editorList: QueueEditorList
     @ObservedObject var editor: QueueEditor
     
     var body: some View {
@@ -66,7 +66,7 @@ struct SidebarRow: View {
     
     func rename(_ newName: String) {
         guard !newName.isEmpty else { return }
-        guard !queueList.queues.map({ $0.name }).contains(newName) else { return }
+        guard !editorList.queues.map({ $0.name }).contains(newName) else { return }
         editor.name = newName
         editor.save()
     }
