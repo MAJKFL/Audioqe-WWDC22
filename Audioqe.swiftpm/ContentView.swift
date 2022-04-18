@@ -6,7 +6,7 @@ struct ContentView: View {
     
     @State private var searchText = ""
     
-//    @State private var selectedQueue: String?
+    @State private var selectedQueue: String?
     
     var queues: [QueueEditor] {
         if searchText == "" {
@@ -20,11 +20,11 @@ struct ContentView: View {
         NavigationView {
             List {
                 ForEach(queues) { queue in
-                    NavigationLink(destination: MainEditorView(editor: queue)/*, tag: queue.id, selection: $selectedQueue*/, label: { SidebarRow(queueList: queueList, editor: queue) })
+                    NavigationLink(destination: MainEditorView(editor: queue, selectedQueue: $selectedQueue), tag: queue.id, selection: $selectedQueue, label: { SidebarRow(queueList: queueList, editor: queue) })
                 }
                 .onDelete { offsets in
                     guard let index = offsets.first else { return }
-//                    if selectedQueue == queues[index].id { selectedQueue = queues.first?.id }
+                    if selectedQueue == queues[index].id { selectedQueue = queues.first?.id }
                     queueList.remove(queues[index])
                 }
             }
@@ -34,7 +34,7 @@ struct ContentView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        queueList.printQueues()
+                        queueList.add(QueueEditor())
                     } label: {
                         Image(systemName: "plus")
                     }

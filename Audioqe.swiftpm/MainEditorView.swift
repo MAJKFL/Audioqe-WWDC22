@@ -6,6 +6,8 @@ struct MainEditorView: View {
     
     @ObservedObject var editor: QueueEditor
     
+    @Binding var selectedQueue: String?
+    
     @State private var selectedBank: Bank?
     @State private var isShowingImporter = false
     @State private var isShowingRecorder = false
@@ -161,6 +163,9 @@ struct MainEditorView: View {
                 if newPhase != .active {
                     editor.pause()
                 }
+            }
+            .onChange(of: selectedQueue) { _ in
+                editor.pause()
             }
         }
     }

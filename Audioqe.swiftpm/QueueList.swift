@@ -146,7 +146,7 @@ extension QueueList {
         "banks" : [
           {
             "preGain" : "-2.832367",
-            "bypass" : "Off",
+            "bypass" : "On",
             "type" : "distortion",
             "wetDryMix" : "41.040462",
             "preset" : "14"
@@ -188,7 +188,7 @@ extension QueueList {
         "banks" : [
           {
             "preGain" : "-6.011566",
-            "bypass" : "Off",
+            "bypass" : "On",
             "type" : "distortion",
             "wetDryMix" : "60.40462",
             "preset" : "11"
