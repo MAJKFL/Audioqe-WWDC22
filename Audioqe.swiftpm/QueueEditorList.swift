@@ -70,26 +70,26 @@ extension QueueEditorList {
         "name" : "Example queue 1",
         "banks" : [
           {
-            "gain" : "19.83815",
+            "gain" : "20.0",
             "filter" : "0",
             "bypass" : "Off",
             "type" : "equalizer",
-            "frequency" : "16065.0",
-            "bandwidth" : "1.0228323"
+            "frequency" : "16000.0",
+            "bandwidth" : "1.0"
           },
           {
             "bypass" : "Off",
             "type" : "reverb",
             "preset" : "2",
-            "wetDryMix" : "23.410406"
+            "wetDryMix" : "25.0"
           },
           {
-            "delayTime" : "0.20809248089790344",
+            "delayTime" : "0.2",
             "lowPassCutoff" : "1600.0",
             "bypass" : "Off",
             "type" : "delay",
-            "feedback" : "-65.31792",
-            "wetDryMix" : "13.294798"
+            "feedback" : "-65.0",
+            "wetDryMix" : "15.0"
           },
           {
             "type" : "empty"
@@ -108,23 +108,23 @@ extension QueueEditorList {
         "name" : "Example queue 2",
         "banks" : [
           {
-            "preGain" : "-0.52023315",
+            "preGain" : "-0.5",
             "bypass" : "Off",
             "type" : "distortion",
-            "wetDryMix" : "28.323698",
+            "wetDryMix" : "30.0",
             "preset" : "10"
           },
           {
             "bypass" : "Off",
             "type" : "reverb",
             "preset" : "2",
-            "wetDryMix" : "54.33526"
+            "wetDryMix" : "55.0"
           },
           {
             "gain" : "0.0",
             "filter" : "1",
             "bypass" : "Off",
-            "frequency" : "4220.0",
+            "frequency" : "4200.0",
             "type" : "equalizer",
             "bandwidth" : "0.0"
           },
@@ -145,10 +145,10 @@ extension QueueEditorList {
         "name" : "Example queue 3",
         "banks" : [
           {
-            "preGain" : "-2.832367",
+            "preGain" : "-2.8",
             "bypass" : "On",
             "type" : "distortion",
-            "wetDryMix" : "41.040462",
+            "wetDryMix" : "40.0",
             "preset" : "14"
           },
           {
@@ -156,22 +156,22 @@ extension QueueEditorList {
             "filter" : "8",
             "bypass" : "Off",
             "type" : "equalizer",
-            "frequency" : "7215.0",
-            "gain" : "14.982658"
+            "frequency" : "7200.0",
+            "gain" : "15.0"
           },
           {
-            "bandwidth" : "1.809682",
+            "bandwidth" : "1.8",
             "filter" : "3",
             "bypass" : "Off",
             "type" : "equalizer",
-            "frequency" : "14345.0",
+            "frequency" : "14000.0",
             "gain" : "0.0"
           },
           {
             "bypass" : "Off",
             "type" : "reverb",
             "preset" : "4",
-            "wetDryMix" : "59.53757"
+            "wetDryMix" : "60.0"
           },
           {
             "type" : "empty"
@@ -187,11 +187,11 @@ extension QueueEditorList {
         "name" : "Example queue 4",
         "banks" : [
           {
-            "preGain" : "-6.011566",
+            "preGain" : "-6.0",
             "bypass" : "On",
             "type" : "distortion",
-            "wetDryMix" : "60.40462",
-            "preset" : "11"
+            "wetDryMix" : "60.0",
+            "preset" : "4"
           },
           {
             "bypass" : "Off",
@@ -200,27 +200,27 @@ extension QueueEditorList {
             "preset" : "0"
           },
           {
-            "frequency" : "18230.0",
+            "frequency" : "18000.0",
             "filter" : "3",
             "bypass" : "Off",
             "type" : "equalizer",
-            "bandwidth" : "1.4377166",
+            "bandwidth" : "1.4",
             "gain" : "0.0"
           },
           {
             "type" : "equalizer",
             "filter" : "8",
             "bypass" : "Off",
-            "frequency" : "6005.0",
+            "frequency" : "6000.0",
             "bandwidth" : "0.0",
-            "gain" : "10.127167"
+            "gain" : "10.0"
           },
           {
             "delayTime" : "0.13294798135757446",
             "lowPassCutoff" : "1500.0",
             "bypass" : "Off",
             "type" : "delay",
-            "feedback" : "17.919075",
+            "feedback" : "18.0",
             "wetDryMix" : "50.0"
           },
           {
