@@ -9,8 +9,7 @@ struct MainEditorView: View {
     @Binding var selectedQueueID: String?
     
     @State private var selectedBank: Bank?
-    @State private var isShowingImporter = false
-    @State private var isShowingRecorder = false
+    @State private var shareButtonRect = CGRect(x: 0, y: 0, width: 0, height: 0)
     
     let portraitColumns = [
         GridItem(.flexible(), spacing: 0),
@@ -31,7 +30,7 @@ struct MainEditorView: View {
                 
                 LazyVGrid(columns: geo.size.width > geo.size.height ? landscapeColumns : portraitColumns, spacing: 50) {
                     HStack(spacing: 0) {
-                        StartTileView(editor: editor, isShowingRecorder: $isShowingRecorder, isShowingImporter: $isShowingImporter, viewSize: geo.size)
+                        StartTileView(editor: editor, viewSize: geo.size)
                         
                         Rectangle()
                             .fill(Color.primary)
@@ -88,77 +87,17 @@ struct MainEditorView: View {
             .navigationTitle(editor.name)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    HStack {
-                        Menu {
-                            Button {
-                                isShowingImporter.toggle()
-                            } label: {
-                                Label("Add file", systemImage: "doc.fill.badge.plus")
-                            }
-                            
-                            Button {
-                                if AVAudioSession.sharedInstance().recordPermission == .undetermined {
-                                    let session = AVAudioSession.sharedInstance()
-                                    try? session.setCategory(.playAndRecord)
-                                    session.requestRecordPermission { _ in }
-                                } else {
-                                    isShowingRecorder.toggle()
-                                }
-                            } label: {
-                                Label("Choose recording", systemImage: "mic.fill.badge.plus")
-                            }
-                        } label: {
-                            Image(systemName: "waveform.badge.plus")
+                    Button {
+                        Task {
+                            await shareFile(url: editor.render(), buttonRect: shareButtonRect)
                         }
-                        .popover(isPresented: $isShowingRecorder, content: { AudioRecorder(editor: editor) })
-                        
-                        GeometryReader { geo in
-                            Button {
-                                Task {
-                                    await shareFile(url: editor.render(), buttonRect: geo.frame(in: CoordinateSpace.global))
-                                }
-                            } label: {
-                                Image(systemName: "square.and.arrow.up")
-                            }
-                            .disabled(editor.file == nil)
-                        }
-                        .padding(.trailing)
+                    } label: {
+                        Image(systemName: "square.and.arrow.up")
                     }
+                    .disabled(editor.file == nil)
+                    .background(rectReader($shareButtonRect))
                 }
             }
-            .fileImporter(isPresented: $isShowingImporter, allowedContentTypes: [.audio], onCompletion: { result in
-                let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-                let documentsURL = URL(string: path)!
-                let recordingsURL = documentsURL.appendingPathComponent("recordings")
-                
-                if !FileManager.default.fileExists(atPath: recordingsURL.path) {
-                    do {
-                        try FileManager.default.createDirectory(atPath: recordingsURL.path, withIntermediateDirectories: true, attributes: nil)
-                    } catch {
-                        print(error.localizedDescription)
-                    }
-                }
-                
-                do {
-                    let fileURL = try result.get()
-                    
-                    let _ = fileURL.startAccessingSecurityScopedResource()
-                    
-                    let destination = URL(string: "file://\(recordingsURL.appendingPathComponent(fileURL.lastPathComponent).absoluteString)")!
-                    
-                    if FileManager.default.fileExists(atPath: destination.path) {
-                        try FileManager.default.removeItem(at: destination)
-                    }
-                    
-                    try FileManager.default.copyItem(at: fileURL, to: destination)
-                    
-                    editor.loadFile(url: destination)
-                    
-                    fileURL.stopAccessingSecurityScopedResource()
-                } catch {
-                    print(error.localizedDescription)
-                }
-            })
             .onChange(of: scenePhase) { newPhase in
                 if newPhase != .active {
                     editor.pause()
@@ -177,6 +116,16 @@ struct MainEditorView: View {
         ac.popoverPresentationController?.sourceView = UIApplication.shared.keyWindow
         ac.popoverPresentationController?.sourceRect = buttonRect
         UIApplication.shared.keyWindow?.rootViewController!.present(ac, animated: true)
+    }
+    
+    func rectReader(_ binding: Binding<CGRect>) -> some View {
+        return GeometryReader { (geometry) -> AnyView in
+            let rect = geometry.frame(in: .global)
+            DispatchQueue.main.async {
+                binding.wrappedValue = rect
+            }
+            return AnyView(Rectangle().fill(Color.clear))
+        }
     }
 }
 

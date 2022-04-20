@@ -4,8 +4,8 @@ import AVFoundation
 struct StartTileView: View {
     @StateObject var editor: QueueEditor
     
-    @Binding var isShowingRecorder: Bool
-    @Binding var isShowingImporter: Bool
+    @State private var isShowingImporter = false
+    @State private var isShowingRecorder = false
     
     let viewSize: CGSize
     
@@ -58,7 +58,7 @@ struct StartTileView: View {
                     Button {
                         isShowingImporter.toggle()
                     } label: {
-                        Label("Add file", systemImage: "doc.fill.badge.plus")
+                        Label("Import file", systemImage: "doc.fill.badge.plus")
                     }
                     
                     Button {
@@ -73,7 +73,7 @@ struct StartTileView: View {
                         Label("Choose recording", systemImage: "mic.fill.badge.plus")
                     }
                 } label: {
-                    Label(editor.file == nil ? "Add file" : "Choose other file", systemImage: "plus")
+                    Label(editor.file == nil ? "Add recording" : "Change recording", systemImage: "waveform.path.badge.plus")
                         .foregroundColor(.accentColor)
                         .font(.headline)
                 }
@@ -82,6 +82,40 @@ struct StartTileView: View {
             }.padding())
             .foregroundColor(.white)
             .padding(.leading)
+            .fileImporter(isPresented: $isShowingImporter, allowedContentTypes: [.audio], onCompletion: { result in
+                let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+                let documentsURL = URL(string: path)!
+                let recordingsURL = documentsURL.appendingPathComponent("recordings")
+                
+                if !FileManager.default.fileExists(atPath: recordingsURL.path) {
+                    do {
+                        try FileManager.default.createDirectory(atPath: recordingsURL.path, withIntermediateDirectories: true, attributes: nil)
+                    } catch {
+                        print(error.localizedDescription)
+                    }
+                }
+                
+                do {
+                    let fileURL = try result.get()
+                    
+                    let _ = fileURL.startAccessingSecurityScopedResource()
+                    
+                    let destination = URL(string: "file://\(recordingsURL.appendingPathComponent(fileURL.lastPathComponent).absoluteString)")!
+                    
+                    if FileManager.default.fileExists(atPath: destination.path) {
+                        try FileManager.default.removeItem(at: destination)
+                    }
+                    
+                    try FileManager.default.copyItem(at: fileURL, to: destination)
+                    
+                    editor.loadFile(url: destination)
+                    
+                    fileURL.stopAccessingSecurityScopedResource()
+                } catch {
+                    print(error.localizedDescription)
+                }
+            })
+            .popover(isPresented: $isShowingRecorder, content: { AudioRecorder(editor: editor) })
     }
     
     func secondsToHoursMinutesSeconds(_ seconds: Int) -> (Int, Int, Int) {
