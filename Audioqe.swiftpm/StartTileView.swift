@@ -52,30 +52,30 @@ struct StartTileView: View {
                         .lineLimit(1)
                     
                     Text("Length - **\(timeStringFromSeconds(Int(file.duration)))**")
-                } else {
-                    Menu {
-                        Button {
-                            isShowingImporter.toggle()
-                        } label: {
-                            Label("Add file", systemImage: "doc.fill.badge.plus")
-                        }
-                        
-                        Button {
-                            if AVAudioSession.sharedInstance().recordPermission == .undetermined {
-                                let session = AVAudioSession.sharedInstance()
-                                try? session.setCategory(.playAndRecord)
-                                session.requestRecordPermission { _ in }
-                            } else {
-                                isShowingRecorder.toggle()
-                            }
-                        } label: {
-                            Label("Choose recording", systemImage: "mic.fill.badge.plus")
+                }
+                
+                Menu {
+                    Button {
+                        isShowingImporter.toggle()
+                    } label: {
+                        Label("Add file", systemImage: "doc.fill.badge.plus")
+                    }
+                    
+                    Button {
+                        if AVAudioSession.sharedInstance().recordPermission == .undetermined {
+                            let session = AVAudioSession.sharedInstance()
+                            try? session.setCategory(.playAndRecord)
+                            session.requestRecordPermission { _ in }
+                        } else {
+                            isShowingRecorder.toggle()
                         }
                     } label: {
-                        Label("Add file", systemImage: "plus")
-                            .foregroundColor(.accentColor)
-                            .font(.headline)
+                        Label("Choose recording", systemImage: "mic.fill.badge.plus")
                     }
+                } label: {
+                    Label(editor.file == nil ? "Add file" : "Choose other file", systemImage: "plus")
+                        .foregroundColor(.accentColor)
+                        .font(.headline)
                 }
                 
                 Spacer()
