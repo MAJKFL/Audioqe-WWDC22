@@ -103,7 +103,10 @@ struct MainEditorView: View {
                     editor.pause()
                 }
             }
-            .onChange(of: selectedQueueID) { _ in
+            .onChange(of: selectedQueueID) { id in
+                editor.pause()
+            }
+            .onDisappear {
                 editor.pause()
             }
         }
