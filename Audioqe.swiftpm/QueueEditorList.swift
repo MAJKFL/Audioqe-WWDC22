@@ -67,7 +67,7 @@ extension QueueEditorList {
       {
         "id" : "2D7C0612-5D96-489B-8DD6-CAFBB3AA0F4F",
         "volume" : 1,
-        "name" : "Example queue 1",
+        "name" : "Example 1",
         "banks" : [
           {
             "gain" : "20.0",
@@ -105,7 +105,7 @@ extension QueueEditorList {
       {
         "id" : "E9E862FA-C72E-4DB8-B164-C43FF4B6E77F",
         "volume" : 1,
-        "name" : "Example queue 2",
+        "name" : "Example 2",
         "banks" : [
           {
             "preGain" : "-0.5",
@@ -142,7 +142,7 @@ extension QueueEditorList {
       {
         "id" : "6BCDC5B0-633C-4E69-A2C9-7E9A441D9F76",
         "volume" : 1,
-        "name" : "Example queue 3",
+        "name" : "Example 3",
         "banks" : [
           {
             "preGain" : "-2.8",
@@ -184,7 +184,7 @@ extension QueueEditorList {
       {
         "id" : "607B899B-159E-4E54-8287-3E8E6E96F6DB",
         "volume" : 1,
-        "name" : "Example queue 4",
+        "name" : "Example 4",
         "banks" : [
           {
             "preGain" : "-6.0",

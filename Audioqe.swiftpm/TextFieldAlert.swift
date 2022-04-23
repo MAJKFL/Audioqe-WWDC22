@@ -6,6 +6,7 @@ extension View {
         
         alert.addTextField { field in
             field.placeholder = title
+            field.text = title
         }
         
         alert.addAction(.init(title: secondaryTitle, style: .cancel, handler: { _ in

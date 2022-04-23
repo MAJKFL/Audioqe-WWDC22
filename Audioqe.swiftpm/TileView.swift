@@ -2,6 +2,8 @@ import SwiftUI
 import AVFoundation
 
 struct TileView: View {
+    @EnvironmentObject var keyboardState: KeyboardState
+    
     @Binding var selectedBank: Bank?
     
     @ObservedObject var bank: Bank
@@ -198,75 +200,79 @@ struct TileView: View {
                     }
                 }
         } else {
-            Menu {
-                Button {
-                    withAnimation(.easeInOut.speed(2)) {
-                        let reverb = AVAudioUnitReverb()
-                        reverb.wetDryMix = 50
-                        bank.effect = reverb
+            ZStack {
+                RoundedRectangle(cornerRadius: 15)
+                    .fill(Color.secondary.opacity(isLastEmptyBank ? 0.2 : 0))
+                
+                Rectangle()
+                    .fill(Color.primary.opacity(isLastEmptyBank ? 0 : 1))
+                    .frame(maxWidth: .infinity, maxHeight: 1)
+            }
+            .frame(width: 220 * sizeMultiplier, height: 160 * 1.1)
+            .overlay(
+                Menu {
+                    Button {
+                        withAnimation(.easeInOut.speed(2)) {
+                            let reverb = AVAudioUnitReverb()
+                            reverb.wetDryMix = 50
+                            bank.effect = reverb
+                        }
+                        editor.connectNodes()
+                    } label: {
+                        Label("Reverb", systemImage: "dot.radiowaves.left.and.right")
                     }
-                    editor.connectNodes()
-                } label: {
-                    Label("Reverb", systemImage: "dot.radiowaves.left.and.right")
-                }
 
-                Button {
-                    withAnimation(.easeInOut.speed(2)) {
-                        let distortion = AVAudioUnitDistortion()
-                        distortion.wetDryMix = 50
-                        distortion.preGain = -22
-                        bank.effect = distortion
+                    Button {
+                        withAnimation(.easeInOut.speed(2)) {
+                            let distortion = AVAudioUnitDistortion()
+                            distortion.wetDryMix = 50
+                            distortion.preGain = -22
+                            bank.effect = distortion
+                        }
+                        editor.connectNodes()
+                    } label: {
+                        Label("Distortion", systemImage: "waveform.path")
                     }
-                    editor.connectNodes()
-                } label: {
-                    Label("Distortion", systemImage: "waveform.path")
-                }
-                
-                Button {
-                    withAnimation(.easeInOut.speed(2)) {
-                        let newDelay = AVAudioUnitDelay()
-                        newDelay.feedback = 50
-                        newDelay.delayTime = 0.25
-                        newDelay.lowPassCutoff = 1500
-                        bank.effect = newDelay
-                    }
-                    editor.connectNodes()
-                } label: {
-                    Label("Delay", systemImage: "wave.3.right")
-                }
-                
-                Button {
-                    withAnimation(.easeInOut.speed(2)) {
-                        let newEqualizer = AVAudioUnitEQ(numberOfBands: 1)
-                        newEqualizer.bands.first?.bandwidth = 1
-                        newEqualizer.bands.first?.frequency = 7500
-                        newEqualizer.bands.first?.gain = -30
-                        newEqualizer.bands.first?.bypass = false
-                        bank.effect = newEqualizer
-                    }
-                    editor.connectNodes()
-                } label: {
-                    Label("Equalizer", systemImage: "slider.vertical.3")
-                }
-            } label: {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 15)
-                        .fill(Color.secondary.opacity(isLastEmptyBank ? 0.2 : 0))
                     
-                    Rectangle()
-                        .fill(Color.primary.opacity(isLastEmptyBank ? 0 : 1))
-                        .frame(maxWidth: .infinity, maxHeight: 1)
+                    Button {
+                        withAnimation(.easeInOut.speed(2)) {
+                            let newDelay = AVAudioUnitDelay()
+                            newDelay.feedback = 50
+                            newDelay.delayTime = 0.25
+                            newDelay.lowPassCutoff = 1500
+                            bank.effect = newDelay
+                        }
+                        editor.connectNodes()
+                    } label: {
+                        Label("Delay", systemImage: "wave.3.right")
+                    }
                     
-                    Label("Add", systemImage: "plus")
-                        .foregroundColor(.white.opacity(isLastEmptyBank ? 1 : 0))
-                        .font(Font.system(size: 50, weight: .bold))
+                    Button {
+                        withAnimation(.easeInOut.speed(2)) {
+                            let newEqualizer = AVAudioUnitEQ(numberOfBands: 1)
+                            newEqualizer.bands.first?.bandwidth = 1
+                            newEqualizer.bands.first?.frequency = 7500
+                            newEqualizer.bands.first?.gain = -30
+                            newEqualizer.bands.first?.bypass = false
+                            bank.effect = newEqualizer
+                        }
+                        editor.connectNodes()
+                    } label: {
+                        Label("Equalizer", systemImage: "slider.vertical.3")
+                    }
+                } label: {
+                    if !keyboardState.shown {
+                        Label("Add", systemImage: "plus")
+                            .foregroundColor(.white.opacity(isLastEmptyBank ? 1 : 0))
+                            .font(Font.system(size: 50, weight: .bold))
+                            .padding()
+                    }
                 }
-                .frame(width: 220 * sizeMultiplier, height: 160 * 1.1)
-            }
-            .disabled(!isLastEmptyBank)
-            .transaction { transaction in
-                transaction.animation = nil
-            }
+                .disabled(!isLastEmptyBank)
+                .transaction { transaction in
+                    transaction.animation = nil
+                }
+            )
         }
     }
 }

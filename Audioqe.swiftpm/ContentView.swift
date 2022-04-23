@@ -5,6 +5,7 @@ struct ContentView: View {
     @Environment(\.horizontalSizeClass) var size
     
     @ObservedObject var editorList = QueueEditorList()
+    @StateObject var keyboardState = KeyboardState()
     
     @State private var searchText = ""
     @State private var selectedQueueID: String?
@@ -22,7 +23,7 @@ struct ContentView: View {
             NavigationView {
                 List {
                     ForEach(queues) { queue in
-                        NavigationLink(destination: MainEditorView(editor: queue, selectedQueueID: $selectedQueueID), tag: queue.id, selection: $selectedQueueID, label: { SidebarRow(editorList: editorList, editor: queue) })
+                        NavigationLink(destination: MainEditorView(editor: queue, selectedQueueID: $selectedQueueID).environmentObject(keyboardState), tag: queue.id, selection: $selectedQueueID, label: { SidebarRow(editorList: editorList, editor: queue) })
                     }
                     .onDelete { offsets in
                         guard let index = offsets.first else { return }
@@ -32,7 +33,8 @@ struct ContentView: View {
                 }
                 .searchable(text: $searchText)
                 .listStyle(.sidebar)
-                .navigationTitle("Saved")
+                .environmentObject(keyboardState)
+                .navigationTitle("Queues")
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button {
@@ -50,6 +52,8 @@ struct ContentView: View {
 }
 
 struct SidebarRow: View {
+    @EnvironmentObject var keyboardState: KeyboardState
+    
     @ObservedObject var editorList: QueueEditorList
     @ObservedObject var editor: QueueEditor
     
@@ -57,7 +61,9 @@ struct SidebarRow: View {
         Label(editor.name, systemImage: "arrow.right.square")
             .contextMenu {
                 Button {
-                    textFieldAlert(title: editor.name, message: "Enter new name", hintText: "New name", primaryTitle: "Done", secondaryTitle: "Cancel", primaryAction: rename, secondaryAction: {})
+                    withAnimation(.easeIn.speed(2)) { keyboardState.shown = true }
+                    
+                    textFieldAlert(title: editor.name, message: "Enter new name", hintText: "New name", primaryTitle: "Done", secondaryTitle: "Cancel", primaryAction: rename, secondaryAction: { withAnimation(.easeIn.speed(2)) { keyboardState.shown = false } })
                 } label: {
                     Label("Rename", systemImage: "pencil")
                 }
@@ -65,9 +71,14 @@ struct SidebarRow: View {
     }
     
     func rename(_ newName: String) {
+        withAnimation(.easeIn.speed(2)) { keyboardState.shown = false }
         guard !newName.isEmpty else { return }
         guard !editorList.queues.map({ $0.name }).contains(newName) else { return }
         editor.name = newName
         editor.save()
     }
+}
+
+class KeyboardState: ObservableObject {
+    @Published var shown = false
 }

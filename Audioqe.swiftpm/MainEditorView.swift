@@ -110,15 +110,16 @@ struct MainEditorView: View {
                 editor.pause()
             }
         }
+        .ignoresSafeArea(.keyboard, edges: .bottom)
     }
     
     func shareFile(url: URL?, buttonRect: CGRect) {
         guard let url = url else { return }
 
         let ac = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-        ac.popoverPresentationController?.sourceView = UIApplication.shared.keyWindow
+        ac.popoverPresentationController?.sourceView = UIApplication.shared.window
         ac.popoverPresentationController?.sourceRect = buttonRect
-        UIApplication.shared.keyWindow?.rootViewController!.present(ac, animated: true)
+        UIApplication.shared.window?.rootViewController!.present(ac, animated: true)
     }
     
     func rectReader(_ binding: Binding<CGRect>) -> some View {
@@ -133,7 +134,7 @@ struct MainEditorView: View {
 }
 
 extension UIApplication {
-    var keyWindow: UIWindow? {
+    var window: UIWindow? {
         return UIApplication.shared.connectedScenes
             .filter { $0.activationState == .foregroundActive }
             .first(where: { $0 is UIWindowScene })
