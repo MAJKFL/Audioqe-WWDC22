@@ -261,12 +261,11 @@ struct TileView: View {
                         Label("Equalizer", systemImage: "slider.vertical.3")
                     }
                 } label: {
-                    if !keyboardState.shown {
-                        Label("Add", systemImage: "plus")
-                            .foregroundColor(.white.opacity(isLastEmptyBank ? 1 : 0))
-                            .font(Font.system(size: 50, weight: .bold))
-                            .padding()
-                    }
+                    Label("Add", systemImage: "plus")
+                        .foregroundColor(.white.opacity(isLastEmptyBank ? 1 : 0))
+                        .font(Font.system(size: 50, weight: .bold))
+                        .padding()
+                        .opacity(keyboardState.shown ? 0 : 1)
                 }
                 .disabled(!isLastEmptyBank)
                 .transaction { transaction in
